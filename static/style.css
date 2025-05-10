@@ -1,0 +1,414 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #6cc24a;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.connection-status {
+    font-size: 14px;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #6cc24a;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.message-log,
+.request-menu {
+    width: 48%;
+}
+
+h2 {
+    font-size: 18px;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.log-box {
+    height: 300px;
+    background-color: #000000;
+    /*border: 1px solid #6cc24a;*/
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column-reverse; /* Reverse order of child elements */
+}
+.clearance-box {
+    height: 300px;
+    background-color: #1c1c1c;
+    border: 1px solid #6cc24a;
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column; /* Reverse order of child elements */
+}
+
+#message-box {
+    display: flex;
+    flex-direction: column-reverse; /* Align messages from top to bottom */
+    overflow-y: auto; /* Enable scrolling when content exceeds height */
+    max-height: 400px; /* Adjust as per design requirements */
+    padding: 10px;
+    scroll-behavior: smooth; /* Smooth scrolling for new messages */
+}
+
+.new-message {
+    color: #fff; /* White for new messages */
+    font-weight: bold;
+}
+
+.old-message {
+    color: grey; /* Gray for old messages */
+    font-style: normal;
+    opacity: 0.6;
+}
+
+.timestamp {
+    color: #61A6F0; /* Light blue */
+    font-weight: bold;
+}
+
+/* Message title style */
+.message-title {
+    color: white; /* White color for the title */
+    font-weight: bold;
+}
+
+/* Status style */
+.status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-left: 5px;
+    color: black; /* Black text for contrast */
+}
+
+/* Open status background color */
+.status.open {
+    background-color: #0DFF00; /* Green background for "OPEN" */
+}
+
+/* Closed status background color and text */
+.status.closed {
+    background-color: #FFFFFF; /* White background for "CLOSED" */
+    color: #000000; /* Black text for contrast */
+}
+
+/* Dropdown and buttons */
+.dropdown {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.dropdown-button {
+    width: 80%;
+    padding: 10px;
+    background-color: #333;
+    border: 1px solid #6cc24a;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    /*transition: background-color 0.3s;*/
+}
+
+.dropdown-button:hover {
+    background-color: #444;
+}
+
+.dropdown-content {
+    display: none;
+    background-color: #444;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    width: 73%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    position: relative;
+}
+
+.request-button,
+.cancel-button,
+.load-button {
+    background-color: #333;
+    border: none;
+    padding: 10px;
+    margin: 5px 0;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.request-button:hover,
+.cancel-button:hover,
+.load-button:hover {
+    background-color: #555;
+}
+
+/* General styles for direction buttons */
+.direction-button {
+    width: 48%; /* Allow buttons to resize equally */
+    height: 50px; /* Adjust height for uniformity */
+    background-color: black; /* Background color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add rounded corners */
+    font-size: 16px; /* Adjust font size */
+    text-align: center; /* Center align text */
+    vertical-align: middle; /* Center align content */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+/* Hover effect for buttons */
+.direction-button:hover {
+    background-color: #333333; /* Darker shade on hover */
+    color: #00FF00; /* Bright green text color */
+}
+
+/* Style for active button */
+.direction-button.active {
+    background-color: #4CAF50; /* Green for active */
+    color: white;
+}
+
+.request-button.active {
+    background-color: #008CBA; /* Blue for active Request button */
+    color: white;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.action-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #333;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    width: 31%;
+    margin-top: 10px;
+}
+
+.action-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.action-button:hover:not(:disabled) {
+    background-color: #6cc24a;
+}
+
+/* Spinner Styles */
+.spinner {
+    display: none;
+    border: 2px solid transparent; /* Transparent borders for base */
+    border-top: 2px solid #6cc24a; /* Green for the top border */
+    border-right: 2px solid #6cc24a; /* Green for the right border */
+    border-radius: 50%; /* Circle shape */
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite; /* Smooth spinning animation */
+    vertical-align: middle; /* Align spinner with button text */
+    margin-right: 8px; /* Space between spinner and text */
+    transition: opacity 0.3s ease-in-out; /* Added smooth transition for spinner */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Checkmark Styles */
+.checkmark {
+    display: inline-block;
+    color: #6cc24a; /* Green color for success */
+    font-size: 18px;
+    font-weight: bold;
+    vertical-align: middle; /* Align checkmark with button text */
+    margin-right: 8px; /* Space between checkmark and text */
+}
+
+/* Loading State for Buttons */
+button.loading {
+    background-color: #444; /* Slightly darker background for loading */
+    cursor: wait; /* Wait cursor to indicate processing */
+    color: #bbb; /* Lighter text color for loading state */
+}
+
+button.completed {
+    background-color: #6cc24a; /* Green background for completed state */
+    color: #fff; /* White text for completed state */
+}
+
+/* Reset Button State Transition */
+button {
+    transition: all 0.3s ease; /* Smooth transitions for color and background */
+}
+
+/* Loader Spinner */
+.loader-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Tick Mark
+.tick-mark {
+    color: rgb(18, 177, 18);
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+/*.tick-icon {
+    color: green;
+    font-size: 1.2em;
+    margin-left: 10px;
+}*/
+
+.tick-icon {
+    display: none;
+    color: rgb(39, 214, 39);
+    font-size: 18px;
+    margin-left: 5px;
+    transition: opacity 0.3s ease-in-out; /* Added smooth transition */
+}
+
+/* Execute Button */
+#execute-button {
+    background-color: #4caf50; /* Green color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    justify-content: center;
+    text-align: center;
+    display: inline-flex; /* Ensures center alignment */
+    align-items: center;
+    width: 100%; /* Ensures it stretches to the width of the container */
+}
+
+#execute-button:disabled {
+    background-color: #a5d6a7; /* Light green for disabled */
+    cursor: not-allowed;
+    text-align: center;
+}
+
+/* Cancel Button */
+#cancel-execute-button {
+    background-color: #f44336; /* Red color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    justify-content: center;
+    text-align: center;
+    display: inline-flex; /* Ensures center alignment */
+    align-items: center;
+    width: 100%; /* Ensures it stretches to the width of the container */
+}
+
+#cancel-execute-button:disabled {
+    background-color: #ef9a9a; /* Light red for disabled */
+    cursor: not-allowed;
+    text-align: center;
+}
+
+/* Grouping Load, Execute, and Cancel buttons in a row */
+.action-buttons-group {
+    display: flex;
+    gap: 10px; /* Space between the buttons */
+    align-items: center; /* Align buttons vertically */
+    margin-bottom: 10px; /* Add space below the button group */
+}
+
+/* Ensure all buttons in the group are styled consistently */
+.action-buttons-group .action-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.action-buttons-group .action-button.cancel {
+    background-color: #ffcccc; /* Highlight cancel button differently */
+    color: #ff0000;
+    border: 1px solid #ff0000;
+}

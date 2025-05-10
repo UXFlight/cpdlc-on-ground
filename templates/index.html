@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>CPDLC UI</title>
+   <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+   <div class="container">
+       <header>
+           <h1>CPDLC</h1>
+           <div class="connection-status">
+               <span class="status-indicator"></span> Connected to KLAX
+           </div>
+       </header>
+       <div class="content">
+           <!-- Message Log -->
+           <div class="message-log">
+               <h2>Message Log</h2>
+               <div id="message-box" class="log-box">
+                   <!-- Dynamic content will be appended here -->
+               </div>
+               <div class="action-buttons-group">
+                    <button id="load-button" class="action-button" onclick="handleLoadButtonClick()">Load</button>
+                    <button id="execute-button" class="action-button" onclick="handleExecuteButtonClick()" disabled>Execute</button>
+                    <button id="cancel-execute-button" class="action-button cancel" onclick="handleCancelExecuteButtonClick()" disabled>Cancel</button>
+               </div>
+               <!-- Action Buttons (Wilco, Standby, Unable) -->
+               <div class="action-buttons">
+                   <button class="action-button" id="wilco" onclick="handleActionButtonClick('wilco')" >Wilco</button>
+                   <button class="action-button" id="standby" onclick="handleActionButtonClick('standby')" disabled>Standby</button>
+                   <button class="action-button" id="unable" onclick="handleActionButtonClick('unable')" disabled>Unable</button>
+               </div>
+           </div>
+
+           <!-- Request Menu -->
+           <div class="request-menu">
+               <h2>Request</h2>
+               <!-- Request button for Expected Taxi Clearance -->
+               <div class="dropdown">
+                   <button class="dropdown-button">
+                       <div class="spinner" id="expected-taxi-clearance-spinner"></div>
+                       <span class="tick-icon" id="expected-taxi-clearance-tick" style="display: none;">&#10003;</span>
+                       Expected Taxi Clearance
+                   </button>
+                   <div class="dropdown-content">
+                       <button class="request-button" id="expected-taxi-clearance-btn" onclick="sendRequest('expected_taxi_clearance')">Request</button>
+                       <button class="cancel-button" onclick="resetExpectedTaxiClearance()">Cancel</button>
+                   </div>
+               </div>
+
+               <!-- Request button for Engine Startup -->
+               <div class="dropdown">
+                   <button class="dropdown-button">
+                       <div class="spinner" id="engine-startup-spinner"></div>
+                       <span class="tick-icon" id="engine-startup-tick-icon" style="display: none;">&#10003;</span>
+                       Engine Startup
+                   </button>
+                   <div class="dropdown-content">
+                       <button class="request-button" id="engine-startup-btn" onclick="sendRequest('engine_startup')">Request</button>
+                       <button class="cancel-button" onclick="resetEngineStartup()">Cancel</button>
+                   </div>
+               </div>
+
+               <!-- Request button for Pushback -->
+               <div class="dropdown">
+                   <button class="dropdown-button">
+                       <div class="spinner" id="pushback-spinner"></div>
+                       <span class="tick-icon" id="pushback-spinner-tick-icon" style="display: none;">&#10003;</span>
+                       Pushback
+                   </button>
+                   <div class="dropdown-content">
+                       <button class="direction-button" id="pushback-left" onclick="selectPushbackDirection('left')">Left</button>
+                       <button class="direction-button" id="pushback-right" onclick="selectPushbackDirection('right')">Right</button>
+                       <button class="request-button" id="pushback-btn" onclick="sendPushbackRequest()">Request</button>
+                       <button class="cancel-button" onclick="resetPushback()">Cancel</button>
+                   </div>
+               </div>
+
+               <!-- Request button for Taxi Clearance -->
+               <div class="dropdown">
+                   <button class="dropdown-button">
+                       <div class="spinner" id="taxi-clearance-spinner"></div>
+                       <span class="tick-icon" id="taxi-clearance-tick-icon" style="display: none;">&#10003;</span>
+                       Taxi Clearance
+                   </button>
+                   <div class="dropdown-content">
+                       <button class="request-button" id="taxi-clearance-btn" onclick="sendRequest('taxi_clearance')">Request</button>
+                       <button class="cancel-button" onclick="resetTaxiClearance()">Cancel</button>
+                   </div>
+               </div>
+
+               <!-- Request button for De-Icing -->
+               <div class="dropdown">
+                   <button class="dropdown-button">
+                       <div class="spinner" id="de-icing-spinner"></div>
+                       <span class="tick-icon" id="de-icing-tick-icon" style="display: none;">&#10003;</span>
+                       De-Icing
+                   </button>
+                   <div class="dropdown-content">
+                       <button class="request-button" id="de-icing-btn" onclick="sendRequest('de_icing')">Request</button>
+                       <button class="cancel-button" onclick="resetDeIcing()">Cancel</button>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+       <!-- Taxi Clearance Section -->
+       <div class="taxi-clearance-box">
+           <h2>Taxi Clearance</h2>
+           <div id="taxi-clearance-message" class="clearance-box">
+               <!-- This will be dynamically updated with taxi clearance message -->
+           </div>
+       </div>
+   </div>
+
+   <script src="/static/script.js"></script>
+</body>
+</html>
