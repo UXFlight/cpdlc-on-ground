@@ -63,3 +63,7 @@ cpdlc-flask-app/
 ├── requirements.txt        # Dépendances Python
 └── README.md
 ```
+
+# Visualisation
+
+![project explaination](/docs/img/project.png)
