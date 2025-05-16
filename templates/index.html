@@ -5,7 +5,12 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>CPDLC UI</title>
    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-   <link rel="stylesheet" href="/static/style.css">
+   <link rel="stylesheet" href="/static/css/style.css">
+   <link rel="stylesheet" href="/static/css/logs.css">
+   <link rel="stylesheet" href="/static/css/pilot-buttons.css">
+   <link rel="stylesheet" href="/static/css/request.css">
+   <link rel="stylesheet" href="/static/css/taxi-clearance.css">
+
 
    <!-- js scripts defered to load after the DOM is ready -->
    <!-- <script type="module" src="/static/script.js"></script> -->
@@ -45,88 +50,100 @@
            </div>
 
            <!-- Request Menu -->
-           <div class="request-menu">
-               <h2>Request</h2>
-               <!-- Request button for Expected Taxi Clearance -->
-               <div class="dropdown">
-                   <button class="dropdown-button">
-                       <div class="spinner" id="expected-taxi-clearance-spinner"></div>
-                       <span class="tick-icon" id="expected-taxi-clearance-tick" style="display: none;">&#10003;</span>
-                       1. Expected Taxi Clearance
-                   </button>
-                   <div class="dropdown-content">
-                       <button class="request-button" data-action="expected_taxi_clearance" id="expected-taxi-clearance-btn">Request</button>
-                       <button class="cancel-button" data-action="expected_taxi_clearance" disabled>Cancel</button>
-                   </div>
-               </div>
+            <div class="request-menu">
+                <h2>Request</h2>
+                <!-- Request button for Expected Taxi Clearance -->
+                <div class="dropdown">
+                    <button class="dropdown-button">
+                        <span class="label">1. Expected Taxi Clearance</span>
+                        <div class="status-icons">
+                          <div class="spinner" id="expected_taxi_clearance_spinner"></div>
+                          <span class="tick-icon" id="expected_taxi_clearance_tick">&#10003;</span>
+                        </div>
+                    </button>
+
+                    <div class="dropdown-content">
+                        <button class="request-button" data-action="expected_taxi_clearance" id="expected-taxi-clearance-btn">Request</button>
+                        <button class="cancel-button" data-action="expected_taxi_clearance" disabled>Cancel</button>
+                    </div>
+                </div>
 
                <!-- Request button for Engine Startup -->
-               <div class="dropdown">
-                   <button class="dropdown-button">
-                       <div class="spinner" id="engine-startup-spinner"></div>
-                       <span class="tick-icon" id="engine-startup-tick-icon" style="display: none;">&#10003;</span>
-                       2. Engine Startup
-                   </button>
+                <div class="dropdown">
+                    <button class="dropdown-button">
+                        <span class="label">2. Engine Startup</span>
+                        <div class="status-icons">
+                          <div class="spinner" id="engine_startup_spinner"></div>
+                          <span class="tick-icon" id="engine_startup_tick">&#10003;</span>
+                        </div>
+                    </button>
+
                    <div class="dropdown-content">
                     <button class="request-button" data-action="engine_startup" id="engine-startup-btn">Request</button>
                     <button class="cancel-button" data-action="engine_startup" disabled>Cancel</button>
                    </div>
-               </div>
+                </div>
 
-               <!-- Request button for Pushback -->
-               <div class="dropdown">
-                   <button class="dropdown-button">
-                       <div class="spinner" id="pushback-spinner"></div>
-                       <span class="tick-icon" id="pushback-spinner-tick-icon" style="display: none;">&#10003;</span>
-                       3. Pushback
-                   </button>
-                   <div class="dropdown-content">
+                <!-- Request button for Pushback -->
+                <div class="dropdown">
+                    <button class="dropdown-button">
+                        <span class="label">3. Pushback</span>
+                        <div class="status-icons">
+                          <div class="spinner" id="pushback_spinner"></div>
+                          <span class="tick-icon" id="pushback_spinner_tick">&#10003;</span>
+                        </div>
+                    </button>
+
+                    <div class="dropdown-content">
                     <div class="pushback-direction">
                         <button class="direction-button" id="pushback-left">Left</button>
                         <button class="direction-button" id="pushback-right">Right</button>
                     </div>
-                       <button class="request-button" id="pushback-btn" data-action="pushback" disabled>Request</button>
-                       <button class="cancel-button" id="cancel-pushback-btn" data-action="pushback" disabled>Cancel</button>
-                   </div>
-               </div>
+                        <button class="request-button" id="pushback-btn" data-action="pushback" disabled>Request</button>
+                        <button class="cancel-button" id="cancel-pushback-btn" data-action="pushback" disabled>Cancel</button>
+                    </div>
+                </div>
 
                <!-- Request button for Taxi Clearance -->
-               <div class="dropdown">
-                   <button class="dropdown-button">
-                       <div class="spinner" id="taxi-clearance-spinner"></div>
-                       <span class="tick-icon" id="taxi-clearance-tick-icon" style="display: none;">&#10003;</span>
-                       4. Taxi Clearance
-                   </button>
-                   <div class="dropdown-content">
-                       <button class="request-button" id="taxi-clearance-btn" data-action="taxi_clearance">Request</button>
-                       <button class="cancel-button" data-action="taxi_clearance" disabled>Cancel</button>
-                   </div>
-               </div>
+                <div class="dropdown">
+                    <button class="dropdown-button">
+                        <span class="label">4. Taxi Clearance</span>
+                        <div class="status-icons">
+                            <div class="spinner" id="taxi_clearance_spinner"></div>
+                            <span class="tick-icon" id="taxi_clearance_tick">&#10003;</span>
+                        </div>
+                    </button>
+
+                    <div class="dropdown-content">
+                        <button class="request-button" id="taxi-clearance-btn" data-action="taxi_clearance">Request</button>
+                        <button class="cancel-button" data-action="taxi_clearance" disabled>Cancel</button>
+                    </div>
+                </div>
 
                <!-- Request button for De-Icing -->
-               <div class="dropdown">
-                   <button class="dropdown-button">
-                       <div class="spinner" id="de-icing-spinner"></div>
-                       <span class="tick-icon" id="de-icing-tick-icon" style="display: none;">&#10003;</span>
-                       5. De-Icing
-                   </button>
-                   <div class="dropdown-content">
-                       <button class="request-button" id="de-icing-btn" data-action="de_icing">Request</button>
-                       <button class="cancel-button" data-action="de_icing" disabled>Cancel</button>
-                   </div>
-               </div>               
+                <div class="dropdown">
+                    <button class="dropdown-button">
+                        <span class="label">5. De-Icing</span>
+                        <div class="status-icons">
+                            <div class="spinner" id="de_icing_spinner"></div>
+                            <span class="tick-icon" id="de_icing_tick">&#10003;</span>
+                        </div>
+                    </button>
+                    <div class="dropdown-content">
+                        <button class="request-button" id="de-icing-btn" data-action="de_icing">Request</button>
+                        <button class="cancel-button" data-action="de_icing" disabled>Cancel</button>
+                    </div>
+                </div>               
            </div>
        </div>
 
-
-
-       <!-- Taxi Clearance Section -->
-       <div class="taxi-clearance-box">
-           <h2>Taxi Clearance</h2>
-           <div id="taxi-clearance-message" class="clearance-box">
-               <!-- This will be dynamically updated with taxi clearance message -->
-           </div>
-       </div>
+        <!-- Taxi Clearance Section -->
+        <div class="taxi-clearance-box">
+            <h2>Taxi Clearance</h2>
+            <div id="taxi-clearance-message" class="clearance-box">
+                <!-- This will be dynamically updated with taxi clearance message -->
+            </div>
+        </div>
 
 
    </div>

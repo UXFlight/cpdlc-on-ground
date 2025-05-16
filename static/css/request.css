@@ -1,0 +1,194 @@
+
+/* Dropdown and buttons */
+.dropdown {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.dropdown-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 80%;
+    padding: 10px;
+    background-color: #333;
+    border: 1px solid #6cc24a;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .dropdown-button .label {
+    flex-grow: 1;
+    text-align: left;
+  }
+  
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+
+.dropdown-button:hover {
+    background-color: #444;
+}
+
+.dropdown-content {
+    display: none;
+    background-color: #444;
+    padding: 10px;
+    width: 80%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+.request-button,
+.cancel-button,
+.load-button {
+    background-color: #333;
+    border: none;
+    padding: 10px;
+    margin: 5px 0;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.request-button:hover,
+.cancel-button:hover,
+.load-button:hover {
+    background-color: #555;
+}
+
+.cancel-button:disabled, 
+#pushback-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+
+.pushback-direction {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.direction-button {
+    flex: 1;
+    height: 50px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+
+/* Hover effect for buttons */
+.direction-button:hover {
+    background-color: #333333; /* Darker shade on hover */
+    color: #00FF00; /* Bright green text color */
+}
+
+/* Style for active button */
+.direction-button.active {
+    background-color: #4CAF50; /* Green for active */
+    color: white;
+}
+
+.request-button.active {
+    background-color: #008CBA; /* Blue for active Request button */
+    color: white;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.action-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #333;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    width: 31%;
+    margin-top: 10px;
+}
+
+.action-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.action-button:hover:not(:disabled) {
+    background-color: #6cc24a;
+}
+
+/* Spinner Styles */
+.spinner {
+    display: none;
+    border: 2px solid transparent; /* Transparent borders for base */
+    border-top: 2px solid #6cc24a; /* Green for the top border */
+    border-right: 2px solid #6cc24a; /* Green for the right border */
+    border-radius: 50%; /* Circle shape */
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite; /* Smooth spinning animation */
+    vertical-align: middle; /* Align spinner with button text */
+    margin-right: 8px; /* Space between spinner and text */
+    transition: opacity 0.3s ease-in-out; /* Added smooth transition for spinner */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Checkmark Styles */
+.checkmark {
+    display: inline-block;
+    color: #6cc24a; /* Green color for success */
+    font-size: 18px;
+    font-weight: bold;
+    vertical-align: middle; /* Align checkmark with button text */
+    margin-right: 8px; /* Space between checkmark and text */
+}
+
+
+
+.tick-icon {
+    display: none;
+    font-size: 18px;
+    margin-left: 5px;
+    transition: opacity 0.3s ease-in-out; 
+}
+
+.tick-icon.success {
+    color: #6cc24a; /* Green for success */
+}
+
+.tick-icon.error {
+    color: #ff4c4c; /* Rouge vif pour erreur */
+}

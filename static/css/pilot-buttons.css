@@ -1,0 +1,69 @@
+
+/* Execute Button */
+#execute-button {
+    background-color: #4caf50; /* Green color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    justify-content: center;
+    text-align: center;
+    display: inline-flex; /* Ensures center alignment */
+    align-items: center;
+    width: 100%; /* Ensures it stretches to the width of the container */
+}
+
+#execute-button:disabled {
+    background-color: #a5d6a7; /* Light green for disabled */
+    cursor: not-allowed;
+    text-align: center;
+}
+
+/* Cancel Button */
+#cancel-execute-button {
+    background-color: #f44336; /* Red color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    justify-content: center;
+    text-align: center;
+    display: inline-flex; /* Ensures center alignment */
+    align-items: center;
+    width: 100%; /* Ensures it stretches to the width of the container */
+}
+
+#cancel-execute-button:disabled {
+    background-color: #ef9a9a; /* Light red for disabled */
+    cursor: not-allowed;
+    text-align: center;
+}
+
+/* Grouping Load, Execute, and Cancel buttons in a row */
+.action-buttons-group {
+    display: flex;
+    gap: 10px; /* Space between the buttons */
+    align-items: center; /* Align buttons vertically */
+    margin-bottom: 10px; /* Add space below the button group */
+}
+
+/* Ensure all buttons in the group are styled consistently */
+.action-buttons-group .action-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.action-buttons-group .action-button.cancel {
+    background-color: #ffcccc; /* Highlight cancel button differently */
+    color: #ff0000;
+    border: 1px solid #ff0000;
+}

@@ -1,0 +1,64 @@
+
+
+.log-box {
+    height: 300px;
+    background-color: #000000;
+    /*border: 1px solid #6cc24a;*/
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column-reverse; /* Reverse order of child elements */
+}
+
+#message-box {
+    display: flex;
+    flex-direction: column-reverse; /* Align messages from top to bottom */
+    overflow-y: auto; /* Enable scrolling when content exceeds height */
+    max-height: 400px; /* Adjust as per design requirements */
+    padding: 10px;
+    scroll-behavior: smooth; /* Smooth scrolling for new messages */
+}
+
+.new-message {
+    color: #fff; /* White for new messages */
+    font-weight: bold;
+}
+
+.old-message {
+    color: grey; /* Gray for old messages */
+    font-style: normal;
+    opacity: 0.6;
+}
+
+.timestamp {
+    color: #61A6F0; /* Light blue */
+    font-weight: bold;
+}
+
+/* Message title style */
+.message-title {
+    color: white; /* White color for the title */
+    font-weight: bold;
+}
+
+/* Status style */
+.status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-left: 5px;
+    color: black; /* Black text for contrast */
+}
+
+/* Open status background color */
+.status.open {
+    background-color: #0DFF00; /* Green background for "OPEN" */
+}
+
+/* Closed status background color and text */
+.status.closed {
+    background-color: #FFFFFF; /* White background for "CLOSED" */
+    color: #000000; /* Black text for contrast */
+}

@@ -1,5 +1,5 @@
 import { sendRequest } from './js/api.js';
-import { createLog, showTick } from './js/ui.js';
+import { createLog, showSpinner, showTick, showErrorIcon, hideSpinner, hideTick } from './js/ui.js';
 import { state } from './js/state.js';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -35,30 +35,38 @@ function listenToButtonEvents() {
 
   // request btns event
   requestButtons.forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const action = btn.dataset.action;
-      const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
-      if (cancelBtn) cancelBtn.disabled = false;
+  btn.addEventListener("click", async () => {
+    const action = btn.dataset.action;
+    // const id = action.replace(/_/g, "-");
+    
+    if (action === "pushback" && !state.selectedPushbackDirection) {
+      alert("Please select a direction before sending the pushback request.");
+      return;
+    }
+    
+    const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
 
+    showSpinner(action);
 
-      if (action === "pushback" && !state.selectedPushbackDirection) {
-        console.log("Pushback action is disabled when left or right button is clicked.");
-        return;
+    try {
+      const data = await sendRequest(action);
+      // hideSpinner(spinnerId);
+
+      if (!data.error) {
+        createLog(data);
+        showTick(action);
+        if (cancelBtn) cancelBtn.disabled = false;
+      } else {
+        showErrorIcon(action)
       }
 
-      console.log(`Action : ${action}`);
+    } catch (err) {
+      showErrorIcon(action)
+      console.error("Network error:", err);
+    }
+  });
+});
 
-      try {
-        const data = await sendRequest(action);
-        if (!data.error) {
-          createLog(data);
-          showTick(`${action}-tick-icon`);
-        }
-      } catch (err) {
-        console.error("Network error:", err);
-      }
-    });
-  }); 
 
   // cancel btns event
   cancelButtons.forEach(btn => {
