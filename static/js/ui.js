@@ -36,26 +36,22 @@ export function showSpinner(action) {
   if (tick) tick.style.display = "none";
 }
 
-export function showTick(action) {
+export function showTick(action, isError = false) {
   const spinner = document.getElementById(`${action}_spinner`);
   const tick = document.getElementById(`${action}_tick`);
-  console.log("action", action);
-  console.log("spinner", spinner);
-  console.log("tick", tick);
-  console.log(`${action}-tick`)
+  console.log('tick', tick)
+  console.log('spinner', spinner)
+  console.log('action', action)
+
   if (spinner) spinner.style.display = "none";
   if (tick) tick.style.display = "inline-block";
-}
 
-export function showErrorIcon(action) {
-  const spinner = document.getElementById(`${action}-spinner`);
-  const tick = document.getElementById(`${action}-tick`);
-  if (spinner) spinner.style.display = "none";
-  if (tick) {
-    tick.textContent = "✖"; // Red X
+  if (isError) {
+    tick.textContent = "✖";
     tick.style.color = "red";
-    tick.style.display = "inline-block";
-  }
+    tick.classList.add('error');
+    tick.classList.remove('success');
+  } 
 }
 
 export function hideSpinner(spinnerId) {

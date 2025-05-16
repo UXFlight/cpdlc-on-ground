@@ -18,18 +18,18 @@
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  .dropdown-button .label {
+}
+
+.dropdown-button .label {
     flex-grow: 1;
     text-align: left;
-  }
-  
-  .status-icons {
+}
+
+.status-icons {
     display: flex;
     align-items: center;
     gap: 6px;
-  }
+}
   
 
 .dropdown-button:hover {
@@ -66,14 +66,6 @@
     background-color: #555;
 }
 
-.cancel-button:disabled, 
-#pushback-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  
-
 .pushback-direction {
     display: flex;
     gap: 10px;
@@ -93,24 +85,21 @@
 }
 
 
-/* Hover effect for buttons */
 .direction-button:hover {
-    background-color: #333333; /* Darker shade on hover */
-    color: #00FF00; /* Bright green text color */
+    background-color: #333333; 
+    color: #00FF00;
 }
 
-/* Style for active button */
 .direction-button.active {
-    background-color: #4CAF50; /* Green for active */
+    background-color: #4CAF50; 
     color: white;
 }
 
 .request-button.active {
-    background-color: #008CBA; /* Blue for active Request button */
+    background-color: #008CBA;
     color: white;
 }
 
-/* Action Buttons */
 .action-buttons {
     display: flex;
     justify-content: space-between;
@@ -142,19 +131,19 @@
     background-color: #6cc24a;
 }
 
-/* Spinner Styles */
+/* SPINNER */
 .spinner {
     display: none;
-    border: 2px solid transparent; /* Transparent borders for base */
-    border-top: 2px solid #6cc24a; /* Green for the top border */
-    border-right: 2px solid #6cc24a; /* Green for the right border */
-    border-radius: 50%; /* Circle shape */
-    width: 16px;
-    height: 16px;
-    animation: spin 1s linear infinite; /* Smooth spinning animation */
-    vertical-align: middle; /* Align spinner with button text */
-    margin-right: 8px; /* Space between spinner and text */
-    transition: opacity 0.3s ease-in-out; /* Added smooth transition for spinner */
+    border: 2px solid transparent;
+    border-top: 2px solid #6cc24a; 
+    border-right: 2px solid #6cc24a; 
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite; 
+    vertical-align: middle;
+    margin-right: 8px;
+    transition: opacity 0.3s ease-in-out; 
 }
 
 @keyframes spin {
@@ -166,29 +155,18 @@
     }
 }
 
-/* Checkmark Styles */
-.checkmark {
-    display: inline-block;
-    color: #6cc24a; /* Green color for success */
-    font-size: 18px;
-    font-weight: bold;
-    vertical-align: middle; /* Align checkmark with button text */
-    margin-right: 8px; /* Space between checkmark and text */
-}
-
-
-
+/* TICK */
 .tick-icon {
+    margin-right: 8px;
     display: none;
     font-size: 18px;
-    margin-left: 5px;
     transition: opacity 0.3s ease-in-out; 
 }
 
 .tick-icon.success {
-    color: #6cc24a; /* Green for success */
+    color: #6cc24a;
 }
 
 .tick-icon.error {
-    color: #ff4c4c; /* Rouge vif pour erreur */
+    color: #ff4c4c;
 }

@@ -60,7 +60,13 @@ header {
 
 .message-log,
 .request-menu {
-    width: 48%;
+    flex: 1;
 }
 
-
+/* BUTTON */
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+  
