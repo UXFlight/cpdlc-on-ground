@@ -26,9 +26,6 @@
            </div>
        </header>
 
-
-
-
        <div class="content">
            <!-- Message Log -->
            <div class="message-log">
@@ -37,15 +34,15 @@
                    <!-- Dynamic content will be appended here -->
                </div>
                <div class="action-buttons-group">
-                    <button id="load-button" class="action-button" onclick="handleLoadButtonClick()">Load</button>
+                    <button id="load-button" class="action-button" disabled>Load</button>
                     <button id="execute-button" class="action-button" onclick="handleExecuteButtonClick()" disabled>Execute</button>
                     <button id="cancel-execute-button" class="action-button cancel" onclick="handleCancelExecuteButtonClick()" disabled>Cancel</button>
                </div>
                <!-- Action Buttons (Wilco, Standby, Unable) -->
                <div class="action-buttons">
-                   <button class="action-button" id="wilco" onclick="handleActionButtonClick('wilco')" >Wilco</button>
-                   <button class="action-button" id="standby" onclick="handleActionButtonClick('standby')" disabled>Standby</button>
-                   <button class="action-button" id="unable" onclick="handleActionButtonClick('unable')" disabled>Unable</button>
+                   <button class="action-button" id="wilco" disabled>Wilco</button>
+                   <button class="action-button" id="standby" disabled>Standby</button>
+                   <button class="action-button cancel" id="unable" disabled>Unable</button>
                </div>
            </div>
 

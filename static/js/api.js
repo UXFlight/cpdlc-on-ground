@@ -12,4 +12,12 @@ export async function postAction(action) {
   });
   return response.json();
 }
-  
+
+export async function postLoad(previousEntry) {
+  const response = await fetch('/load', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ requestType: previousEntry }),
+  });
+  return response.json();
+}

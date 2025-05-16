@@ -1,64 +1,80 @@
-
-
 .log-box {
     height: 300px;
     background-color: #000000;
-    /*border: 1px solid #6cc24a;*/
     padding: 10px;
     overflow-y: auto;
     border-radius: 5px;
     display: flex;
-    flex-direction: column-reverse; /* Reverse order of child elements */
+    flex-direction: column-reverse;
 }
 
 #message-box {
     display: flex;
-    flex-direction: column-reverse; /* Align messages from top to bottom */
-    overflow-y: auto; /* Enable scrolling when content exceeds height */
-    max-height: 400px; /* Adjust as per design requirements */
+    flex-direction: column-reverse;
+    overflow-y: auto; 
+    max-height: 400px;
     padding: 10px;
-    scroll-behavior: smooth; /* Smooth scrolling for new messages */
+    scroll-behavior: smooth; 
 }
 
 .new-message {
-    color: #fff; /* White for new messages */
+    color: #fff;
     font-weight: bold;
 }
 
 .old-message {
-    color: grey; /* Gray for old messages */
+    color: grey; 
     font-style: normal;
     opacity: 0.6;
 }
 
 .timestamp {
-    color: #61A6F0; /* Light blue */
+    color: #61A6F0;
     font-weight: bold;
 }
 
-/* Message title style */
 .message-title {
-    color: white; /* White color for the title */
+    color: white; 
     font-weight: bold;
 }
 
-/* Status style */
 .status {
     display: inline-block;
     padding: 2px 8px;
     border-radius: 8px;
     font-weight: bold;
     margin-left: 5px;
-    color: black; /* Black text for contrast */
+    color: black; 
 }
 
-/* Open status background color */
 .status.open {
-    background-color: #0DFF00; /* Green background for "OPEN" */
+    background-color: #0DFF00; 
 }
 
-/* Closed status background color and text */
+.status.cancelled {
+    background-color: #FF0000;
+}
+
 .status.closed {
-    background-color: #FFFFFF; /* White background for "CLOSED" */
-    color: #000000; /* Black text for contrast */
+    background-color: #FFFFFF; 
+    color: #000000; 
+}
+
+/* RESPONSE */
+.message-response {
+    font-size: 1rem;
+    background-color: #1e1e1e;       
+    color: #f0f0f0;    
+    font-style: italic;
+    margin-bottom: 6px;
+    padding: 8px 12px;
+    border-left: 3px solid #6cc24a;
+    border-radius: 4px;
+    font-weight: 400;
+    white-space: pre-wrap;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.message-response:hover {
+    background-color: #2a2a2a;
 }

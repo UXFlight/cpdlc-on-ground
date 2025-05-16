@@ -164,7 +164,8 @@ def request_action(action):
     if action == "expected_taxi_clearance":
         exp_t_c_response.update({
             "timestamp": timestamp,
-            "action": action_label
+            "action": action_label,
+            "message": ATC_RESPONSES[action],
         })
         app.logger.info(f"Action requested: {action} - Response: {exp_t_c_response}")
         return jsonify(exp_t_c_response)
@@ -174,7 +175,8 @@ def request_action(action):
         print("Taxi clearance requested")
         t_c_response.update({
             "timestamp": timestamp,
-            "action": action_label
+            "action": action_label,
+            "message": ATC_RESPONSES[action],
         })
         app.logger.info(f"Action requested: {action} - Response: {t_c_response}")
         return jsonify(t_c_response)
@@ -189,7 +191,6 @@ def request_action(action):
     }
     app.logger.info(f"Action requested: {action} - Response: {response}")
     return jsonify(response)
-
 
 
 # Load taxi clearance

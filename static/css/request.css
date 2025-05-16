@@ -1,5 +1,5 @@
 
-/* Dropdown and buttons */
+/* Dropdown */
 .dropdown {
     margin-bottom: 15px;
     position: relative;
@@ -30,7 +30,6 @@
     align-items: center;
     gap: 6px;
 }
-  
 
 .dropdown-button:hover {
     background-color: #444;

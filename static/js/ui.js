@@ -1,6 +1,7 @@
 
 // Creates log message 
 export function createLog({ timestamp, action, message }) {
+
   const messageBox = document.getElementById('message-box');
   const div = document.createElement('div');
   div.classList.add('new-message');
@@ -21,10 +22,15 @@ export function createLog({ timestamp, action, message }) {
   status.textContent = 'OPEN';
   
   p1.append(ts, sep, title, document.createTextNode(' '), status);
-  const p2 = document.createElement('p');
-  p2.textContent = message;
+  div.append(p1);
   
-  div.append(p1, p2);
+  if (message) {
+    const p2 = document.createElement('p');
+    p2.classList.add('message-response');
+    p2.textContent = `_> ${message}`;
+    div.append(p2);
+  }
+  
   messageBox.prepend(div);
 }
 
@@ -39,9 +45,6 @@ export function showSpinner(action) {
 export function showTick(action, isError = false) {
   const spinner = document.getElementById(`${action}_spinner`);
   const tick = document.getElementById(`${action}_tick`);
-  console.log('tick', tick)
-  console.log('spinner', spinner)
-  console.log('action', action)
 
   if (spinner) spinner.style.display = "none";
   if (tick) tick.style.display = "inline-block";
@@ -67,3 +70,49 @@ export function hideTick(tickId) {
   }
 }
 
+// buttons functions
+export function enableButtons(action) {
+  console.log('enableButtons', action);
+  switch (action) {
+
+    case 'expected_taxi_clearance':
+      document.getElementById('load-button').disabled = false;
+      break;
+    case 'engine_startup':
+      document.getElementById('wilco').disabled = false;
+      break;
+    case 'pushback':
+      document.getElementById('wilco').disabled = false;
+      break;
+    case 'taxi_clearance':
+      document.getElementById('load-button').disabled = false;
+      break;
+    case 'de_icing':
+      document.getElementById('wilco').disabled = false;
+      break;
+    default:
+      break;
+  }
+}
+
+export function disableExecuteButtons() {
+  document.getElementById('execute-button').disabled = true;
+  document.getElementById('cancel-execute-button').disabled = true;
+}
+
+export function enableWilcoButtons() {
+  const buttons = document.querySelectorAll(".action-button");
+  buttons.forEach(button => {
+      button.disabled = false;
+      button.classList.add("active");
+  });
+}
+
+function disableWilcoButtons() {
+  console.log("Disabling Wilco, Standby, and Unable buttons...");
+  const buttons = document.querySelectorAll(".action-button");
+  buttons.forEach(button => {
+      button.disabled = true;
+      button.classList.remove("active");
+  });
+}
