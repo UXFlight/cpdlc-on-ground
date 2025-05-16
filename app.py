@@ -103,7 +103,7 @@ ATC_RESPONSES = {
     "engine_startup": "ENGINE STARTUP APPROVED",
     "pushback": "PUSHBACK APPROVED",
     "taxi_clearance": "TAXI CLEARANCE GRANTED",
-    "de-icing": "DE-ICING NOT REQUIRED"
+    "de_icing": "DE-ICING NOT REQUIRED"
 }
 
 exp_t_c_response = {
