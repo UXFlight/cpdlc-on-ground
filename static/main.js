@@ -12,6 +12,9 @@ function listenToButtonEvents() {
   const requestButtons = document.querySelectorAll(".request-button");
   const cancelButtons = document.querySelectorAll(".cancel-button");
 
+  const leftButton = document.getElementById("pushback-left");
+  const rightButton = document.getElementById("pushback-right");
+
   // dropdown event
   dropdownButtons.forEach(button => {
     const dropdownContent = button.nextElementSibling;
@@ -34,7 +37,17 @@ function listenToButtonEvents() {
   requestButtons.forEach(btn => {
     btn.addEventListener("click", async () => {
       const action = btn.dataset.action;
+      const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
+      if (cancelBtn) cancelBtn.disabled = false;
+
+
+      if (action === "pushback" && !state.selectedPushbackDirection) {
+        console.log("Pushback action is disabled when left or right button is clicked.");
+        return;
+      }
+
       console.log(`Action : ${action}`);
+
       try {
         const data = await sendRequest(action);
         if (!data.error) {
@@ -49,24 +62,39 @@ function listenToButtonEvents() {
 
   // cancel btns event
   cancelButtons.forEach(btn => {
-    btn.addEventListener("click", async () => {
+    btn.addEventListener("click", async () => {     
       const action = btn.dataset.action;
       if (!action) return;
+      if (btn.disabled) return;
 
-      const messageBox = document.getElementById(`${action.replace(/_/g, "-")}-message`);
-      const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
-
-      console.log(`Cancel button clicked: ${action}`);
-
-      if (messageBox) messageBox.innerHTML = '';
-      if (requestBtn) {
+      const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);   
+      
+      if (action === "pushback") {
+        leftButton.classList.remove("active");
+        rightButton.classList.remove("active");
+        state.selectedPushbackDirection = '';     
         requestBtn.disabled = true;
+        btn.disabled = true;
+        return;
+      }
+
+      if (requestBtn) {
+        requestBtn.disabled = false;
         requestBtn.classList.remove('active');
       }
+
+      const messageBox = document.getElementById(`${action.replace(/_/g, "-")}-message`);
+      if (messageBox) messageBox.innerHTML = '';
+
+      btn.disabled = true;
       console.log(`${action} reset.`);
 
     });
   });
+
+  // left/ right pushback event
+  leftButton.addEventListener("click", () => selectPushbackDirection("left"));
+  rightButton.addEventListener("click", () => selectPushbackDirection("right"));
 }
 
 function listenToGlobalClickEvents() {
@@ -81,4 +109,28 @@ function listenToGlobalClickEvents() {
       if (!isClickInsideDropdown && !isClickOnButton) dropdown.style.display = "none";
     });
   });
+}
+
+// pushback direction
+const selectPushbackDirection = (direction) => {
+  if (state.selectedPushbackDirection === direction) return;
+
+  const pushbackBtn = document.getElementById("pushback-btn");
+  const cancelPushbackBtn = document.getElementById("cancel-pushback-btn");
+
+  const leftButton = document.getElementById("pushback-left");
+  const rightButton = document.getElementById("pushback-right");
+
+  if (direction === "left") {
+    leftButton.classList.add("active");
+    rightButton.classList.remove("active");
+  } else {
+    rightButton.classList.add("active");
+    leftButton.classList.remove("active");
+  }
+
+  state.selectedPushbackDirection = direction;
+  pushbackBtn.disabled = false;
+  cancelPushbackBtn.disabled = false;
+  console.log(`Selected pushback direction: ${direction}`);
 }

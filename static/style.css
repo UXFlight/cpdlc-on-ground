@@ -185,6 +185,14 @@ h2 {
     background-color: #555;
 }
 
+.cancel-button:disabled, 
+#pushback-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+
 .pushback-direction {
     display: flex;
     gap: 10px;

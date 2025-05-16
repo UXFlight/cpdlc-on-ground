@@ -56,7 +56,7 @@
                    </button>
                    <div class="dropdown-content">
                        <button class="request-button" data-action="expected_taxi_clearance" id="expected-taxi-clearance-btn">Request</button>
-                       <button class="cancel-button" data-action="expected_taxi_clearance">Cancel</button>
+                       <button class="cancel-button" data-action="expected_taxi_clearance" disabled>Cancel</button>
                    </div>
                </div>
 
@@ -69,7 +69,7 @@
                    </button>
                    <div class="dropdown-content">
                     <button class="request-button" data-action="engine_startup" id="engine-startup-btn">Request</button>
-                    <button class="cancel-button" data-action="engine_startup">Cancel</button>
+                    <button class="cancel-button" data-action="engine_startup" disabled>Cancel</button>
                    </div>
                </div>
 
@@ -82,11 +82,11 @@
                    </button>
                    <div class="dropdown-content">
                     <div class="pushback-direction">
-                        <button class="direction-button" id="pushback-left" onclick="selectPushbackDirection('left')">Left</button>
-                        <button class="direction-button" id="pushback-right" onclick="selectPushbackDirection('right')">Right</button>
+                        <button class="direction-button" id="pushback-left">Left</button>
+                        <button class="direction-button" id="pushback-right">Right</button>
                     </div>
-                       <button class="request-button" id="pushback-btn" data-action="pushback">Request</button>
-                       <button class="cancel-button">Cancel</button>
+                       <button class="request-button" id="pushback-btn" data-action="pushback" disabled>Request</button>
+                       <button class="cancel-button" id="cancel-pushback-btn" data-action="pushback" disabled>Cancel</button>
                    </div>
                </div>
 
@@ -99,7 +99,7 @@
                    </button>
                    <div class="dropdown-content">
                        <button class="request-button" id="taxi-clearance-btn" data-action="taxi_clearance">Request</button>
-                       <button class="cancel-button" data-action="taxi_clearance">Cancel</button>
+                       <button class="cancel-button" data-action="taxi_clearance" disabled>Cancel</button>
                    </div>
                </div>
 
@@ -112,7 +112,7 @@
                    </button>
                    <div class="dropdown-content">
                        <button class="request-button" id="de-icing-btn" data-action="de_icing">Request</button>
-                       <button class="cancel-button" data-action="de_icing">Cancel</button>
+                       <button class="cancel-button" data-action="de_icing" disabled>Cancel</button>
                    </div>
                </div>               
            </div>
