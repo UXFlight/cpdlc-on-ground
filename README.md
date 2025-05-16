@@ -65,5 +65,3 @@ cpdlc-flask-app/
 ```
 
 # Visualisation
-
-![project explaination](/docs/img/project.png)

@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #000;
@@ -155,16 +159,9 @@ h2 {
     display: none;
     background-color: #444;
     padding: 10px;
-    position: absolute;
-    z-index: 1;
-    width: 73%;
+    width: 80%;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-    position: relative;
 }
 
 .request-button,
@@ -188,19 +185,24 @@ h2 {
     background-color: #555;
 }
 
-/* General styles for direction buttons */
-.direction-button {
-    width: 48%; /* Allow buttons to resize equally */
-    height: 50px; /* Adjust height for uniformity */
-    background-color: black; /* Background color */
-    color: white; /* Text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Add rounded corners */
-    font-size: 16px; /* Adjust font size */
-    text-align: center; /* Center align text */
-    vertical-align: middle; /* Center align content */
-    cursor: pointer; /* Change cursor to pointer */
+.pushback-direction {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
 }
+
+.direction-button {
+    flex: 1;
+    height: 50px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
 
 /* Hover effect for buttons */
 .direction-button:hover {

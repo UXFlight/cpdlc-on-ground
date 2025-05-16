@@ -569,7 +569,7 @@ function resetDeIcing() {
     const clearanceBox = document.getElementById('de-icing-message');
     clearanceBox.innerHTML = '';  // Clear the de-icing message
 
-    const requestButton = document.getElementById('de-icing-request');
+
     requestButton.disabled = true;
     requestButton.classList.remove('active'); // Disable request button
 
