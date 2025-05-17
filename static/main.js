@@ -1,5 +1,5 @@
-import { sendRequest, postLoad } from './js/api.js';
-import { createLog, showSpinner, showTick, enableButtons, disableExecuteButtons, enableWilcoButtons } from './js/ui.js';
+import { sendRequest, postLoad, postExecute } from './js/api.js';
+import { createLog, showSpinner, showTick, enableButtons, disableExecuteButtons, enableActionButtons, disableActionButtons } from './js/ui.js';
 import { state } from './js/state.js';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // dropdown event
 function listenToGlobalClickEvents() {
   const dropdownButtons = document.querySelectorAll(".dropdown-button");
+  const dropdownContents = document.querySelectorAll(".dropdown-content");
 
   dropdownButtons.forEach(button => {
     const dropdownContent = button.nextElementSibling;
@@ -17,7 +18,7 @@ function listenToGlobalClickEvents() {
     button.addEventListener("click", (e) => {
       e.stopPropagation();
 
-      document.querySelectorAll(".dropdown-content").forEach(content => {
+      dropdownContents.forEach(content => {
         if (content !== dropdownContent) {
           content.style.display = "none";
         }
@@ -29,7 +30,7 @@ function listenToGlobalClickEvents() {
   });
 
   document.addEventListener("click", function (event) {
-    document.querySelectorAll(".dropdown-content").forEach(dropdown => {
+    dropdownContents.forEach(dropdown => {
       const parent = dropdown.parentElement;
       const button = parent.querySelector(".dropdown-button");
 
@@ -63,16 +64,16 @@ function listenToButtonEvents() {
 
   // cancel btns event
   cancelButtons.forEach(btn => {
-    btn.addEventListener("click", async (e) => cancelRequestEvent(btn.dataset.action, e.currentTarget));
-  });
+    btn.addEventListener("click", cancelRequestEvent.bind(btn, btn.dataset.action)); // bind to set 'this' to cancel btn
+  });  
 
   // left/ right pushback event
   leftButton.addEventListener("click", () => selectPushbackDirection("left"));
   rightButton.addEventListener("click", () => selectPushbackDirection("right"));
 
   // load buttons event
-  loadButton.addEventListener("click", async () => loadEvent());
-  executeButton.addEventListener("click", async () => {});
+  loadButton.addEventListener("click", loadEvent.bind(loadButton)); // bind to set 'this' to load btn
+  executeButton.addEventListener("click", async () => executeEvent(state.currentRequest));
   cancelExecuteButton.addEventListener("click", async () => {});
 
   // wilco buttons event
@@ -113,7 +114,7 @@ const sendRequestEvent = async (action) => {
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
 
   showSpinner(action);
-  disableExecuteButtons();
+  // disableExecuteButtons();
 
   try {
     if (cancelBtn) cancelBtn.disabled = false;
@@ -137,17 +138,19 @@ const sendRequestEvent = async (action) => {
 }
 
 // cancel event
-const cancelRequestEvent = async (action, btn) => {     
-  if (!action || !btn || btn.disabled) return;
+async function cancelRequestEvent(action) {     
+  if (!action || this.disabled) return;
 
-  const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);   
+  const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
+
+  console.log(state.messages[action]);
   
   if (action === "pushback") {
     leftButton.classList.remove("active");
     rightButton.classList.remove("active");
     state.selectedPushbackDirection = '';     
     requestBtn.disabled = true;
-    btn.disabled = true;
+    this.disabled = true;
     return;
   }
 
@@ -159,12 +162,12 @@ const cancelRequestEvent = async (action, btn) => {
   const messageBox = document.getElementById(`${action.replace(/_/g, "-")}-message`);
   if (messageBox) messageBox.innerHTML = '';
 
-  btn.disabled = true;
+  this.disabled = true;
 }
 
 // load event
-const loadEvent = async () => {
-  if (!state.currentRequest || state.currentRequest === '') return;
+async function loadEvent() {
+  if (!state.currentRequest) return;
 
   try {
     const data = await postLoad(state.currentRequest);
@@ -179,15 +182,41 @@ const loadEvent = async () => {
     const clearanceBox = document.getElementById('taxi-clearance-message');
     clearanceBox.innerHTML = `<p>${data.message}</p>`;
 
-    // preventMessageUpdate();
-    enableWilcoButtons();
+    if(state.currentRequest === 'taxi_clearance') enableActionButtons('load');
+    else enableActionButtons('wilco');
 
-    console.log("Taxi clearance loaded:", data.message);
+    this.disabled = true;
 
   } catch (err) {
     console.error("Network error:", err);
     alert("Error communicating with server.");
   }
+}
+
+// execute event
+const executeEvent = async (action) => {
+  if (!action) return;
+
+  const data = await postExecute(action);
+
+  if (data.error) {
+    console.error("Execute error:", data.error);
+    return;
+  }
+
+  if (data.message === null) return;
+
+  const clearanceBox = document.getElementById('taxi-clearance-message');
+  clearanceBox.innerHTML = `<p>${data.message}</p>`;
+
+  disableActionButtons('load');
+  enableActionButtons('wilco');
+}
+
+const cancelExecuteEvent = async (action) => { // for now only disabling buttons
+
+  disableActionButtons('load');
+  enableActionButtons('wilco');
 }
 
 // willco, standby, unable event

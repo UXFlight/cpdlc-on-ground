@@ -21,3 +21,12 @@ export async function postLoad(previousEntry) {
   });
   return response.json();
 }
+
+export async function postExecute(requestType) {
+  const response = await fetch(`/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ requestType }),
+  });
+  return response.json();
+}

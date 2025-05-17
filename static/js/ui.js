@@ -79,16 +79,16 @@ export function enableButtons(action) {
       document.getElementById('load-button').disabled = false;
       break;
     case 'engine_startup':
-      document.getElementById('wilco').disabled = false;
+      enableActionButtons('wilco');
       break;
     case 'pushback':
-      document.getElementById('wilco').disabled = false;
+      enableActionButtons('wilco');
       break;
     case 'taxi_clearance':
       document.getElementById('load-button').disabled = false;
       break;
     case 'de_icing':
-      document.getElementById('wilco').disabled = false;
+      enableActionButtons('wilco');
       break;
     default:
       break;
@@ -100,17 +100,17 @@ export function disableExecuteButtons() {
   document.getElementById('cancel-execute-button').disabled = true;
 }
 
-export function enableWilcoButtons() {
-  const buttons = document.querySelectorAll(".action-button");
+export function enableActionButtons(action) {
+  const buttons = document.querySelectorAll(`.${action}-grp`);
   buttons.forEach(button => {
       button.disabled = false;
       button.classList.add("active");
   });
 }
 
-function disableWilcoButtons() {
+export function disableActionButtons(action) {
   console.log("Disabling Wilco, Standby, and Unable buttons...");
-  const buttons = document.querySelectorAll(".action-button");
+  const buttons = document.querySelectorAll(`.${action}-grp`);
   buttons.forEach(button => {
       button.disabled = true;
       button.classList.remove("active");
