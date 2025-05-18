@@ -1,6 +1,10 @@
 
 // Creates log message 
 export function createLog({ timestamp, action, message }) {
+  if (!action) {
+    // createResponse(message, div)
+    return;
+  }
 
   const messageBox = document.getElementById('message-box');
   const div = document.createElement('div');
@@ -137,9 +141,11 @@ function enableLoadBtn() {
 // functions that handles status of messages
 export function updateMessageStatus(action, newStatus) {
   const message = document.querySelector(`.new-message[data-action="${action}"][data-status="open"]`);
+  console.log(message);
   if (!message) return;
 
   const statusEl = message.querySelector('.status');
+  console.log(statusEl);
   if (!statusEl) return;
 
   statusEl.classList.remove('open', 'closed', 'cancelled');
@@ -152,4 +158,15 @@ export function updateMessageStatus(action, newStatus) {
 export function markOldMessages(action) {
   const oldMsgs = document.querySelectorAll(`.new-message[data-action="${action}"]`);
   oldMsgs.forEach(msg => msg.classList.add('old-message'));
+}
+
+// disable request/ cancel buttons
+export function disableRequestButtons(action) {
+  console.log(action);
+  const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
+  const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
+  console.log(cancelBtn);
+  console.log(requestBtn);
+  if (cancelBtn) cancelBtn.disabled = true;
+  if (requestBtn) requestBtn.disabled = true;
 }

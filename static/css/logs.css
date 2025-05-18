@@ -81,3 +81,14 @@
     background-color: #888;
     color: white;
 }
+
+.status.standby {
+    background-color: #e6b800; 
+    color: #1a1a1a;
+}
+
+
+.status.unable {
+    background-color: #cc1f1a; 
+    color: #ffffff;
+}

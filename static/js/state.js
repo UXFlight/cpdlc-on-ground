@@ -11,11 +11,11 @@ export const state = {
 };
 
 export const status = {
-  SUCCESS: 'success',
-  ERROR: 'error',
-  PENDING: 'pending',
+  CLOSED: 'closed', // success
   CANCELLED: 'cancelled',
-  LOAD: 'load',
+  PENDING: 'pending',
+  ERROR: 'error',
+  LOAD: 'load', // will separate this in the future
   WILCO: 'wilco',
   STANDBY: 'standby',
   UNABLE: 'unable',

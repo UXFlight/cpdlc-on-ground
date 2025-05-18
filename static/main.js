@@ -1,6 +1,6 @@
 import { sendRequest, postLoad, postExecute, postAction } from './js/api.js';
 import { state, status } from './js/state.js';
-import { createLog, showSpinner, showTick, enableButtons, enableActionButtons, disableActionButtons, hideSpinner, updateMessageStatus } from './js/ui.js';
+import { createLog, showSpinner, showTick, enableButtons, enableActionButtons, disableActionButtons, hideSpinner, updateMessageStatus, disableRequestButtons } from './js/ui.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   listenToButtonEvents();
@@ -110,9 +110,9 @@ const selectPushbackDirection = (direction) => {
 
 // request event
 const sendRequestEvent = async (action) => {
-  checkPendingRequest();
-  
   if (!action) return;
+  if (checkPendingRequest()) return;
+  if (blockSecondRequest(action)) return;  
   if (action === "pushback" && !state.steps[action].direction) return;
   
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
@@ -128,7 +128,6 @@ const sendRequestEvent = async (action) => {
     if (!data.error) {
       state.steps[action].message = data.message;
       createLog(data);
-      // showTick(action);
       state.steps[action].status = status.PENDING;
       enableButtons(action);
     } else {
@@ -144,12 +143,12 @@ const sendRequestEvent = async (action) => {
 }
 
 function checkPendingRequest() {
-  for (const step in state.steps) { // for now, blocking all other requests
-    if (state.steps[step].status === status.PENDING) {
-      console.warn(`Previous request '${step}' is still pending.`);
-      return;
-    }
-  }
+  return Object.values(state.steps).some(step => step.status === status.PENDING); // for now, blocking all other requests
+}
+
+function blockSecondRequest(action) {
+  const currentStatus = state.steps[action]?.status;
+  return currentStatus === status.CLOSED || currentStatus === status.PENDING || currentStatus === status.LOAD;
 }
 
 // cancel event
@@ -166,9 +165,6 @@ async function cancelRequestEvent(action) {
     document.getElementById("pushback-left").classList.remove("active");
     document.getElementById("pushback-right").classList.remove("active");
     state.steps[action].direction = null;     
-    requestBtn.disabled = true;
-    this.disabled = true;
-    return;
   }
 
   if (requestBtn) {
@@ -178,11 +174,12 @@ async function cancelRequestEvent(action) {
 
   // putting cancelled status
   const messageBox = document.getElementById(`${action.replace(/_/g, "-")}-message`);
-  console.log(messageBox);
   if (messageBox) messageBox.innerHTML = '';
 
   this.disabled = true;
   hideSpinner(action);
+  disableActionButtons(status.LOAD);
+  disableActionButtons(status.WILCO);
 }
 
 // load event
@@ -242,9 +239,7 @@ const cancelExecuteEvent = async (action) => { // for now only disabling buttons
 }
 
 // willco, standby, unable event
-const actionEvent = async (action) => { 
-  console.log(state);
-  console.log(action);
+const actionEvent = async (action) => {
   if (!action) return;
 
   showSpinner(action);
@@ -252,14 +247,19 @@ const actionEvent = async (action) => {
   disableActionButtons(status.WILCO);
 
   try {
+    const currentRequest = state.steps[state.currentRequest];
     const data = await postAction(action);
     if (!data.error) {
-      state.steps[state.currentRequest].status = action;
-      state.steps[state.currentRequest].message = data.message; // recheck this
+      currentRequest.status = action === status.WILCO ? status.CLOSED : action;
+      console.log(action);
+      currentRequest.message = data.message; // recheck this
       console.log(data)
       createLog(data);
-      showTick(state.currentRequest);
-      console.log(state.currentRequest);
+      updateMessageStatus(state.currentRequest, currentRequest.status);
+      if (action === status.WILCO) {
+        disableRequestButtons(state.currentRequest);
+        showTick(state.currentRequest);
+      }
     } else {
       console.warn(`Server error on '${action}'`, data.error);
       showTick(action, true);
