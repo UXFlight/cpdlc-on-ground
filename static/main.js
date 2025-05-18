@@ -1,5 +1,5 @@
-import { sendRequest, postLoad, postExecute } from './js/api.js';
-import { createLog, showSpinner, showTick, enableButtons, disableExecuteButtons, enableActionButtons, disableActionButtons } from './js/ui.js';
+import { sendRequest, postLoad, postExecute, postAction } from './js/api.js';
+import { createLog, showSpinner, showTick, enableButtons, enableActionButtons, disableActionButtons, hideSpinner } from './js/ui.js';
 import { state } from './js/state.js';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,6 +17,9 @@ function listenToGlobalClickEvents() {
 
     button.addEventListener("click", (e) => {
       e.stopPropagation();
+
+      const dropdownAction = dropdownContent.querySelector('.request-button')?.dataset.action;
+      if (dropdownAction) state.currentRequest = dropdownAction
 
       dropdownContents.forEach(content => {
         if (content !== dropdownContent) {
@@ -77,14 +80,14 @@ function listenToButtonEvents() {
   cancelExecuteButton.addEventListener("click", async () => {});
 
   // wilco buttons event
-  wilcoButton.addEventListener("click", () => {});
-  standbyButton.addEventListener("click", () => {});
-  unableButton.addEventListener("click", () => {});
+  wilcoButton.addEventListener("click", () => actionEvent('wilco'));
+  standbyButton.addEventListener("click", () => actionEvent('standby'));
+  unableButton.addEventListener("click", () => actionEvent('unable'));
 }
 
 // pushback direction
 const selectPushbackDirection = (direction) => {
-  if (state.selectedPushbackDirection === direction) return;
+  if (state.steps[state.currentRequest].direction === direction) return;
 
   const pushbackBtn = document.getElementById("pushback-btn");
   const cancelPushbackBtn = document.getElementById("cancel-pushback-btn");
@@ -100,7 +103,7 @@ const selectPushbackDirection = (direction) => {
     leftButton.classList.remove("active");
   }
 
-  state.selectedPushbackDirection = direction;
+  state.steps[state.currentRequest].direction = direction;
   pushbackBtn.disabled = false;
   cancelPushbackBtn.disabled = false;
 }
@@ -109,23 +112,22 @@ const selectPushbackDirection = (direction) => {
 const sendRequestEvent = async (action) => {
   if (!action) return;
   
-  if (action === "pushback" && !state.selectedPushbackDirection) return;
+  if (action === "pushback" && !state.steps[action].direction) return;
   
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
 
   showSpinner(action);
-  // disableExecuteButtons();
+  disableActionButtons('load');
+  disableActionButtons('wilco');
 
   try {
     if (cancelBtn) cancelBtn.disabled = false;
     const data = await sendRequest(action);
 
     if (!data.error) {
-      state.messages[action] = data.message;
-      state.currentRequest = action;
-      console.log("state", state);
+      state.steps[action].message = data.message;
       createLog(data);
-      showTick(action);
+      // showTick(action);
       enableButtons(action);
     } else {
       showTick(action, true)
@@ -143,12 +145,12 @@ async function cancelRequestEvent(action) {
 
   const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
 
-  console.log(state.messages[action]);
+  console.log(state);
   
   if (action === "pushback") {
-    leftButton.classList.remove("active");
-    rightButton.classList.remove("active");
-    state.selectedPushbackDirection = '';     
+    document.getElementById("pushback-left").classList.remove("active");
+    document.getElementById("pushback-right").classList.remove("active");
+    state.steps[action].direction = null;     
     requestBtn.disabled = true;
     this.disabled = true;
     return;
@@ -163,6 +165,7 @@ async function cancelRequestEvent(action) {
   if (messageBox) messageBox.innerHTML = '';
 
   this.disabled = true;
+  hideSpinner(action);
 }
 
 // load event
@@ -221,5 +224,25 @@ const cancelExecuteEvent = async (action) => { // for now only disabling buttons
 
 // willco, standby, unable event
 const actionEvent = async (action) => { 
+  if (!action) return;
 
+  showSpinner(action);
+  disableActionButtons('load');
+  disableActionButtons('wilco');
+
+  try {
+    const data = await postAction(action);
+    if (!data.error) {
+      state.steps[state.currentRequest].status = action;
+      createLog(data);
+      showTick(state.currentRequest);
+      console.log(state.currentRequest);
+    } else {
+      console.warn(`Server error on '${action}'`, data.error);
+      showTick(action, true);
+    }
+  } catch (err) {
+    console.error(`Error handling action '${action}'`, err);
+    showTick(action, true);
+  }
 }

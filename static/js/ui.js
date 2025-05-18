@@ -24,14 +24,16 @@ export function createLog({ timestamp, action, message }) {
   p1.append(ts, sep, title, document.createTextNode(' '), status);
   div.append(p1);
   
-  if (message) {
-    const p2 = document.createElement('p');
-    p2.classList.add('message-response');
-    p2.textContent = `_> ${message}`;
-    div.append(p2);
-  }
+  if (message) createResponse(message, div);
   
   messageBox.prepend(div);
+}
+
+export function createResponse(message, div) {
+  const p2 = document.createElement('p');
+  p2.classList.add('message-response');
+  p2.textContent = `_> ${message}`;
+  div.append(p2);
 }
 
 // loader
@@ -57,9 +59,9 @@ export function showTick(action, isError = false) {
   } 
 }
 
-export function hideSpinner(spinnerId) {
-  const spinner = document.getElementById(spinnerId);
-  if (spinner) spinner.style.display = 'none';
+export function hideSpinner(action) {
+  const spinner = document.getElementById(`${action}_spinner`);
+  if (spinner) spinner.style.display = "none";
 }
 
 export function hideTick(tickId) {
@@ -71,12 +73,10 @@ export function hideTick(tickId) {
 }
 
 // buttons functions
-export function enableButtons(action) {
-  console.log('enableButtons', action);
+export function enableButtons(action) { // we only enable load button on taxi_clearances
   switch (action) {
-
     case 'expected_taxi_clearance':
-      document.getElementById('load-button').disabled = false;
+      enableLoadBtn()
       break;
     case 'engine_startup':
       enableActionButtons('wilco');
@@ -85,12 +85,13 @@ export function enableButtons(action) {
       enableActionButtons('wilco');
       break;
     case 'taxi_clearance':
-      document.getElementById('load-button').disabled = false;
+      enableLoadBtn();
       break;
     case 'de_icing':
       enableActionButtons('wilco');
       break;
     default:
+      // helper function that displays error modal
       break;
   }
 }
@@ -100,6 +101,9 @@ export function disableExecuteButtons() {
   document.getElementById('cancel-execute-button').disabled = true;
 }
 
+// enables buttons based on action
+// action = load : enables first row
+// action = wilco : enables second row
 export function enableActionButtons(action) {
   const buttons = document.querySelectorAll(`.${action}-grp`);
   buttons.forEach(button => {
@@ -109,10 +113,18 @@ export function enableActionButtons(action) {
 }
 
 export function disableActionButtons(action) {
-  console.log("Disabling Wilco, Standby, and Unable buttons...");
   const buttons = document.querySelectorAll(`.${action}-grp`);
   buttons.forEach(button => {
       button.disabled = true;
       button.classList.remove("active");
   });
+}
+
+// quick utils func
+function enableLoadBtn() {
+  const loadButton = document.getElementById('load-button');
+  if (loadButton) {
+    loadButton.disabled = false;
+    loadButton.classList.add('active');
+  }
 }
