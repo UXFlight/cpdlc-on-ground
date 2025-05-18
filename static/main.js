@@ -1,6 +1,6 @@
 import { sendRequest, postLoad, postExecute, postAction } from './js/api.js';
-import { createLog, showSpinner, showTick, enableButtons, enableActionButtons, disableActionButtons, hideSpinner } from './js/ui.js';
-import { state } from './js/state.js';
+import { state, status } from './js/state.js';
+import { createLog, showSpinner, showTick, enableButtons, enableActionButtons, disableActionButtons, hideSpinner, updateMessageStatus } from './js/ui.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   listenToButtonEvents();
@@ -80,7 +80,7 @@ function listenToButtonEvents() {
   cancelExecuteButton.addEventListener("click", async () => {});
 
   // wilco buttons event
-  wilcoButton.addEventListener("click", () => actionEvent('wilco'));
+  wilcoButton.addEventListener("click", () => actionEvent(status.WILCO));
   standbyButton.addEventListener("click", () => actionEvent('standby'));
   unableButton.addEventListener("click", () => actionEvent('unable'));
 }
@@ -110,15 +110,16 @@ const selectPushbackDirection = (direction) => {
 
 // request event
 const sendRequestEvent = async (action) => {
-  if (!action) return;
+  checkPendingRequest();
   
+  if (!action) return;
   if (action === "pushback" && !state.steps[action].direction) return;
   
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
 
   showSpinner(action);
-  disableActionButtons('load');
-  disableActionButtons('wilco');
+  disableActionButtons(status.LOAD);
+  disableActionButtons(status.WILCO);
 
   try {
     if (cancelBtn) cancelBtn.disabled = false;
@@ -128,24 +129,38 @@ const sendRequestEvent = async (action) => {
       state.steps[action].message = data.message;
       createLog(data);
       // showTick(action);
+      state.steps[action].status = status.PENDING;
       enableButtons(action);
     } else {
       showTick(action, true)
+      state.steps[action].status = status.ERROR;
     }
 
   } catch (err) {
     showTick(action, true)
+    state.steps[action].status = status.ERROR;
     console.error("Network error:", err);
   }
 }
 
+function checkPendingRequest() {
+  for (const step in state.steps) { // for now, blocking all other requests
+    if (state.steps[step].status === status.PENDING) {
+      console.warn(`Previous request '${step}' is still pending.`);
+      return;
+    }
+  }
+}
+
 // cancel event
-async function cancelRequestEvent(action) {     
+async function cancelRequestEvent(action) {   
+  console.log(state);  
   if (!action || this.disabled) return;
 
   const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
 
-  console.log(state);
+  state.steps[action].status = status.CANCELLED;
+  updateMessageStatus(action, state.steps[action].status);
   
   if (action === "pushback") {
     document.getElementById("pushback-left").classList.remove("active");
@@ -161,7 +176,9 @@ async function cancelRequestEvent(action) {
     requestBtn.classList.remove('active');
   }
 
+  // putting cancelled status
   const messageBox = document.getElementById(`${action.replace(/_/g, "-")}-message`);
+  console.log(messageBox);
   if (messageBox) messageBox.innerHTML = '';
 
   this.disabled = true;
@@ -182,13 +199,15 @@ async function loadEvent() {
 
     if (data.message === null) return;
 
+    // create taxi clearance message
     const clearanceBox = document.getElementById('taxi-clearance-message');
     clearanceBox.innerHTML = `<p>${data.message}</p>`;
 
-    if(state.currentRequest === 'taxi_clearance') enableActionButtons('load');
-    else enableActionButtons('wilco');
+    if(state.currentRequest === 'taxi_clearance') enableActionButtons(status.LOAD);
+    else enableActionButtons(status.WILCO);
 
     this.disabled = true;
+    state.steps[state.currentRequest].status = status.LOAD;
 
   } catch (err) {
     console.error("Network error:", err);
@@ -212,28 +231,32 @@ const executeEvent = async (action) => {
   const clearanceBox = document.getElementById('taxi-clearance-message');
   clearanceBox.innerHTML = `<p>${data.message}</p>`;
 
-  disableActionButtons('load');
-  enableActionButtons('wilco');
+  disableActionButtons(status.LOAD);
+  enableActionButtons(status.WILCO);
 }
 
 const cancelExecuteEvent = async (action) => { // for now only disabling buttons
 
-  disableActionButtons('load');
-  enableActionButtons('wilco');
+  disableActionButtons(status.LOAD);
+  enableActionButtons(status.WILCO);
 }
 
 // willco, standby, unable event
 const actionEvent = async (action) => { 
+  console.log(state);
+  console.log(action);
   if (!action) return;
 
   showSpinner(action);
-  disableActionButtons('load');
-  disableActionButtons('wilco');
+  disableActionButtons(status.LOAD);
+  disableActionButtons(status.WILCO);
 
   try {
     const data = await postAction(action);
     if (!data.error) {
       state.steps[state.currentRequest].status = action;
+      state.steps[state.currentRequest].message = data.message; // recheck this
+      console.log(data)
       createLog(data);
       showTick(state.currentRequest);
       console.log(state.currentRequest);

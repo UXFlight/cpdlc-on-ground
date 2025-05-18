@@ -5,6 +5,11 @@ export function createLog({ timestamp, action, message }) {
   const messageBox = document.getElementById('message-box');
   const div = document.createElement('div');
   div.classList.add('new-message');
+
+  // to access the message in the UI
+  div.classList.add('new-message');
+  div.dataset.action = action.toLowerCase();
+  div.dataset.status = 'open';
   
   const p1 = document.createElement('p');
   const ts = document.createElement('span');
@@ -127,4 +132,24 @@ function enableLoadBtn() {
     loadButton.disabled = false;
     loadButton.classList.add('active');
   }
+}
+
+// functions that handles status of messages
+export function updateMessageStatus(action, newStatus) {
+  const message = document.querySelector(`.new-message[data-action="${action}"][data-status="open"]`);
+  if (!message) return;
+
+  const statusEl = message.querySelector('.status');
+  if (!statusEl) return;
+
+  statusEl.classList.remove('open', 'closed', 'cancelled');
+  statusEl.textContent = newStatus.toUpperCase();
+  statusEl.classList.add(newStatus.toLowerCase());
+
+  message.dataset.status = newStatus.toLowerCase();
+}
+
+export function markOldMessages(action) {
+  const oldMsgs = document.querySelectorAll(`.new-message[data-action="${action}"]`);
+  oldMsgs.forEach(msg => msg.classList.add('old-message'));
 }

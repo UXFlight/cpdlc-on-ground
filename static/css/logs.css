@@ -38,27 +38,6 @@
     font-weight: bold;
 }
 
-.status {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-left: 5px;
-    color: black; 
-}
-
-.status.open {
-    background-color: #0DFF00; 
-}
-
-.status.cancelled {
-    background-color: #FF0000;
-}
-
-.status.closed {
-    background-color: #FFFFFF; 
-    color: #000000; 
-}
 
 /* RESPONSE */
 .message-response {
@@ -77,4 +56,28 @@
 
 .message-response:hover {
     background-color: #2a2a2a;
+}
+
+/* STATUS */
+.status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-left: 5px;
+    color: black; 
+}
+
+.status.open {
+    background-color: #0DFF00; 
+}
+
+.status.cancelled {
+    background-color: #FF0000;
+    color: white;
+}
+
+.status.closed {
+    background-color: #888;
+    color: white;
 }

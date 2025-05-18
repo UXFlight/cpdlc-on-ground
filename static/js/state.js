@@ -9,3 +9,14 @@ export const state = {
     de_icing: { status: null, message: null }
   }
 };
+
+export const status = {
+  SUCCESS: 'success',
+  ERROR: 'error',
+  PENDING: 'pending',
+  CANCELLED: 'cancelled',
+  LOAD: 'load',
+  WILCO: 'wilco',
+  STANDBY: 'standby',
+  UNABLE: 'unable',
+};
