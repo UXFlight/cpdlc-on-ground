@@ -1,94 +1,155 @@
-.log-box {
-    height: 300px;
-    background-color: #000000;
+.message-log {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     padding: 10px;
+}
+
+.log-box {
+    flex-grow: 1;
+    background-color: #0a0a0a;
+    padding: 12px;
     overflow-y: auto;
-    border-radius: 5px;
+    border-radius: 6px;
     display: flex;
     flex-direction: column-reverse;
+    border: 1px solid #333;
+    margin-bottom: 12px;
 }
 
 #message-box {
     display: flex;
     flex-direction: column-reverse;
-    overflow-y: auto; 
-    max-height: 400px;
-    padding: 10px;
-    scroll-behavior: smooth; 
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    gap: 12px;
 }
 
+/* LOGS */
 .new-message {
-    color: #fff;
-    font-weight: bold;
+    background-color: #141414;
+    border-left: 4px solid #5eaefc;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-family: "Courier New", monospace;
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+    transition: background-color 0.3s ease;
 }
 
-.old-message {
-    color: grey; 
-    font-style: normal;
-    opacity: 0.6;
+.new-message:hover {
+    background-color: #1f1f1f;
+}
+
+.new-message.open {
+    border-left-color: #6cc24a;
+}
+
+.new-message.closed {
+    border-left-color: #ccc;
+}
+
+.new-message.cancelled {
+    border-left-color: #ff4d4d;
+}
+
+.new-message.standby {
+    border-left-color: #ffc107;
+}
+
+.new-message.unable {
+    border-left-color: #e53935;
+}
+
+/* MESSAGE */
+.new-message p:first-child {
+    margin: 5px 0 0;
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
 }
 
 .timestamp {
-    color: #61A6F0;
+    color: #5eaefc;
     font-weight: bold;
+    margin-right: 10px;
+    white-space: nowrap;
 }
 
 .message-title {
-    color: white; 
+    color: #fff;
+    font-weight: 600;
+    margin-right: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
     font-weight: bold;
-}
-
-
-/* RESPONSE */
-.message-response {
-    font-size: 1rem;
-    background-color: #1e1e1e;       
-    color: #f0f0f0;    
-    font-style: italic;
-    margin-bottom: 6px;
-    padding: 8px 12px;
-    border-left: 3px solid #6cc24a;
-    border-radius: 4px;
-    font-weight: 400;
-    white-space: pre-wrap;
-    transition: background-color 0.3s ease-in-out;
-}
-
-.message-response:hover {
-    background-color: #2a2a2a;
+    text-transform: uppercase;
 }
 
 /* STATUS */
-.status {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-left: 5px;
-    color: black; 
-}
-
 .status.open {
-    background-color: #0DFF00; 
-}
-
-.status.cancelled {
-    background-color: #FF0000;
-    color: white;
+    background-color: #6cc24a;
+    color: #000;
 }
 
 .status.closed {
-    background-color: #888;
-    color: white;
+    background-color: #ccc;
+    color: #222;
+}
+
+.status.cancelled {
+    background-color: #ff4d4d;
+    color: #fff;
 }
 
 .status.standby {
-    background-color: #e6b800; 
-    color: #1a1a1a;
+    background-color: #ffc107;
+    color: #222;
 }
 
-
 .status.unable {
-    background-color: #cc1f1a; 
-    color: #ffffff;
+    background-color: #e53935;
+    color: #fff;
+}
+
+/* ATC RESPONSE */
+.message-response {
+    font-size: 0.95rem;
+    color: #ddd;
+    margin-bottom: 0;
+    padding-left: 8px;
+    line-height: 1.6;
+    font-style: italic;
+    white-space: pre-wrap;
+    position: relative;
+}
+
+.message-response::before {
+    content: "↳";
+    margin-right: 6px;
+    color: #ddd;
+    font-style: normal;
+}
+
+/* NOTIF */
+/* NOTIF */
+.new-message.flash {
+    animation: flash-in 1s ease-in-out;
+}
+
+@keyframes flash-in {
+    0% {
+        background-color: #2f577e;
+        filter: brightness(1.2); /* plus lumineux */
+    }
+    100% {
+        background-color: #141414;
+        filter: brightness(1); /* normal */
+    }
 }

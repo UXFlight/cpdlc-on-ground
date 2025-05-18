@@ -1,34 +1,40 @@
 
+
 /* BUTTON STYLES */
-.action-buttons-group {
+.action-buttons-grp {
     display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
     gap: 10px;
-    align-items: center;
-    margin-bottom: 10px;
+    font-size: 16px;
 }
 
 /* ACTION BUTTONS */
 .action-button {
-    background-color: #f4f4f4;
-    color: white;
-    border: 1px solid #ccc;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
+    flex: 1;
+    padding: 10px;
+    background-color: #2b2b2b;
+    color: #fff;
     cursor: pointer;
-    justify-content: center;
     text-align: center;
-    display: inline-flex;
-    align-items: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
     width: 100%;
-    text-transform: uppercase;
     font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.2rem;
 }
 
-.action-buttons-group .action-button.cancel {
-    background-color: #ffcccc; 
-    color: #ff0000;
-    border: 1px solid #ff0000;
+.action-button:hover:not(:disabled) {
+    background-color: #6cc24a;
+}
+
+.action-button:disabled {
+    background-color: #444;
+}
+
+.action-button:disabled:hover {
+    cursor: not-allowed;
 }
 
 /* LOAD BUTTON */

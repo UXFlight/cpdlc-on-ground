@@ -7,42 +7,16 @@ document.addEventListener("DOMContentLoaded", () => {
   listenToGlobalClickEvents();
 });
 
-// dropdown event
 function listenToGlobalClickEvents() {
-  const dropdownButtons = document.querySelectorAll(".dropdown-button");
-  const dropdownContents = document.querySelectorAll(".dropdown-content");
+  const dropdowns = document.querySelectorAll(".dropdown");
 
-  dropdownButtons.forEach(button => {
-    const dropdownContent = button.nextElementSibling;
-
-    button.addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      const dropdownAction = dropdownContent.querySelector('.request-button')?.dataset.action;
-      if (dropdownAction) state.currentRequest = dropdownAction
-
-      dropdownContents.forEach(content => {
-        if (content !== dropdownContent) {
-          content.style.display = "none";
-        }
-      });
-
-      dropdownContent.style.display =
-        dropdownContent.style.display === "block" ? "none" : "block";
-    });
+  dropdowns.forEach(dropdown => {
+    const button = dropdown.querySelector(".dropdown-button");
+    button.addEventListener("click", (e) => toggleDropdown(dropdown, e));
+    button.addEventListener("mouseenter", (e) => toggleDropdown(dropdown, e))
   });
 
-  document.addEventListener("click", function (event) {
-    dropdownContents.forEach(dropdown => {
-      const parent = dropdown.parentElement;
-      const button = parent.querySelector(".dropdown-button");
-
-      const isClickInsideDropdown = dropdown.contains(event.target);
-      const isClickOnButton = button && button.contains(event.target);
-
-      if (!isClickInsideDropdown && !isClickOnButton) dropdown.style.display = "none";
-    });
-  });
+  document.addEventListener("click", () => closeCurrentOverlay());
 }
 
 function listenToButtonEvents() {
@@ -62,13 +36,22 @@ function listenToButtonEvents() {
 
   // request btns event
   requestButtons.forEach(btn => {
-    btn.addEventListener("click", async () => sendRequestEvent(btn.dataset.action));
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      await sendRequestEvent(btn.dataset.action);
+    });
   });
 
-  // cancel btns event
+  // ancel buttons
   cancelButtons.forEach(btn => {
-    btn.addEventListener("click", cancelRequestEvent.bind(btn, btn.dataset.action)); // bind to set 'this' to cancel btn
-  });  
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      cancelRequestEvent.call(this, btn.dataset.action);
+    });
+  });
+
 
   // left/ right pushback event
   leftButton.addEventListener("click", () => selectPushbackDirection("left"));
@@ -77,12 +60,37 @@ function listenToButtonEvents() {
   // load buttons event
   loadButton.addEventListener("click", loadEvent.bind(loadButton)); // bind to set 'this' to load btn
   executeButton.addEventListener("click", async () => executeEvent(state.currentRequest));
-  cancelExecuteButton.addEventListener("click", async () => {});
+  cancelExecuteButton.addEventListener("click", async () => cancelExecuteEvent(state.currentRequest));
 
   // wilco buttons event
   wilcoButton.addEventListener("click", () => actionEvent(status.WILCO));
-  standbyButton.addEventListener("click", () => actionEvent('standby'));
-  unableButton.addEventListener("click", () => actionEvent('unable'));
+  standbyButton.addEventListener("click", () => actionEvent(status.STANDBY));
+  unableButton.addEventListener("click", () => actionEvent(status.UNABLE));
+}
+
+// overlay event
+const toggleDropdown = (dropdown, e) => {
+  e.stopPropagation();
+
+  const isOpen = dropdown.classList.contains("open");
+
+  document.querySelectorAll(".dropdown.open").forEach(open => {
+    open.classList.remove("open");
+  });
+
+  if (!isOpen) {
+    const action = dropdown.dataset.action;
+    if (state.steps[action].status === status.CLOSED) return;
+    dropdown.classList.add("open");
+
+    if (action && !checkPendingRequest()) state.currentRequest = action;
+  }
+}
+
+// close overlay
+function closeCurrentOverlay() {
+  const open = document.querySelector(".dropdown.open");
+  if (open) open.classList.remove("open");
 }
 
 // pushback direction
@@ -115,6 +123,7 @@ const sendRequestEvent = async (action) => {
   if (blockSecondRequest(action)) return;  
   if (action === "pushback" && !state.steps[action].direction) return;
   
+  state.steps[action].status = status.PENDING; // change status to pending asap
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
 
   showSpinner(action);
@@ -128,15 +137,17 @@ const sendRequestEvent = async (action) => {
     if (!data.error) {
       state.steps[action].message = data.message;
       createLog(data);
-      state.steps[action].status = status.PENDING;
+      // showTick(action);
       enableButtons(action);
     } else {
       showTick(action, true)
+      closeCurrentOverlay();
       state.steps[action].status = status.ERROR;
     }
 
   } catch (err) {
     showTick(action, true)
+    closeCurrentOverlay();
     state.steps[action].status = status.ERROR;
     console.error("Network error:", err);
   }
@@ -153,7 +164,6 @@ function blockSecondRequest(action) {
 
 // cancel event
 async function cancelRequestEvent(action) {   
-  console.log(state);  
   if (!action || this.disabled) return;
 
   const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
@@ -204,7 +214,7 @@ async function loadEvent() {
     else enableActionButtons(status.WILCO);
 
     this.disabled = true;
-    state.steps[state.currentRequest].status = status.LOAD;
+    // state.steps[state.currentRequest].status = status.LOAD; // temp ?
 
   } catch (err) {
     console.error("Network error:", err);
@@ -233,7 +243,6 @@ const executeEvent = async (action) => {
 }
 
 const cancelExecuteEvent = async (action) => { // for now only disabling buttons
-
   disableActionButtons(status.LOAD);
   enableActionButtons(status.WILCO);
 }
@@ -251,14 +260,14 @@ const actionEvent = async (action) => {
     const data = await postAction(action);
     if (!data.error) {
       currentRequest.status = action === status.WILCO ? status.CLOSED : action;
-      console.log(action);
-      currentRequest.message = data.message; // recheck this
-      console.log(data)
+      currentRequest.message = data.message; // recheck this // saving server response but for what ?
       createLog(data);
       updateMessageStatus(state.currentRequest, currentRequest.status);
       if (action === status.WILCO) {
         disableRequestButtons(state.currentRequest);
         showTick(state.currentRequest);
+      } else {
+        showTick(state.currentRequest, true)
       }
     } else {
       console.warn(`Server error on '${action}'`, data.error);

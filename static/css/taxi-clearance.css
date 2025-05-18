@@ -1,16 +1,46 @@
 .taxi-clearance-box {
-    padding: 10px;
-    border-radius: 5px;
-    margin: 20px 0;
+    padding: 12px 0;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.taxi-clearance-box h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.taxi-clearance-box:not(.active) h2 {
+    color: #ccc;
+}
+
+.taxi-clearance-box:not(.active) .clearance-box {
+    color: #bbb;
+    font-style: italic;
+}
+
+.taxi-clearance-box.active h2 {
+    color: #6cc24a;
+}
+
+.taxi-clearance-box.active .clearance-box {
+    border-left: 3px solid #6cc24a;
+    color: #f2f2f2;
+    background-color: #1c1c1c;
+    font-style: normal;
 }
 
 .clearance-box {
-    height: 300px;
-    background-color: #1c1c1c;
-    border: 1px solid #6cc24a;
     padding: 10px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: monospace;
+    line-height: 1.5;
+    max-height: 120px;
     overflow-y: auto;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
+    white-space: pre-wrap;
+    transition: all 0.3s ease;
 }

@@ -1,17 +1,12 @@
 
 // Creates log message 
 export function createLog({ timestamp, action, message }) {
-  if (!action) {
-    // createResponse(message, div)
-    return;
-  }
+  if (!action) return;
 
   const messageBox = document.getElementById('message-box');
   const div = document.createElement('div');
-  div.classList.add('new-message');
+  div.classList.add('new-message', 'flash'); 
 
-  // to access the message in the UI
-  div.classList.add('new-message');
   div.dataset.action = action.toLowerCase();
   div.dataset.status = 'open';
   
@@ -20,8 +15,6 @@ export function createLog({ timestamp, action, message }) {
   ts.classList.add('timestamp');
   ts.textContent = timestamp;
   
-  const sep = document.createTextNode(' | ');
-  
   const title = document.createElement('span');
   title.classList.add('message-title');
   title.textContent = action;
@@ -29,21 +22,40 @@ export function createLog({ timestamp, action, message }) {
   const status = document.createElement('span');
   status.classList.add('status', 'open');
   status.textContent = 'OPEN';
-  
-  p1.append(ts, sep, title, document.createTextNode(' '), status);
+
+  p1.append(ts, title, document.createTextNode(' '), status);
   div.append(p1);
-  
+
   if (message) createResponse(message, div);
-  
+
   messageBox.prepend(div);
+
+  const sound = document.getElementById('notif-sound');
+  if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch(e => console.warn("Audio play failed:", e));
+  }
+
+  setTimeout(() => div.classList.remove('flash'), 1000);
 }
+
 
 export function createResponse(message, div) {
   const p2 = document.createElement('p');
   p2.classList.add('message-response');
-  p2.textContent = `_> ${message}`;
+  p2.textContent = message;
   div.append(p2);
+  playNotificationSound();
 }
+
+const playNotificationSound = () => {
+  const audio = new Audio('/static/mp3/notif.mp3');
+  audio.volume = 0.3; 
+  audio.play().catch(err => {
+    console.warn('Unable to play sound:', err);
+  });
+};
+
 
 // loader
 export function showSpinner(action) {
@@ -56,17 +68,27 @@ export function showSpinner(action) {
 export function showTick(action, isError = false) {
   const spinner = document.getElementById(`${action}_spinner`);
   const tick = document.getElementById(`${action}_tick`);
+  const wrapper = document.querySelector(`.dropdown[data-action="${action}"]`);
 
   if (spinner) spinner.style.display = "none";
-  if (tick) tick.style.display = "inline-block";
 
-  if (isError) {
-    tick.textContent = "✖";
-    tick.style.color = "red";
-    tick.classList.add('error');
-    tick.classList.remove('success');
-  } 
+  if (tick) {
+    tick.style.display = "inline-block";
+    if (isError) {
+      tick.textContent = "✖";
+      tick.classList.add('error');
+      tick.classList.remove('success');
+    } else {
+      tick.textContent = "✔"; 
+      tick.classList.add('success');
+      tick.classList.remove('error');
+    }
+  }
+  if (wrapper) {
+    wrapper.setAttribute('data-status', isError ? 'error' : 'fulfilled');
+  }
 }
+
 
 export function hideSpinner(action) {
   const spinner = document.getElementById(`${action}_spinner`);
@@ -141,11 +163,10 @@ function enableLoadBtn() {
 // functions that handles status of messages
 export function updateMessageStatus(action, newStatus) {
   const message = document.querySelector(`.new-message[data-action="${action}"][data-status="open"]`);
-  console.log(message);
   if (!message) return;
 
   const statusEl = message.querySelector('.status');
-  console.log(statusEl);
+  (statusEl);
   if (!statusEl) return;
 
   statusEl.classList.remove('open', 'closed', 'cancelled');
@@ -162,11 +183,8 @@ export function markOldMessages(action) {
 
 // disable request/ cancel buttons
 export function disableRequestButtons(action) {
-  console.log(action);
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
   const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
-  console.log(cancelBtn);
-  console.log(requestBtn);
   if (cancelBtn) cancelBtn.disabled = true;
   if (requestBtn) requestBtn.disabled = true;
 }
