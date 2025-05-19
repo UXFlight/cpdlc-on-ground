@@ -103,7 +103,7 @@ ATC_RESPONSES = {
     "engine_startup": "ENGINE STARTUP APPROVED",
     "pushback": "PUSHBACK APPROVED",
     "taxi_clearance": "TAXI CLEARANCE GRANTED",
-    "de-icing": "DE-ICING NOT REQUIRED"
+    "de_icing": "DE-ICING NOT REQUIRED"
 }
 
 exp_t_c_response = {
@@ -147,45 +147,50 @@ def log_action():
     app.logger.info("Log request acknowledged.")
     return jsonify(response)
 
-# Handle ATC requests
 @app.route('/request/<action>', methods=['GET'])
 def request_action(action):
+    print(f"Action requested: {action}")
     global exp_t_c_response, t_c_response
-    
-    if action in ATC_RESPONSES:
-        if action == "expected_taxi_clearance":
-            set_bool("expected_taxi_clearance", True, agent)
-            exp_t_c_response["timestamp"] = datetime.now().strftime("%H:%M:%S")
-            exp_t_c_response["action"] = action.replace(" ", "_").title()
-            app.logger.info(f"Action requested: {action} - Response: {exp_t_c_response}")
-            return jsonify(exp_t_c_response)
-        
-        elif action == "taxi_clearance":
-            set_bool("taxi_clearance", True, agent)
-            print("Taxi clearance requested")
-            t_c_response["timestamp"] = datetime.now().strftime("%H:%M:%S")
-            t_c_response["action"] = action.replace(" ", "_").title()
-            app.logger.info(f"Action requested: {action} - Response: {exp_t_c_response}")
-            return jsonify(t_c_response)
-        else:
-            if action == "engine_startup":
-                set_bool("engine_startup", True, agent)
-            elif action == "pushback":
-                set_bool("pushback", True, agent)
-            elif action == "de-icing":
-                set_bool("de-icing", True, agent)
-            
-            time.sleep(2)  # Simulate processing delay
-            response = {
-                "timestamp": datetime.now().strftime("%H:%M:%S"),
-                "message": ATC_RESPONSES[action],
-                "status": "closed",
-                "action": action.replace(" ", "_").title()
-            }
-            app.logger.info(f"Action requested: {action} - Response: {exp_t_c_response}")
-            return jsonify(response)
-    else:
+
+    if action not in ATC_RESPONSES:
         return jsonify({"error": "Invalid action"}), 400
+
+    # Déclenche le booléen côté agent
+    set_bool(action, True, agent)
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    action_label = action.replace(" ", "_").title()
+
+    # Traitement spécifique pour expected_taxi_clearance
+    if action == "expected_taxi_clearance":
+        exp_t_c_response.update({
+            "timestamp": timestamp,
+            "action": action_label,
+            "message": ATC_RESPONSES[action],
+        })
+        app.logger.info(f"Action requested: {action} - Response: {exp_t_c_response}")
+        return jsonify(exp_t_c_response)
+
+    # Traitement spécifique pour taxi_clearance
+    if action == "taxi_clearance":
+        print("Taxi clearance requested")
+        t_c_response.update({
+            "timestamp": timestamp,
+            "action": action_label,
+            "message": ATC_RESPONSES[action],
+        })
+        app.logger.info(f"Action requested: {action} - Response: {t_c_response}")
+        return jsonify(t_c_response)
+
+    # Tous les autres cas standards
+    time.sleep(2)  # Simulate delay
+    response = {
+        "timestamp": timestamp,
+        "message": ATC_RESPONSES[action],
+        "status": "closed",
+        "action": action_label
+    }
+    app.logger.info(f"Action requested: {action} - Response: {response}")
+    return jsonify(response)
 
 
 # Load taxi clearance
@@ -345,4 +350,4 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
 
 
-    app.run(debug=False, host='0.0.0.0', port=5320)
+    app.run(debug=False, host='0.0.0.0', port=5321)

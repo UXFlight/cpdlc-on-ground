@@ -1,0 +1,88 @@
+
+
+/* BUTTON STYLES */
+.action-buttons-grp {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+    font-size: 16px;
+}
+
+/* ACTION BUTTONS */
+.action-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #2b2b2b;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+}
+
+.action-button:hover:not(:disabled) {
+    background-color: #6cc24a;
+}
+
+.action-button:disabled {
+    background-color: #444;
+}
+
+.action-button:disabled:hover {
+    cursor: not-allowed;
+}
+
+/* LOAD BUTTON */
+#load-button.active {
+    background-color: #2196F3; 
+}
+
+#load-button.active:hover {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* EXEC BUTTON */
+#execute-button {
+    background-color: #4caf50;     
+}
+
+#execute-button:disabled {
+    background-color: #a5d6a7;
+}
+
+#execute-button:hover {
+    background-color: #45a049; 
+    border: 1px solid #fff;
+}
+
+/* CANCEL EXEC BUTTON */
+#cancel-execute-button {
+    background-color: #f44336; 
+    color: #fff;
+    border: 1px solid #ff0000;
+}
+
+#cancel-execute-button:disabled {
+    background-color: #ef9a9a;
+}
+
+#cancel-execute-button:hover {
+    background-color: #d32f2f;
+    border: 1px solid #fff;
+}
+
+/* STANDBY BUTTON */
+#standby:hover {
+    background-color: #ff9800; 
+}
+
+/* UNABLE BUTTON */
+#unable:hover {
+    background-color: #f44336; 
+}
