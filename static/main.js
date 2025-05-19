@@ -244,9 +244,9 @@ const executeEvent = async (action) => {
   enableActionButtons(status.WILCO);
 }
 
-const cancelExecuteEvent = async (action) => { // for now only disabling buttons
+const cancelExecuteEvent = async (action) => { // for now only enabling load button
   disableActionButtons(status.LOAD);
-  enableActionButtons(status.WILCO);
+  enableButtons(action);
 }
 
 // willco, standby, unable event

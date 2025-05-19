@@ -76,6 +76,10 @@
     font-weight: 800;
 }
 
+.dropdown[data-status="error"] .dropdown-button .label {
+    color: #ff4c4c;
+}
+
 /* STATUS */
 .status-icons {
     display: flex;
