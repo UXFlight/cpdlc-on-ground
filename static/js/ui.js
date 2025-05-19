@@ -182,9 +182,17 @@ export function markOldMessages(action) {
 }
 
 // disable request/ cancel buttons
-export function disableRequestButtons(action) {
+export function disableAllButtons(action) {
+  disableRequestButtons(action);
+  disableCancelButtons(action); 
+}
+
+export function disableCancelButtons(action) {
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
-  const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
   if (cancelBtn) cancelBtn.disabled = true;
+}
+
+function disableRequestButtons(action) {
+  const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
   if (requestBtn) requestBtn.disabled = true;
 }

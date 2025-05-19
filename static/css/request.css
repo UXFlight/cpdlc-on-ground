@@ -50,7 +50,8 @@
     align-items: center;
     gap: 10px;
     padding: 14px 16px;
-    font-size: 16px;
+    font-size: 12px;
+    text-transform: uppercase;
     color: #f5f5f5;
     cursor: pointer;
     background-color: transparent;

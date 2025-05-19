@@ -1,6 +1,6 @@
 import { sendRequest, postLoad, postExecute, postAction } from './js/api.js';
 import { state, status } from './js/state.js';
-import { createLog, showSpinner, showTick, enableButtons, enableActionButtons, disableActionButtons, hideSpinner, updateMessageStatus, disableRequestButtons } from './js/ui.js';
+import { createLog, showSpinner, showTick, enableButtons, enableActionButtons, disableActionButtons, hideSpinner, updateMessageStatus, disableAllButtons, disableCancelButtons } from './js/ui.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   listenToButtonEvents();
@@ -119,7 +119,7 @@ const selectPushbackDirection = (direction) => {
 }
 
 // request event
-const sendRequestEvent = async (action) => {
+const sendRequestEvent = async (action) => { // can spam request/ cancel and creates multiple requests
   if (!action) return;
   if (checkPendingRequest()) return;
   if (blockSecondRequest(action)) return;  
@@ -135,7 +135,7 @@ const sendRequestEvent = async (action) => {
   try {
     if (cancelBtn) cancelBtn.disabled = false;
     const data = await sendRequest(action);
-
+    if (state.steps[action].status === status.CANCELLED) return; // if cancelled, do not proceed // might send request to server
     if (!data.error) {
       state.steps[action].message = data.message;
       createLog(data);
@@ -144,6 +144,7 @@ const sendRequestEvent = async (action) => {
     } else {
       showTick(action, true)
       closeCurrentOverlay();
+      disableCancelButtons(action);
       state.steps[action].status = status.ERROR;
     }
 
@@ -266,9 +267,10 @@ const actionEvent = async (action) => {
       createLog(data);
       updateMessageStatus(state.currentRequest, currentRequest.status);
       if (action === status.WILCO) {
-        disableRequestButtons(state.currentRequest);
+        disableAllButtons(state.currentRequest);
         showTick(state.currentRequest);
       } else {
+        disableCancelButtons(state.currentRequest);
         showTick(state.currentRequest, true)
       }
     } else {
