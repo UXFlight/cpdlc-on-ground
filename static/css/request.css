@@ -63,10 +63,14 @@
     text-align: center;
     transition: transform 0.2s ease, font-size 0.3s ease, opacity 0.3s ease;
     transform: translateY(0%) scale(1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
 }
 
 .dropdown.open .dropdown-button .label {
-    transform: translateY(-150%) scale(0.85); 
+    transform: translateY(-170%) scale(0.95); 
     opacity: 0.9;
     color: #6cc24a;
     font-weight: 800;
@@ -94,6 +98,11 @@
 @keyframes spin {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
+}
+
+.dropdown.open .dropdown-button .status-icons {
+    transform: translateY(-170%) scale(0.95); 
+
 }
 
 .tick-icon {
@@ -179,17 +188,17 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 12px;
+    gap: 5px;
 }
 
 .direction-button {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     background-color: #1a1a1a;
     color: #e0e0e0;
     border: 1px solid #444;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     text-align: center;

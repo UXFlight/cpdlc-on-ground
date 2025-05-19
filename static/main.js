@@ -13,11 +13,13 @@ function listenToGlobalClickEvents() {
   dropdowns.forEach(dropdown => {
     const button = dropdown.querySelector(".dropdown-button");
     button.addEventListener("click", (e) => toggleDropdown(dropdown, e));
-    button.addEventListener("mouseenter", (e) => toggleDropdown(dropdown, e))
   });
 
-  document.addEventListener("click", () => closeCurrentOverlay());
-}
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".dropdown")) return;
+    closeCurrentOverlay();
+  });
+  }
 
 function listenToButtonEvents() {
   const requestButtons = document.querySelectorAll(".request-button");
