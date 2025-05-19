@@ -60,7 +60,16 @@
 
 .label {
     flex: 1;
-    text-align: left;
+    text-align: center;
+    transition: transform 0.2s ease, font-size 0.3s ease, opacity 0.3s ease;
+    transform: translateY(0%) scale(1);
+}
+
+.dropdown.open .dropdown-button .label {
+    transform: translateY(-150%) scale(0.85); 
+    opacity: 0.9;
+    color: #6cc24a;
+    font-weight: 800;
 }
 
 /* STATUS */
@@ -99,20 +108,25 @@
 /* OVERLAY */
 .overlay-actions {
     position: absolute;
-    inset: 0;
+    bottom: 0;
     display: none;
     justify-content: center;
     align-items: center;
     gap: 8px;
     padding: 8px;
-    background-color: rgba(20, 20, 20, 0.95);
-    backdrop-filter: blur(2px);
     z-index: 10;
     border-radius: 6px;
+    width: 100%;
+    height: 70%;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.25s ease;
 }
 
 .dropdown.open .overlay-actions {
     display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
 }
 
 /* REQUEST, CANCEL BUTTONS */
@@ -120,10 +134,11 @@
 .cancel-button {
     flex: 1;
     height: 75%;
-    padding: 10px 12px;
+    width: 100%;
+    padding: 6px 10px;
     border: 1px solid transparent;
     border-radius: 4px;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
@@ -160,7 +175,6 @@
 }
 
 /* PUSHBACK */
-
 .pushback-direction {
     display: flex;
     flex-direction: column;
