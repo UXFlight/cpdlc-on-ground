@@ -57,9 +57,18 @@ Cette application web, construite avec **Flask**, fournit une interface utilisat
 cpdlc-flask-app/
 .
 ├── agent.py
-├── app.py
+├── app
+│   ├── config.py
+│   ├── __init__.py
+│   ├── routes
+│   │   └── __init__.py
+│   ├── services
+│   │   └── __init__.py
+│   └── utils
+│       └── helpers.py
 ├── img
 │   └── project.png
+├── main.py
 ├── project-structure.txt
 ├── README.md
 ├── requirements.txt
@@ -74,15 +83,15 @@ cpdlc-flask-app/
 │   ├── favicon.ico
 │   ├── js
 │   │   ├── api.js
+│   │   ├── main.js
 │   │   ├── state.js
 │   │   └── ui.js
-│   ├── main.js
 │   └── mp3
 │       └── notif.mp3
 └── templates
     └── index.html
 
-8 directories, 18 files
+12 directories, 23 files
 
 ```
 
