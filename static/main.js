@@ -213,6 +213,9 @@ async function loadEvent() {
     const clearanceBox = document.getElementById('taxi-clearance-message');
     clearanceBox.innerHTML = `<p>${data.message}</p>`;
 
+    const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
+    clearanceMessageBox.classList.add("active");
+
     if(state.currentRequest === 'taxi_clearance') enableActionButtons(status.LOAD);
     else enableActionButtons(status.WILCO);
 
@@ -259,6 +262,7 @@ const actionEvent = async (action) => {
   disableActionButtons(status.WILCO);
 
   try {
+
     const currentRequest = state.steps[state.currentRequest];
     const data = await postAction(action);
     if (!data.error) {
@@ -270,6 +274,8 @@ const actionEvent = async (action) => {
         disableAllButtons(state.currentRequest);
         showTick(state.currentRequest);
       } else {
+        const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
+        clearanceMessageBox.classList.remove("active");
         disableCancelButtons(state.currentRequest);
         showTick(state.currentRequest, true)
       }

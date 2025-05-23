@@ -55,13 +55,35 @@ Cette application web, construite avec **Flask**, fournit une interface utilisat
 
 ```
 cpdlc-flask-app/
-│
-├── app.py                  # Point d'entrée principal de l'application Flask
-├── agent.py                # Point de communication avec Ingescape et X-Plane
-├── templates/              # Templates HTML
-├── static/                 # Fichiers CSS/JS
-├── requirements.txt        # Dépendances Python
-└── README.md
+.
+├── agent.py
+├── app.py
+├── img
+│   └── project.png
+├── project-structure.txt
+├── README.md
+├── requirements.txt
+├── services
+├── static
+│   ├── css
+│   │   ├── logs.css
+│   │   ├── pilot-buttons.css
+│   │   ├── request.css
+│   │   ├── style.css
+│   │   └── taxi-clearance.css
+│   ├── favicon.ico
+│   ├── js
+│   │   ├── api.js
+│   │   ├── state.js
+│   │   └── ui.js
+│   ├── main.js
+│   └── mp3
+│       └── notif.mp3
+└── templates
+    └── index.html
+
+8 directories, 18 files
+
 ```
 
 # Visualisation

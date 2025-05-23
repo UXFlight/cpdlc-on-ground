@@ -109,20 +109,11 @@ export function enableButtons(action) { // we only enable load button on taxi_cl
     case 'expected_taxi_clearance':
       enableLoadBtn()
       break;
-    case 'engine_startup':
-      enableActionButtons('wilco');
-      break;
-    case 'pushback':
-      enableActionButtons('wilco');
-      break;
     case 'taxi_clearance':
       enableLoadBtn();
       break;
-    case 'de_icing':
-      enableActionButtons('wilco');
-      break;
     default:
-      // helper function that displays error modal
+      enableActionButtons('wilco');
       break;
   }
 }
