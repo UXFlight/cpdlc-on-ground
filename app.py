@@ -300,9 +300,9 @@ def health_check():
 
 if __name__ == '__main__':
         
-    port = 5925
+    port = 5670
     agent_name = "Pilot_CPDLC_APP"
-    device = "wlp3s0"
+    device = "wlp0s20f3"
 
     # catch SIGINT handler before starting agent
     signal.signal(signal.SIGINT, signal_handler)
