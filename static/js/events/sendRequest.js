@@ -1,5 +1,5 @@
 import { checkPendingRequest, blockSecondRequest } from "../utils.js";
-import { state, status } from '../state.js';
+import { state, status, updateStep } from '../state.js';
 import { showSpinner, showTick } from "../ui.js";
 import { createLog } from "../messages.js";
 import { disableActionButtons, enableButtons, disableCancelButtons } from "../buttons-ui.js";
@@ -8,9 +8,9 @@ import { closeCurrentOverlay } from "../utils.js";
 
 export const sendRequestEvent = async (action) => { // !bug : can spam request/ cancel and creates multiple requests
   if (invalidRequest(action)) return;
-  
-  state.steps[action].status = status.PENDING; // change status to pending asap
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
+  
+  updateStep(status.PENDING); // change status to pending asap
 
   showSpinner(action);
   disableActionButtons(status.LOAD);
@@ -23,19 +23,17 @@ export const sendRequestEvent = async (action) => { // !bug : can spam request/ 
     if (!data.error) {
       state.steps[action].message = data.message;
       createLog(data);
-      // showTick(action);
       enableButtons(action);
     } else {
       showTick(action, true)
       closeCurrentOverlay();
       disableCancelButtons(action);
-      state.steps[action].status = status.ERROR;
+      updateStep(status.ERROR, data.message)
     }
-
   } catch (err) {
     showTick(action, true)
     closeCurrentOverlay();
-    state.steps[action].status = status.ERROR;
+    updateStep(status.ERROR, err)
     console.error("Network error:", err);
   }
 }

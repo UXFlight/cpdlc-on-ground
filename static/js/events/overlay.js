@@ -16,7 +16,7 @@ export const toggleOverlay = (overlay, e) => {
     if (state.steps[action].status === status.CLOSED) return;
     overlay.classList.add("open");
 
-    if (action && !checkPendingRequest()) state.currentRequest = action;
+    if (action && !checkPendingRequest()) state.currentRequest = action; // if open overlay defined and no pending request
   }
 }
 

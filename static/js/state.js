@@ -1,28 +1,59 @@
+// Global state
 export const state = {
   messageCount: 0,
   currentRequest: null,
   steps: {
-    able_intersection_departure: { status: null, message: null },
-    expected_taxi_clearance: { status: null, message: null },
-    taxi_clearance: { status: null, message: null },
-    ready_for_clearance: { status: null, message: null },
-    departure_clearance: { status: null, message: null },
-    engine_startup: { status: null, message: null },
-    pushback: { status: null, message: null, direction: null },
-    startup_cancellation: { status: null, message: null },
-    request_voice_contact: { status: null, message: null }, // audio btn
-    affirm: { status: null, message: null },
-    negative: { status: null, message: null },
-    roger: { status: null, message: null },
-    we_can_accept: { status: null, message: null },
-    we_cannot_accept: { status: null, message: null },
-    de_icing: { status: null, message: null },
-    de_icing_complete: { status: null, message: null },
-    for_de_icing: { status: null, message: null },
-    no_de_icing_required: { status: null, message: null },
+    able_intersection_departure: createStep("Able Intersection Departure"),
+    expected_taxi_clearance: createStep("Expected Taxi Clearance"),
+    taxi_clearance: createStep("Taxi Clearance"),
+    ready_for_clearance: createStep("Ready for Clearance"),
+    departure_clearance: createStep("Departure Clearance"),
+    engine_startup: createStep("Engine Startup"),
+    pushback: createStep("Pushback", { direction: null }),
+    startup_cancellation: createStep("Startup Cancellation"),
+    request_voice_contact: createStep("Request Voice Contact"), 
+    affirm: createStep("Affirm"),
+    negative: createStep("Negative"),
+    roger: createStep("Roger"),
+    we_can_accept: createStep("We Can Accept"),
+    we_cannot_accept: createStep("We Cannot Accept"),
+    de_icing: createStep("De-Icing"),
+    de_icing_complete: createStep("De-Icing Complete"),
+    for_de_icing: createStep("For De-Icing"),
+    no_de_icing_required: createStep("No De-Icing Required")
   }
 };
 
+export function updateStep(newStatus, newMessage = null) {
+  console.log(state.steps[state.currentRequest]);
+  const step = state.steps[state.currentRequest];
+  if (!step) return;
+
+  step.history.push({
+    status: step.status,
+    message: step.message,
+    timestamp: step.timestamp
+  });
+
+  step.status = newStatus;
+  step.message = newMessage;
+  step.timestamp = new Date().toISOString();
+}
+
+export function updateDirection(direction) {
+  state.steps["pushback"].direction = direction;
+}
+
+function createStep(label, extra = {}) {
+  return {
+    label,
+    status: null,
+    message: null,
+    timestamp: null,
+    history: [],
+    ...extra
+  };
+}
 
 export const status = {
   CLOSED: 'closed', // success
@@ -33,4 +64,5 @@ export const status = {
   WILCO: 'wilco',
   STANDBY: 'standby',
   UNABLE: 'unable',
+  EXECUTED: 'executed',
 };

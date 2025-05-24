@@ -21,7 +21,7 @@ export const actionEvent = async (action) => {
       const data = await postAction(action);
       if (!data.error) {
         currentRequest.status = action === status.WILCO ? status.CLOSED : action;
-        currentRequest.message = data.message; // recheck this // saving server response but for what ?
+        currentRequest.message = data.message; // recheck this //? saving server response but for what ?
         createLog(data);
         updateMessageStatus(state.currentRequest, currentRequest.status);
         if (action === status.WILCO) {

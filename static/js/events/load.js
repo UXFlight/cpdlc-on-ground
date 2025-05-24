@@ -1,5 +1,5 @@
 import { enableActionButtons } from "../buttons-ui.js";
-import { state, status } from '../state.js';
+import { state, status, updateStep } from '../state.js';
 import { postLoad } from "../api.js";
 
 export async function loadEvent() {
@@ -26,7 +26,8 @@ export async function loadEvent() {
     else enableActionButtons(status.WILCO);
 
     this.disabled = true;
-    // state.steps[state.currentRequest].status = status.LOAD; // temp ?
+    // state.steps[state.currentRequest].status = status.LOAD; // temp ? 
+    updateStep(status.LOAD)
 
   } catch (err) {
     console.error("Network error:", err);

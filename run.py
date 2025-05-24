@@ -3,7 +3,7 @@ from datetime import datetime
 import time
 import signal
 import sys
-from agent import *
+from app.ingescape.agent import *
 import threading
 
 app = Flask(__name__)

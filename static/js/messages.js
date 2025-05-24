@@ -64,7 +64,7 @@ export function updateMessageStatus(action, newStatus) {
     (statusEl);
     if (!statusEl) return;
 
-    statusEl.classList.remove('open', 'closed', 'cancelled');
+    statusEl.classList.remove('open', 'closed', 'cancelled'); //! will updated status with loaded, executed, etc
     statusEl.textContent = newStatus.toUpperCase();
     statusEl.classList.add(newStatus.toLowerCase());
 

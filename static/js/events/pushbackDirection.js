@@ -1,4 +1,4 @@
-import { state } from '../state.js';
+import { state, updateDirection } from '../state.js';
 
 // pushback direction
 export const selectPushbackDirection = (direction) => {
@@ -18,7 +18,7 @@ export const selectPushbackDirection = (direction) => {
     leftButton.classList.remove("active");
   }
 
-  state.steps[state.currentRequest].direction = direction;
+  updateDirection(direction)
   pushbackBtn.disabled = false;
   cancelPushbackBtn.disabled = false;
 }

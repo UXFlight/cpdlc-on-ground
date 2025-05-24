@@ -63,8 +63,8 @@ function listenToButtonEvents() {
 
   // load buttons event
   loadButton.addEventListener("click", loadEvent.bind(loadButton)); // bind to set 'this' to load btn
-  executeButton.addEventListener("click", async () => executeEvent(state.currentRequest));
-  cancelExecuteButton.addEventListener("click", async () => cancelExecuteEvent(state.currentRequest));
+  executeButton.addEventListener("click", async () => executeEvent());
+  cancelExecuteButton.addEventListener("click", async () => cancelExecuteEvent());
 
   // wilco buttons event
   wilcoButton.addEventListener("click", () => actionEvent(status.WILCO));

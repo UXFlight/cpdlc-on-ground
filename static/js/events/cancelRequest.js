@@ -1,20 +1,21 @@
 import { updateMessageStatus } from "../messages.js";
 import { hideSpinner } from "../ui.js";
 import { disableActionButtons } from "../buttons-ui.js";
-import { state, status } from '../state.js';
+import { state, status, updateDirection, updateStep } from '../state.js';
 
 export async function cancelRequestEvent(action) {   
   if (!action || this.disabled) return;
 
   const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
 
-  state.steps[action].status = status.CANCELLED;
+  updateStep(status.CANCELLED, status.CANCELLED) //! when will be sending request, updateStep with response.json().message
   updateMessageStatus(action, state.steps[action].status);
   
   if (action === "pushback") {
     document.getElementById("pushback-left").classList.remove("active");
     document.getElementById("pushback-right").classList.remove("active");
-    state.steps[action].direction = null;     
+    updateDirection(null);
+    
   }
 
   if (requestBtn) {
