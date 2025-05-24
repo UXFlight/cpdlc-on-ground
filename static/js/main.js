@@ -1,4 +1,4 @@
-import { state, status } from './state.js'
+import { status } from './state.js'
 // all events imported
 import { selectPushbackDirection } from './events/pushbackDirection.js';
 import { sendRequestEvent } from './events/sendRequest.js';
