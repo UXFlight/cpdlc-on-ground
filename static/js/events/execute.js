@@ -1,6 +1,6 @@
-import { state, status, updateStep } from '../state.js';
-import { postExecute } from '../api.js';
-import { disableActionButtons, enableActionButtons } from '../buttons-ui.js';
+import { state, status, updateStep } from '../state/state.js';
+import { postExecute } from '../api/api.js';
+import { disableActionButtons, enableActionButtons } from '../ui/buttons-ui.js';
 
 // execute event
 export const executeEvent = async () => {

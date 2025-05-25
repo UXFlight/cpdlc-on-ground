@@ -1,7 +1,7 @@
-import { updateMessageStatus } from "../messages.js";
-import { hideSpinner } from "../ui.js";
-import { disableActionButtons } from "../buttons-ui.js";
-import { state, status, updateDirection, updateStep } from '../state.js';
+import { updateMessageStatus } from "../messages/messages.js";
+import { hideSpinner } from "../ui/ui.js";
+import { disableActionButtons } from "../ui/buttons-ui.js";
+import { state, status, updateDirection, updateStep } from '../state/state.js';
 
 export async function cancelRequestEvent(action) {   
   if (!action || this.disabled) return;

@@ -37,7 +37,7 @@ export function updateStep(newStatus, newMessage = null) {
 
   step.status = newStatus;
   step.message = newMessage;
-  step.timestamp = new Date().toISOString();
+  step.timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
 }
 
 export function updateDirection(direction) {

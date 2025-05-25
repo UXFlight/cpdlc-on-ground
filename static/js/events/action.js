@@ -1,10 +1,9 @@
 
-import { state, status } from '../state.js';
-import { showSpinner, showTick } from '../ui.js';
-import { disableActionButtons, disableAllButtons, disableCancelButtons } from '../buttons-ui.js';
-import { postAction } from '../api.js';
-import { createLog } from '../messages.js';
-import { updateMessageStatus } from '../messages.js';
+import { state, status } from '../state/state.js';
+import { showSpinner, showTick } from '../ui/ui.js';
+import { disableActionButtons, disableAllButtons, disableCancelButtons } from '../ui/buttons-ui.js';
+import { postAction } from '../api/api.js';
+import { updateMessageStatus, createLog } from '../messages/messages.js';
 
 // willco, standby, unable event
 export const actionEvent = async (action) => {

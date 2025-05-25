@@ -1,12 +1,12 @@
-import { status } from './state.js'
+import { status } from './state/state.js';
 // all events imported
-import { selectPushbackDirection } from './events/pushbackDirection.js';
-import { sendRequestEvent } from './events/sendRequest.js';
-import { toggleOverlay, closeOverlay } from './events/overlay.js';
-import { cancelRequestEvent } from './events/cancelRequest.js';
 import { loadEvent } from './events/load.js';
-import { executeEvent, cancelExecuteEvent } from './events/execute.js';
 import { actionEvent } from './events/action.js';
+import { sendRequestEvent } from './events/sendRequest.js';
+import { cancelRequestEvent } from './events/cancelRequest.js';
+import { toggleOverlay, closeOverlay } from './events/overlay.js';
+import { executeEvent, cancelExecuteEvent } from './events/execute.js';
+import { selectPushbackDirection } from './events/pushbackDirection.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   listenToButtonEvents();

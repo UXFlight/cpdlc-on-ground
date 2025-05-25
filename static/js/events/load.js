@@ -1,6 +1,6 @@
-import { enableActionButtons } from "../buttons-ui.js";
-import { state, status, updateStep } from '../state.js';
-import { postLoad } from "../api.js";
+import { enableActionButtons } from "../ui/buttons-ui.js";
+import { state, status, updateStep } from '../state/state.js';
+import { postLoad } from "../api/api.js";
 
 export async function loadEvent() {
   if (!state.currentRequest) return;

@@ -1,4 +1,4 @@
-import { state, updateDirection } from '../state.js';
+import { state, updateDirection } from '../state/state.js';
 
 // pushback direction
 export const selectPushbackDirection = (direction) => {

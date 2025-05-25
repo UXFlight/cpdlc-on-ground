@@ -1,5 +1,4 @@
-import { state, status } from './state.js';
-
+import { state, status } from '../state/state.js';
 // small utils functions
 export function checkPendingRequest() {
   return Object.values(state.steps).some(step => step.status === status.PENDING || step.status === status.LOAD); // for now, blocking all other requests

@@ -1,10 +1,10 @@
-import { checkPendingRequest, blockSecondRequest } from "../utils.js";
-import { state, status, updateStep } from '../state.js';
-import { showSpinner, showTick } from "../ui.js";
-import { createLog } from "../messages.js";
-import { disableActionButtons, enableButtons, disableCancelButtons } from "../buttons-ui.js";
-import { sendRequest } from '../api.js'
-import { closeCurrentOverlay } from "../utils.js";
+import { sendRequest } from '../api/api.js'
+import { showSpinner, showTick } from "../ui/ui.js";
+import { createLog } from "../messages/messages.js";
+import { closeCurrentOverlay } from "../utils/utils.js";
+import { state, status, updateStep } from '../state/state.js';
+import { checkPendingRequest, blockSecondRequest } from "../utils/utils.js";
+import { disableActionButtons, enableButtons, disableCancelButtons } from "../ui/buttons-ui.js";
 
 export const sendRequestEvent = async (action) => { // !bug : can spam request/ cancel and creates multiple requests
   if (invalidRequest(action)) return;

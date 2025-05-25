@@ -1,5 +1,5 @@
-import { state, status } from '../state.js';
-import { checkPendingRequest, closeCurrentOverlay } from '../utils.js';
+import { state, status } from '../state/state.js';
+import { checkPendingRequest, closeCurrentOverlay } from '../utils/utils.js';
 
 // overlay event
 export const toggleOverlay = (overlay, e) => {
