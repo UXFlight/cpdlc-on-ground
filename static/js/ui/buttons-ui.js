@@ -1,3 +1,5 @@
+import { closeCurrentOverlay } from "../utils/utils.js";
+
 // buttons functions
 export function enableButtons(action) { // we only enable load button on taxi_clearances
     switch (action) {
@@ -39,8 +41,11 @@ export function disableActionButtons(action) {
 
 // disable request/ cancel buttons
 export function disableAllButtons(action) {
+    const overlay = document.querySelector(`.overlay[data-action="${action}"]`);
+    if (overlay) overlay.style.cursor = 'not-allowed';
     disableRequestButtons(action);
-    disableCancelButtons(action); 
+    disableCancelButtons(action);
+    closeCurrentOverlay();
 }
   
 export function disableCancelButtons(action) {
@@ -60,4 +65,20 @@ function enableLoadBtn() {
     loadButton.disabled = false;
     loadButton.classList.add('active');
     }
+}
+
+export const disableAllRequestButtons = () => {
+    const requestButtons = document.querySelectorAll(".request-button");
+    requestButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.remove("active");
+    });
+}
+
+export const enableAllRequestButtons = () => {
+    const requestButtons = document.querySelectorAll(".request-button");
+    requestButtons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.add("active");
+    });
 }

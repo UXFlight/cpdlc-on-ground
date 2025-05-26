@@ -26,6 +26,7 @@
     background-color: #222;
     border-radius: 6px;
     transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease;
+    cursor: pointer;
 }
 
 .overlay:hover {
@@ -53,7 +54,6 @@
     font-size: 18px;
     text-transform: uppercase;
     color: #f5f5f5;
-    cursor: pointer;
     background-color: transparent;
     border: none;
     width: 100%;
