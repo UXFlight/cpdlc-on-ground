@@ -14,11 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function listenToGlobalClickEvents() {
-  const dropdowns = document.querySelectorAll(".dropdown");
+  const overlays = document.querySelectorAll(".overlay");
 
-  dropdowns.forEach(dropdown => {
-    const button = dropdown.querySelector(".dropdown-button");
-    button.addEventListener("click", (e) => toggleOverlay(dropdown, e));
+  overlays.forEach(overlay => {
+    const button = overlay.querySelector(".overlay-button");
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleOverlay(overlay, e)
+    });
   });
 
   document.addEventListener("click", (event) => closeOverlay(event));

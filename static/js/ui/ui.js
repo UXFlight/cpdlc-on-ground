@@ -10,7 +10,7 @@ export function showSpinner(action) {
 export function showTick(action, isError = false) {
   const spinner = document.getElementById(`${action}_spinner`);
   const tick = document.getElementById(`${action}_tick`);
-  const wrapper = document.querySelector(`.dropdown[data-action="${action}"]`);
+  const wrapper = document.querySelector(`.overlay[data-action="${action}"]`);
 
   if (spinner) spinner.style.display = "none";
 
