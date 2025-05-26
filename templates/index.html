@@ -33,18 +33,20 @@
                 <!-- Dynamic content will be appended here -->
             </div>
         
-            <!-- Action Buttons (Load, Execute, Cancel) -->
+            <!-- Dynamic Action Buttons -->
+            {% for group in action_groups %}
             <div class="action-buttons-grp">
-                <button id="load-button" class="action-button load-grp" disabled>Load</button>
-                <button id="execute-button" class="action-button load-grp" disabled>Execute</button>
-                <button id="cancel-execute-button" class="action-button load-grp cancel" disabled>Cancel</button>
+            {% for btn in group.buttons %}
+                <button
+                id="{{ btn.id }}"
+                class="action-button {{ group.group_class }} {{ btn.extra_class }}"
+                disabled
+                >
+                {{ btn.label }}
+                </button>
+            {% endfor %}
             </div>
-            <!-- Action Buttons (Wilco, Standby, Unable) -->
-            <div class="action-buttons-grp">
-                <button class="action-button wilco-grp" id="wilco" disabled>Wilco</button>
-                <button class="action-button wilco-grp" id="standby" disabled>Standby</button>
-                <button class="action-button cancel wilco-grp" id="unable" disabled>Unable</button>
-            </div>
+            {% endfor %}
         
             <div class="taxi-clearance-box">
                 <h2>Taxi Clearance</h2>
@@ -60,265 +62,33 @@
                 <h2>Request</h2>
                 <div  class="request-list">
                     <!-- Request button for Expected Taxi Clearance -->
-                    <div class="overlay" data-action="expected_taxi_clearance">
-                        <div class="overlay-button">
-                          <span class="label">1. Expected Taxi Clearance</span>
-                          <div class="status-icons">
-                            <div class="spinner" id="expected_taxi_clearance_spinner"></div>
-                            <span class="tick-icon success" id="expected_taxi_clearance_tick">&#10003;</span>
-                          </div>
-                        </div>
-                        <div class="overlay-actions">
-                          <button class="request-button" data-action="expected_taxi_clearance" id="expected-taxi-clearance-btn">Request</button>
-                          <button class="cancel-button" data-action="expected_taxi_clearance" disabled>Cancel</button>
-                        </div>
-                    </div>
-                      
-                    <!-- Request button for Engine Startup -->
-                    <div class="overlay" data-action="engine_startup">
-                        <div class="overlay-button">
-                            <span class="label">2. Engine Startup</span>
+                    {% for item in request_overlays %}
+                        <div class="overlay" data-action="{{ item.action }}">
+                            <div class="overlay-button">
+                            <span class="label">{{ item.number }}. {{ item.label }}</span>
                             <div class="status-icons">
-                            <div class="spinner" id="engine_startup_spinner"></div>
-                            <span class="tick-icon success" id="engine_startup_tick">&#10003;</span>
+                                <div class="spinner" id="{{ item.action }}_spinner"></div>
+                                <span class="tick-icon success" id="{{ item.action }}_tick">&#10003;</span>
                             </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" data-action="engine_startup" id="engine-startup-btn">Request</button>
-                            <button class="cancel-button" data-action="engine_startup" disabled>Cancel</button>
-                        </div>
-                    </div>
-
-                    <!-- Request button for Pushback -->
-                    <div class="overlay" data-action="pushback">
-                        <div class="overlay-button">
-                            <span class="label">3. Pushback</span>
-                            <div class="status-icons">
-                            <div class="spinner" id="pushback_spinner"></div>
-                            <span class="tick-icon success" id="pushback_tick">&#10003;</span>
                             </div>
-                        </div>
 
-                        <div class="overlay-actions pushback-overlay">
-                            <div class="pushback-direction">
+                            <div class="overlay-actions{% if item.type == 'pushback' %} pushback-overlay{% endif %}">
+                            {% if item.type == 'pushback' %}
+                                <div class="pushback-direction">
                                 <button class="direction-button" id="pushback-left">L</button>
                                 <button class="direction-button" id="pushback-right">R</button>
-                            </div>
-                            <button class="request-button" id="pushback-btn" data-action="pushback" disabled>Request</button>
-                            <button class="cancel-button" id="cancel-pushback-btn" data-action="pushback" disabled>Cancel</button>
-                        </div>
-                    </div>
+                                </div>
+                            {% endif %}
 
-                    <!-- Request button for Taxi Clearance -->
-                    <div class="overlay" data-action="taxi_clearance">
-                        <div class="overlay-button">
-                            <span class="label">4. Taxi Clearance</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="taxi_clearance_spinner"></div>
-                                <span class="tick-icon success" id="taxi_clearance_tick">&#10003;</span>
+                            <button class="request-button" id="{{ item.action | replace('_', '-') }}-btn" data-action="{{ item.action }}"
+                                    {% if item.type == 'pushback' %}disabled{% endif %}>
+                                Request
+                            </button>
+                            <button class="cancel-button" data-action="{{ item.action }}" disabled>Cancel</button>
                             </div>
                         </div>
+                    {% endfor %}
 
-                        <div class="overlay-actions">
-                            <button class="request-button" id="taxi-clearance-btn" data-action="taxi_clearance">Request</button>
-                            <button class="cancel-button" data-action="taxi_clearance" disabled>Cancel</button>
-                        </div>
-                    </div>
-
-                    <!-- Request button for De-Icing -->
-                    <div class="overlay" data-action="de_icing">
-                        <div class="overlay-button">
-                            <span class="label">5. De-Icing</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="de_icing_spinner"></div>
-                                <span class="tick-icon success" id="de_icing_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="de-icing-btn" data-action="de_icing">Request</button>
-                            <button class="cancel-button" data-action="de_icing" disabled>Cancel</button>
-                        </div>
-                    </div>
-
-                    <!-- Request button for Able Intersection for Departure Runway -->
-                    <div class="overlay" data-action="able_intersection_departure">
-                        <div class="overlay-button">
-                            <span class="label">6. Able Intersection Departure</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="able_intersection_departure_spinner"></div>
-                                <span class="tick-icon success" id="able_intersection_departure_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="able-intersection-departure-btn" data-action="able_intersection_departure">Request</button>
-                            <button class="cancel-button" data-action="able_intersection_departure" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for Ready for Clearance -->
-                    <div class="overlay" data-action="ready_for_clearance" >
-                        <div class="overlay-button">
-                            <span class="label">7. Ready for Clearance</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="ready_for_clearance_spinner"></div>
-                                <span class="tick-icon success" id="ready_for_clearance_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="ready-for-clearance-btn" data-action="ready_for_clearance">Request</button>
-                            <button class="cancel-button" data-action="ready_for_clearance" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for Departure Clearance -->
-                    <div class="overlay" data-action="departure_clearance">
-                        <div class="overlay-button">
-                            <span class="label">8. Departure Clearance</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="departure_clearance_spinner"></div>
-                                <span class="tick-icon success" id="departure_clearance_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="departure-clearance-btn" data-action="departure_clearance">Request</button>
-                            <button class="cancel-button" data-action="departure_clearance" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for Startup Cancellation -->
-                    <div class="overlay" data-action="startup_cancellation">
-                        <div class="overlay-button">
-                            <span class="label">9. Startup Cancellation</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="startup_cancellation_spinner"></div>
-                                <span class="tick-icon success" id="startup_cancellation_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="startup-cancellation-btn" data-action="startup_cancellation">Request</button>
-                            <button class="cancel-button" data-action="startup_cancellation" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for Affirm -->
-                    <div class="overlay" data-action="affirm">
-                        <div class="overlay-button">
-                            <span class="label">10. Affirm</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="affirm_spinner"></div>
-                                <span class="tick-icon success" id="affirm_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="affirm-btn" data-action="affirm">Request</button>
-                            <button class="cancel-button" data-action="affirm" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for Negative -->
-                    <div class="overlay" data-action="negative">
-                        <div class="overlay-button">
-                            <span class="label">11. Negative</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="negative_spinner"></div>
-                                <span class="tick-icon success" id="negative_tick">&#10003;</span>
-                        </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="negative-btn" data-action="negative">Request</button>
-                            <button class="cancel-button" data-action="negative" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for Roger -->
-                    <div class="overlay" data-action="roger">
-                        <div class="overlay-button">
-                            <span class="label">12. Roger</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="roger_spinner"></div>
-                                <span class="tick-icon success" id="roger_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="roger-btn" data-action="roger">Request</button>
-                            <button class="cancel-button" data-action="roger" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for We Can Accept -->
-                    <div class="overlay" data-action="we_can_accept">
-                        <div class="overlay-button">
-                        <span class="label">13. We Can Accept</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="we_can_accept_spinner"></div>
-                                <span class="tick-icon success" id="we_can_accept_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="we-can-accept-btn" data-action="we_can_accept">Request</button>
-                            <button class="cancel-button" data-action="we_can_accept" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for We Cannot Accept -->
-                    <div class="overlay" data-action="we_cannot_accept">
-                        <div class="overlay-button">
-                            <span class="label">14. We Cannot Accept</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="we_cannot_accept_spinner"></div>
-                                <span class="tick-icon success" id="we_cannot_accept_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="we-cannot-accept-btn" data-action="we_cannot_accept">Request</button>
-                            <button class="cancel-button" data-action="we_cannot_accept" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for De-Icing Complete -->
-                    <div class="overlay" data-action="de_icing_complete">
-                        <div class="overlay-button">
-                            <span class="label">15. De-Icing Complete</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="de_icing_complete_spinner"></div>
-                                <span class="tick-icon success" id="de_icing_complete_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="de-icing-complete-btn" data-action="de_icing_complete">Request</button>
-                            <button class="cancel-button" data-action="de_icing_complete" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for For De-Icing -->
-                    <div class="overlay" data-action="for_de_icing">
-                        <div class="overlay-button">
-                            <span class="label">16. For De-Icing</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="for_de_icing_spinner"></div>
-                                <span class="tick-icon success" id="for_de_icing_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="for-de-icing-btn" data-action="for_de_icing">Request</button>
-                            <button class="cancel-button" data-action="for_de_icing" disabled>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Request button for No De-Icing Required -->
-                    <div class="overlay" data-action="no_de_icing_required">
-                        <div class="overlay-button">
-                            <span class="label">17. No De-Icing Required</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="no_de_icing_required_spinner"></div>
-                                <span class="tick-icon success" id="no_de_icing_required_tick">&#10003;</span>
-                            </div>
-                        </div>
-                        <div class="overlay-actions">
-                            <button class="request-button" id="no-de-icing-required-btn" data-action="no_de_icing_required">Request</button>
-                            <button class="cancel-button" data-action="no_de_icing_required" disabled>Cancel</button>
-                        </div>
-                    </div> 
 
 
                 </div>   
