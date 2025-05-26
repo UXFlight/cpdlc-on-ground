@@ -7,6 +7,7 @@ import { cancelRequestEvent } from './events/cancelRequest.js';
 import { toggleOverlay, closeOverlay } from './events/overlay.js';
 import { executeEvent, cancelExecuteEvent } from './events/execute.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
+import { enableAllRequestButtons } from './ui/buttons-ui.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   listenToButtonEvents();
@@ -42,6 +43,8 @@ function listenToButtonEvents() {
   const standbyButton = document.getElementById("standby");
   const unableButton = document.getElementById("unable");
 
+  const wilcoButtonsGrp = document.querySelectorAll('.wilco-grp');
+
   // request btns event
   requestButtons.forEach(btn => {
     btn.addEventListener("click", async (e) => {
@@ -65,12 +68,19 @@ function listenToButtonEvents() {
   rightButton.addEventListener("click", () => selectPushbackDirection("right"));
 
   // load buttons event
-  loadButton.addEventListener("click", loadEvent.bind(loadButton)); // bind to set 'this' to load btn
-  executeButton.addEventListener("click", async () => executeEvent());
-  cancelExecuteButton.addEventListener("click", async () => cancelExecuteEvent());
+  loadButton.addEventListener("click", function (e) {loadEvent.call(this, e)});
+  executeButton.addEventListener("click", async (e) => executeEvent(e));
+  cancelExecuteButton.addEventListener("click", async (e) => cancelExecuteEvent(e));
 
   // wilco buttons event
-  wilcoButton.addEventListener("click", () => actionEvent(status.WILCO));
-  standbyButton.addEventListener("click", () => actionEvent(status.STANDBY));
-  unableButton.addEventListener("click", () => actionEvent(status.UNABLE));
+  wilcoButton.addEventListener("click", (e) => actionEvent(status.WILCO, e));
+  standbyButton.addEventListener("click", (e) => actionEvent(status.STANDBY, e));
+  unableButton.addEventListener("click", (e) => actionEvent(status.UNABLE, e));
+
+  wilcoButtonsGrp.forEach((btn) => 
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      enableAllRequestButtons();
+    })
+  );
 }

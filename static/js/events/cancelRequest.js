@@ -1,6 +1,6 @@
 import { updateMessageStatus } from "../messages/messages.js";
 import { hideSpinner } from "../ui/ui.js";
-import { disableActionButtons } from "../ui/buttons-ui.js";
+import { disableActionButtons, enableAllRequestButtons } from "../ui/buttons-ui.js";
 import { state, status, updateDirection, updateStep } from '../state/state.js';
 
 export async function cancelRequestEvent(action) {   
@@ -31,4 +31,5 @@ export async function cancelRequestEvent(action) {
   hideSpinner(action);
   disableActionButtons(status.LOAD);
   disableActionButtons(status.WILCO);
+  enableAllRequestButtons();
 }

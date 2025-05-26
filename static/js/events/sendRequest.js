@@ -4,7 +4,7 @@ import { createLog } from "../messages/messages.js";
 import { closeCurrentOverlay } from "../utils/utils.js";
 import { state, status, updateStep } from '../state/state.js';
 import { checkPendingRequest, blockSecondRequest } from "../utils/utils.js";
-import { disableActionButtons, enableButtons, disableCancelButtons } from "../ui/buttons-ui.js";
+import { disableActionButtons, enableButtons, disableCancelButtons, disableAllRequestButtons } from "../ui/buttons-ui.js";
 
 export const sendRequestEvent = async (action) => { // !bug : can spam request/ cancel and creates multiple requests
   if (invalidRequest(action)) return;
@@ -15,6 +15,7 @@ export const sendRequestEvent = async (action) => { // !bug : can spam request/ 
   showSpinner(action);
   disableActionButtons(status.LOAD);
   disableActionButtons(status.WILCO);
+  disableAllRequestButtons();
 
   try {
     if (cancelBtn) cancelBtn.disabled = false;
