@@ -1,6 +1,5 @@
 // Global state
 export const state = {
-  messageCount: 0,
   currentRequest: null,
   steps: {
     able_intersection_departure: createStep("Able Intersection Departure"),

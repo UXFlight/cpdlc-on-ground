@@ -1,4 +1,5 @@
 # coding: utf-8
+from datetime import datetime
 import ingescape as igs
 
 class Singleton(type):
@@ -10,6 +11,7 @@ class Singleton(type):
 
 class Echo(metaclass=Singleton):
     def __init__(self):
+        self._history = [] # keeps logs of actions and requests
         self._requests = {
             "able_intersection_departure": False,
             "expected_taxi_clearance": False,
@@ -47,8 +49,12 @@ class Echo(metaclass=Singleton):
     @property
     def actions(self):
         return self._actions
+    
+    def _log_change(self, name, value):
+        self._history.append((name, value, datetime.utcnow().isoformat()))
 
     def _set_output(self, pool, name, value):
+        self._log_change(name, value)
         if name in pool:
             pool[name] = value
             if value is not None:
@@ -78,3 +84,7 @@ class Echo(metaclass=Singleton):
             self.set_request(name, False)
         for name in self._actions:
             self.set_action(name, False)
+        igs.info("[Echo] All outputs reset.")
+
+    def get_history(self):
+        return getattr(self, "_history", [])

@@ -1,9 +1,7 @@
 from datetime import datetime
 
-
 def current_timestamp():
     return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-
 
 def create_step(label, extra=None):
     step = {
@@ -17,9 +15,16 @@ def create_step(label, extra=None):
         step.update(extra)
     return step
 
-class PilotState:
-    def __init__(self):
-        self.message_count = 0
+class PilotState: # Singleton
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(PilotState, cls).__new__(cls)
+            cls._instance._init_state()
+        return cls._instance
+
+    def _init_state(self):
         self.current_request = None
         self.steps = {
             "able_intersection_departure": create_step("Able Intersection Departure"),
@@ -46,14 +51,11 @@ class PilotState:
         step = self.steps.get(step_name)
         if not step:
             return
-
-        # Add previous state to history
         step["history"].append({
             "status": step["status"],
             "message": step["message"],
             "timestamp": step["timestamp"]
         })
-
         step["status"] = status
         step["message"] = message
         step["timestamp"] = current_timestamp()
@@ -74,6 +76,10 @@ class PilotState:
             step["timestamp"] = None
             if "direction" in step:
                 step["direction"] = None
-
-        self.message_count = 0
         self.current_request = None
+
+    def get_state(self):
+        return {
+            "current_request": self.current_request,
+            "steps": self.steps
+        }
