@@ -31,7 +31,6 @@ def load_action():
     print(data["requestType"])
     return jsonify({"status": "loaded", "message": DEFAULT_ATC_RESPONSES[data["requestType"]]})
 
-
 @action_bp.route("/cancel", methods=["POST"])
 def cancel():
     agent.set_action("Cancel", True)

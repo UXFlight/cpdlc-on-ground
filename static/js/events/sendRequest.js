@@ -6,11 +6,11 @@ import { state, status, updateStep } from '../state/state.js';
 import { checkPendingRequest, blockSecondRequest } from "../utils/utils.js";
 import { disableActionButtons, enableButtons, disableCancelButtons, disableAllRequestButtons } from "../ui/buttons-ui.js";
 
-export const sendRequestEvent = async (action) => { // !bug : can spam request/ cancel and creates multiple requests
+export const sendRequestEvent = async (action) => {
   if (invalidRequest(action)) return;
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
   
-  updateStep(status.PENDING); // change status to pending asap
+  updateStep(status.PENDING); //! change status to pending asap : still frontend only, will work on ws later
 
   showSpinner(action);
   disableActionButtons(status.LOAD);
@@ -22,8 +22,9 @@ export const sendRequestEvent = async (action) => { // !bug : can spam request/ 
     const data = await sendRequest(action);
     if (state.steps[action].status === status.CANCELLED) return; // if cancelled, do not proceed // might send request to server
     if (!data.error) {
+      console.log("Request successful:", data);
       state.steps[action].message = data.message;
-      createLog(data);
+      createLog({timestamp : data.timestamp, action : state.currentRequest, message : data.message});
       enableButtons(action);
     } else {
       showTick(action, true)

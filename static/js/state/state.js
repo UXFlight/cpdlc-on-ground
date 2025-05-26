@@ -23,7 +23,7 @@ export const state = {
   }
 };
 
-export function updateStep(newStatus, newMessage = null) {
+export function updateStep(newStatus, newMessage = null) { //! keeping it stricly bc we dont have async ws implemented yet
   console.log(state.steps[state.currentRequest]);
   const step = state.steps[state.currentRequest];
   if (!step) return;

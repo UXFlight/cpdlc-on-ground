@@ -51,11 +51,12 @@ class PilotState: # Singleton
         step = self.steps.get(step_name)
         if not step:
             return
-        step["history"].append({
-            "status": step["status"],
-            "message": step["message"],
-            "timestamp": step["timestamp"]
-        })
+        if step["status"] or step["message"] or step["timestamp"]:
+            step["history"].append({
+                "status": step["status"],
+                "message": step["message"],
+                "timestamp": step["timestamp"]
+            })
         step["status"] = status
         step["message"] = message
         step["timestamp"] = current_timestamp()
