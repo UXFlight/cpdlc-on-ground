@@ -1,9 +1,10 @@
 import { state, status, updateStep } from '../state/state.js';
 import { postExecute } from '../api/api.js';
-import { disableActionButtons, enableActionButtons } from '../ui/buttons-ui.js';
+import { disableActionButtons, enableActionButtons, enableButtons } from '../ui/buttons-ui.js';
 
 // execute event
-export const executeEvent = async () => {
+export const executeEvent = async (e) => {
+  e.stopPropagation();
   if (!state.currentRequest) return;
 
   const data = await postExecute(state.currentRequest);
@@ -24,7 +25,8 @@ export const executeEvent = async () => {
   enableActionButtons(status.WILCO);
 }
 
-export const cancelExecuteEvent = async () => {
+export const cancelExecuteEvent = async (e) => {
+  e.stopPropagation();
   disableActionButtons(status.LOAD);
   enableButtons(state.currentRequest);
 };

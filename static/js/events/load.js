@@ -2,7 +2,8 @@ import { enableActionButtons } from "../ui/buttons-ui.js";
 import { state, status, updateStep } from '../state/state.js';
 import { postLoad } from "../api/api.js";
 
-export async function loadEvent() {
+export async function loadEvent(e) {
+  e.stopPropagation();
   if (!state.currentRequest) return;
 
   try {
