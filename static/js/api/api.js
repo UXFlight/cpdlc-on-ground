@@ -13,11 +13,12 @@ export async function postAction(action) {
   return response.json();
 }
 
-export async function postLoad(previousEntry) {
+export async function postLoad(requestType) {
+  console.log("postLoad called with:", requestType);
   const response = await fetch('/load', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ requestType: previousEntry }),
+    body: JSON.stringify({ requestType }),
   });
   return response.json();
 }

@@ -17,7 +17,6 @@ def create_step(label, extra=None):
         step.update(extra)
     return step
 
-
 class PilotState:
     def __init__(self):
         self.message_count = 0
@@ -62,3 +61,19 @@ class PilotState:
     def update_pushback_direction(self, direction):
         if "pushback" in self.steps:
             self.steps["pushback"]["direction"] = direction
+
+    def reset(self):
+        for step in self.steps.values():
+            step["history"].append({
+                "status": step["status"],
+                "message": step["message"],
+                "timestamp": step["timestamp"]
+            })
+            step["status"] = None
+            step["message"] = None
+            step["timestamp"] = None
+            if "direction" in step:
+                step["direction"] = None
+
+        self.message_count = 0
+        self.current_request = None

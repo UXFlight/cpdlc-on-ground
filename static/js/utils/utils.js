@@ -10,6 +10,6 @@ export function blockSecondRequest(action) {
 }
 
 export function closeCurrentOverlay() {
-    const open = document.querySelector(".dropdown.open");
+    const open = document.querySelector(".overlay.open");
     if (open) open.classList.remove("open");
 }

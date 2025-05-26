@@ -1,7 +1,7 @@
 .
 ├── app
 │   ├── config.py
-│   ├── ingescape
+│   ├── ingsvc
 │   │   ├── agent.py
 │   │   └── __init__.py
 │   ├── __init__.py
@@ -13,41 +13,44 @@
 │   │   └── __init__.py
 │   ├── socket
 │   │   └── sockets.py
-│   ├── state.py
+│   ├── state
+│   │   ├── __init__.py
+│   │   └── state.py
 │   └── utils
 │       └── helpers.py
-├── img
-│   └── project.png
 ├── project-structure.txt
 ├── README.md
-├── services
-├── static
-│   ├── css
-│   │   ├── logs.css
-│   │   ├── pilot-buttons.css
-│   │   ├── request.css
-│   │   ├── style.css
-│   │   └── taxi-clearance.css
-│   ├── favicon.ico
-│   ├── js
-│   │   ├── api.js
-│   │   ├── buttons-ui.js
-│   │   ├── events
-│   │   │   ├── action.js
-│   │   │   ├── cancelRequest.js
-│   │   │   ├── execute.js
-│   │   │   ├── load.js
-│   │   │   ├── overlay.js
-│   │   │   ├── pushbackDirection.js
-│   │   │   └── sendRequest.js
-│   │   ├── main.js
-│   │   ├── messages.js
-│   │   ├── state.js
-│   │   ├── ui.js
-│   │   └── utils.js
-│   └── mp3
-│       └── notif.mp3
-└── templates
-    └── index.html
+└── static
+    ├── css
+    │   ├── logs.css
+    │   ├── pilot-buttons.css
+    │   ├── request.css
+    │   ├── style.css
+    │   └── taxi-clearance.css
+    ├── favicon.ico
+    ├── index.html
+    ├── js
+    │   ├── api
+    │   │   └── api.js
+    │   ├── events
+    │   │   ├── action.js
+    │   │   ├── cancelRequest.js
+    │   │   ├── execute.js
+    │   │   ├── load.js
+    │   │   ├── overlay.js
+    │   │   ├── pushbackDirection.js
+    │   │   └── sendRequest.js
+    │   ├── main.js
+    │   ├── messages
+    │   │   └── messages.js
+    │   ├── state
+    │   │   └── state.js
+    │   ├── ui
+    │   │   ├── buttons-ui.js
+    │   │   └── ui.js
+    │   └── utils
+    │       └── utils.js
+    └── mp3
+        └── notif.mp3
 
-15 directories, 36 files
+18 directories, 36 files
