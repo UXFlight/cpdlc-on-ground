@@ -1,5 +1,11 @@
 // Global state
 export const state = {
+  connection: {
+    backend: "connecting",   // "connecting" | "connected" | "disconnected"
+    atc: {status : "pending", // "pending" | "connected" | "disconnected"
+      facility: null, 
+    },          
+  },
   currentRequest: null,
   steps: {
     able_intersection_departure: createStep("Able Intersection Departure"),
@@ -24,15 +30,17 @@ export const state = {
 };
 
 export function updateStep(newStatus, newMessage = null) { //! keeping it stricly bc we dont have async ws implemented yet
-  console.log(state.steps[state.currentRequest]);
+  console.log('STEP LOGS : ', state.steps[state.currentRequest]);
   const step = state.steps[state.currentRequest];
   if (!step) return;
 
-  step.history.push({
-    status: step.status,
-    message: step.message,
-    timestamp: step.timestamp
-  });
+  if(!step.status || !step.message || !step.timestamp) {
+    step.history.push({
+      status: step.status,
+      message: step.message,
+      timestamp: step.timestamp
+    });
+  }
 
   step.status = newStatus;
   step.message = newMessage;

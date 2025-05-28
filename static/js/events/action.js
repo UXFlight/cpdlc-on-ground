@@ -1,5 +1,5 @@
 
-import { state, status } from '../state/state.js';
+import { state, status, updateStep } from '../state/state.js';
 import { showSpinner, showTick } from '../ui/ui.js';
 import { disableActionButtons, disableAllButtons, disableCancelButtons, enableAllRequestButtons } from '../ui/buttons-ui.js';
 import { postAction } from '../api/api.js';
@@ -24,6 +24,7 @@ export const actionEvent = async (action, e) => {
       currentRequest.message = data.message; // recheck this //? saving server response but for what ?
       createLog(data);
       updateMessageStatus(state.currentRequest, currentRequest.status);
+      updateStep(currentRequest.status, currentRequest.message);
       if (action === status.WILCO) {
         disableAllButtons(state.currentRequest);
         showTick(state.currentRequest);

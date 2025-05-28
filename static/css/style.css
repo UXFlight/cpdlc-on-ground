@@ -43,34 +43,6 @@ header {
     border-bottom: 1px solid #333;
 }
 
-.header-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #e0e0e0;
-    margin: 0;
-    letter-spacing: 0.5px;
-}
-
-.connection-status {
-    font-size: 0.95rem;
-    color: #ccc;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.status-indicator {
-    width: 10px;
-    height: 10px;
-    background-color: #6cc24a; 
-    border-radius: 50%;
-}
-
-.status-indicator.disconnected {
-    background-color: #e74c3c;
-}
-
-
 /* MAIN CONTENT */
 .content {
     display: flex;

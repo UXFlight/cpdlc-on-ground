@@ -10,6 +10,7 @@
    <link rel="stylesheet" href="./static/css/pilot-buttons.css">
    <link rel="stylesheet" href="/static/css/request.css">
    <link rel="stylesheet" href="/static/css/taxi-clearance.css">
+   <link rel="stylesheet" href="/static/css/connection.css">
 
    <!-- socket io -->
    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>   
@@ -22,11 +23,25 @@
     <div class="container">
         <header>
             <h1 class="header-title">CPDLC Ground</h1>
-            <div class="connection-status">
-                <span class="status-indicator"></span>
-                <span id="connection-text">Connected to KLAX</span>
+            <div class="connection-status-wrapper">
+                <div class="connection-status" id="connection-status">
+                    <span class="status-indicator connecting" id="connection-indicator"></span>
+                    <span id="connection-text">Connecting to server...</span>
+                    <div class="tooltip" id="connection-tooltip">
+                        <div class="status-line">
+                            <span class="status-label">Server:</span>
+                            <span id="backend-text" class="status-text">Connecting...</span>
+                            <span id="backend-icon" class="status-dot"></span>
+                        </div>
+                        <div class="status-line">
+                            <span class="status-label">ATC:</span>
+                            <span id="atc-text" class="status-text">Waiting...</span>
+                            <span id="atc-icon" class="status-dot"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </header>     
+        </header>          
 
        <div class="content">
            <!-- Message Log -->

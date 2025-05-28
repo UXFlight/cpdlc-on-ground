@@ -1,16 +1,37 @@
-import { state } from "../state/state.js";
 import { enableButtons } from "../ui/buttons-ui.js";
-
+import { renderConnectionState } from "./connectionEvents.js";
+import { state } from "../state/state.js";
 
 const socket = io("http://localhost:5321");
 
 export function listenToSocketEvents() {
-    socket.on("connect", () => {    
-        console.log("[SOCKET] Connected to backend");
+    // connection events
+    socket.on("connect", () => {
+        state.connection.backend = "connected";
+        renderConnectionState(state.connection);
+    });
+      
+    socket.on("connectedToATC", (data) => {
+        console.log(`[SOCKET] Connected to ATC at ${data.facility}`);
+        state.connection.atc.status = "connected";
+        state.connection.atc.facility = data.facility;
+        renderConnectionState(state.connection);
     });
     
+    // disconnection events
     socket.on("disconnect", () => {
         console.log("[SOCKET] Disconnected from backend");
+        state.connection.backend = "disconnected";
+        state.connection.atc.status = "disconnected"; // if backend down, cannot communicate w ATC
+        state.connection.atc.facility = null;
+        renderConnectionState(state.connection);
+    });
+    
+    socket.on("disconnectedFromATC", () => {
+        console.log("[SOCKET] ATC disconnected");
+        state.connection.atc.status = "disconnected";
+        state.connection.atc.facility = null;
+        renderConnectionState(state.connection);
     });
 
     socket.on("load_update", (data) => {

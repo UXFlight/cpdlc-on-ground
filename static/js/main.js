@@ -8,10 +8,10 @@ import { toggleOverlay, closeOverlay } from './events/overlay.js';
 import { executeEvent, cancelExecuteEvent } from './events/execute.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
 import { enableAllRequestButtons } from './ui/buttons-ui.js';
-// import { listenToSocketEvents } from './socket/socket.js';
+import { listenToSocketEvents } from './socket/socket.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  // listenToSocketEvents() 
+  listenToSocketEvents() 
   listenToButtonEvents();
   listenToGlobalClickEvents();
 });

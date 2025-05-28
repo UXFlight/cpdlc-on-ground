@@ -22,7 +22,6 @@ export const sendRequestEvent = async (action) => {
     const data = await sendRequest(action);
     if (state.steps[action].status === status.CANCELLED) return; // if cancelled, do not proceed // might send request to server
     if (!data.error) {
-      console.log("Request successful:", data);
       state.steps[action].message = data.message;
       createLog({timestamp : data.timestamp, action : state.currentRequest, message : data.message});
       enableButtons(action);
