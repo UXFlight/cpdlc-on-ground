@@ -71,16 +71,3 @@ export function updateStep(newStatus, newMessage = null) {
 export function updateDirection(direction) {
   state.steps["pushback"].direction = direction;
 }
-
-
-export const status = {
-  CLOSED: 'closed', // success
-  CANCELLED: 'cancelled',
-  NEW: 'new',
-  ERROR: 'error',
-  LOAD: 'load', // will separate this in the future
-  WILCO: 'wilco',
-  STANDBY: 'standby',
-  UNABLE: 'unable',
-  EXECUTED: 'executed',
-};

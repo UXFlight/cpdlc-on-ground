@@ -1,5 +1,6 @@
 import { enableButtons } from "../ui/buttons-ui.js";
-import { state, status, updateStep } from '../state/state.js';
+import { state, updateStep } from '../state/state.js';
+import { MSG_STATUS } from "../state/status.js";
 import { postLoad } from "../api/api.js";
 
 export async function loadEvent(e) {
@@ -26,7 +27,7 @@ export async function loadEvent(e) {
     enableButtons(state.currentRequest);
 
     this.disabled = true;
-    updateStep(status.LOAD)
+    updateStep(MSG_STATUS.LOAD)
 
   } catch (err) {
     console.error("Network error:", err);

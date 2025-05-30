@@ -62,8 +62,8 @@ function disableRequestButtons(action) {
 function enableLoadBtn() {
     const loadButton = document.getElementById('load-button');
     if (loadButton) {
-    loadButton.disabled = false;
-    loadButton.classList.add('active');
+        loadButton.disabled = false;
+        loadButton.classList.add('active');
     }
 }
 

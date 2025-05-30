@@ -1,14 +1,15 @@
 import { updateMessageStatus } from "../messages/historyLogs.js";
 import { hideSpinner } from "../ui/ui.js";
 import { disableActionButtons, enableAllRequestButtons } from "../ui/buttons-ui.js";
-import { state, status, updateDirection, updateStep } from '../state/state.js';
+import { state, updateDirection, updateStep } from '../state/state.js';
+import { MSG_STATUS } from "../state/status.js";
 
 export async function cancelRequestEvent(action) {   
   if (!action || this.disabled) return;
 
   const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
 
-  updateStep(status.CANCELLED, status.CANCELLED) //! when will be sending request, updateStep with response.json().message
+  updateStep(MSG_STATUS.CANCELLED, MSG_STATUS.CANCELLED) //! when will be sending request, updateStep with response.json().message
   updateMessageStatus(action, state.steps[action].status);
   
   if (action === "pushback") {
@@ -23,12 +24,16 @@ export async function cancelRequestEvent(action) {
   }
 
   // putting cancelled status
-  const messageBox = document.getElementById(`${action.replace(/_/g, "-")}-message`);
-  if (messageBox) messageBox.innerHTML = '';
+  /*
+      const messageBox = document.getElementById(`${action.replace(/_/g, "-")}-message`);
+      if (messageBox) messageBox.innerHTML = '';
+   * 
+   * 
+   */
 
   this.disabled = true;
   hideSpinner(action);
-  disableActionButtons(status.LOAD);
-  disableActionButtons(status.WILCO);
+  disableActionButtons(MSG_STATUS.LOAD);
+  disableActionButtons(MSG_STATUS.WILCO);
   enableAllRequestButtons();
 }
