@@ -33,7 +33,8 @@ export const sendRequestEvent = async (action) => {
             { 
               action, 
               timestamp : data.timestamp, 
-              message : data.message
+              message : data.message,
+              status: data.status
             });
       playNotificationSound();
       enableButtons(action);

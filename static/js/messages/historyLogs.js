@@ -20,17 +20,18 @@ export function flashElement(div) {
     setTimeout(() => div.classList.remove('flash'), 1000);
 }
 
-// BASIC MESSAGE CREATION //
-export function createHistoryLog({ action, timestamp, message }) {
+export function createHistoryLog({ action, timestamp, message, status = 'NEW' }) {
     if (!action) return;
     ensureMessageBoxNotEmpty();
+
+    const normalizedStatus = status.toLowerCase();
 
     const div = document.createElement('div');
     div.classList.add('new-message');
     div.dataset.action = action.toLowerCase();
-    div.dataset.status = 'new';
+    div.dataset.status = normalizedStatus;
 
-    const header = createHeader({ timestamp, title: action, status: 'new' });
+    const header = createHeader({ timestamp, title: action, status: normalizedStatus });
     div.appendChild(header);
 
     if (message) {
@@ -135,12 +136,13 @@ function createHeader({ timestamp, title, status }) {
     titleEl.textContent = title;
 
     const statusEl = document.createElement('span');
-    statusEl.classList.add('status', status.toLowerCase());
+    statusEl.classList.add('status', status); 
     statusEl.textContent = status.toUpperCase();
 
     p.append(ts, titleEl, document.createTextNode(' '), statusEl);
     return p;
 }
+
 
 function createResponseParagraph(message) {
     const p = document.createElement('p');
