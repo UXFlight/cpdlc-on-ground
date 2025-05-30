@@ -41,7 +41,7 @@ export function listenToSocketEvents() {
         state.steps[requestType].timestamp = timestamp;
     
         if (data.history_entry) {
-        state.steps[requestType].history.push(data.history_entry);
+            state.steps[requestType].history.push(data.history_entry);
         }
 
         enableButtons(state.currentRequest);
@@ -58,7 +58,7 @@ export function listenToSocketEvents() {
         state.steps[action].timestamp = timestamp;
 
         if (data.history_entry) {
-        state.history.push(data.history_entry);
+            state.history.push(data.history_entry);
         }
     });
 

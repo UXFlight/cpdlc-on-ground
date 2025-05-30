@@ -1,11 +1,6 @@
-import { state } from "../state/state.js";
 // ui/connection-ui.js
 const indicator = document.getElementById("connection-indicator");
 const text = document.getElementById("connection-text");
-const backendStatus = document.getElementById("backend-status");
-const atcStatus = document.getElementById("atc-status");
-const backendIcon = document.getElementById("backend-icon");
-const atcIcon = document.getElementById("atc-icon");
 
 
 export function renderConnectionState(connection) {
@@ -19,17 +14,17 @@ function updateMainIndicator(connection) {
     const { backend, atc } = connection;
 
     if (backend === "connected" && atc.status === "connected") {
-    indicator.classList.add("connected");
-    text.textContent = `Connected to ${atc.facility}`;
+        indicator.classList.add("connected");
+        text.textContent = `Connected to ${atc.facility}`;
     } else if (backend === "connected" && atc.status !== "connected") {
-    indicator.classList.add("partial");
-    text.textContent = "Establishing connection to ATC...";
+        indicator.classList.add("partial");
+        text.textContent = "Establishing connection to ATC...";
     } else if (backend === "disconnected") {
-    indicator.classList.add("disconnected");
-    text.textContent = "Disconnected from server";
+        indicator.classList.add("disconnected");
+        text.textContent = "Disconnected from server";
     } else {
-    indicator.classList.add("connecting");
-    text.textContent = "Connecting to server...";
+        indicator.classList.add("connecting");
+        text.textContent = "Connecting to server...";
     }
 }
 
