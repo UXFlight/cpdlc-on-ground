@@ -1,4 +1,4 @@
-import { status } from './state/state.js';
+import { MSG_STATUS } from './state/status.js';
 // all events imported
 import { loadEvent } from './events/load.js';
 import { actionEvent } from './events/action.js';
@@ -78,9 +78,9 @@ function listenToButtonEvents() {
   // cancelExecuteButton.addEventListener("click", async (e) => cancelExecuteEvent(e));
 
   // wilco buttons event
-  // wilcoButton.addEventListener("click", (e) => actionEvent(status.WILCO, e));
-  // standbyButton.addEventListener("click", (e) => actionEvent(status.STANDBY, e));
-  // unableButton.addEventListener("click", (e) => actionEvent(status.UNABLE, e));
+  // wilcoButton.addEventListener("click", (e) => actionEvent(MSG_STATUS.WILCO, e));
+  // standbyButton.addEventListener("click", (e) => actionEvent(MSG_STATUS.STANDBY, e));
+  // unableButton.addEventListener("click", (e) => actionEvent(MSG_STATUS.UNABLE, e));
 
   wilcoButtonsGrp.forEach((btn) => 
     btn.addEventListener("click", (e) => {
