@@ -43,3 +43,8 @@ export function hideTick(tickId) {
     tick.classList.remove('error');
   }
 }
+
+export function changeFilterIcon(isFiltered) {
+  const svg = document.getElementById("filter-icon");
+  if(svg) svg.classList.toggle("filtered");
+}

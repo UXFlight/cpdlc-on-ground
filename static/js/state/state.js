@@ -2,9 +2,11 @@
 export const state = {
   currentRequest: null,
   isFiltered: true, // used to filter history logs
+  history: [], // history logs
   connection: {
     backend: "connecting",   // "connecting" | "connected" | "disconnected"
-    atc: {status : "pending", // "pending" | "connected" | "disconnected"
+    atc: {
+      status : "pending", // "pending" | "connected" | "disconnected"
       facility: null, 
     },
   },
@@ -28,8 +30,17 @@ export const state = {
     for_de_icing: createStep("For De-Icing"),
     no_de_icing_required: createStep("No De-Icing Required")
   },
-  history: [], // history logs
 };
+
+function createStep(label, extra = {}) {
+  return {
+    label,
+    status: null,
+    message: null,
+    timestamp: null,
+    ...extra
+  };
+}
 
 export function updateStep(newStatus, newMessage = null) {
   const key = state.currentRequest;
@@ -61,15 +72,6 @@ export function updateDirection(direction) {
   state.steps["pushback"].direction = direction;
 }
 
-function createStep(label, extra = {}) {
-  return {
-    label,
-    status: null,
-    message: null,
-    timestamp: null,
-    ...extra
-  };
-}
 
 export const status = {
   CLOSED: 'closed', // success

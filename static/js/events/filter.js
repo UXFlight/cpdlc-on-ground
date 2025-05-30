@@ -1,14 +1,16 @@
 import { state } from "../state/state.js";
 import { createHistoryLog, clearMessageBox, createGroupedLog } from "../messages/historyLogs.js";
+import { changeFilterIcon } from "../ui/ui.js";
 
 export const filterHistoryLogs = () => {
-    clearMessageBox('history-log-box');
+  console.log(state.history.length)
+    if(state.history.length > 0) clearMessageBox('history-log-box');
     state.isFiltered ? displayNonFilteredLogs() : displayFilteredLogs();
 }
 
 function displayNonFilteredLogs() {
-    state.isFiltered = false;
-    clearMessageBox('history-log-box');
+    state.isFiltered = !state.isFiltered;
+    changeFilterIcon(state.isFiltered);
   
     const allEntries = state.history.reduce((acc, log) => {
       const entries = log.entries.map(entry => ({
@@ -32,12 +34,11 @@ function displayNonFilteredLogs() {
     });
   }
   
-
 export function displayFilteredLogs() {
-    state.isFiltered = true;
-    clearMessageBox("history-log-box");
+  state.isFiltered = !state.isFiltered;
+    changeFilterIcon(state.isFiltered);
 
-    const sortedGroups = [...state.history].sort((a, b) => { // copied array
+    const sortedGroups = [...state.history].sort((a, b) => { //* copied array
         const ta = a.entries[a.entries.length - 1].timestamp;
         const tb = b.entries[b.entries.length - 1].timestamp;
         return new Date(ta) - new Date(tb); 

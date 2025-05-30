@@ -186,3 +186,12 @@
 .empty-log-message.hidden {
     display: none;
 }
+
+/* FILTERED */
+#filter-icon > path {
+    fill: #ededed;
+}
+
+#filter-icon.filtered > path {
+    fill: none;
+}

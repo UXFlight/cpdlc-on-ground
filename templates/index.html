@@ -54,21 +54,14 @@
             <h2 id="message-header">
                 Messages
                 <span id="filter-btn" class="icon-wrap">
-                    <!-- Ton SVG intégré -->
-                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="22" height="22" viewBox="0 0 64 64">
-                        <defs>
-                        <linearGradient id="a" x1="59.5" x2="31.92" y1="31.78" y2="31.78" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#ffffff" stop-opacity="0.22" offset="0"></stop>
-                            <stop stop-color="#eeeeee" stop-opacity="1" offset="1"></stop>
-                        </linearGradient>
-                        </defs>
-                        <path fill="#ededed" d="M53.39 8H10.61a5.61 5.61 0 0 0-4.15 9.38L25 37.77V57a2 2 0 0 0 1.13 1.8 1.94 1.94 0 0 0 .87.2 2 2 0 0 0 1.25-.44l10-8A2 2 0 0 0 39 49V37.77l18.54-20.39A5.61 5.61 0 0 0 53.39 8z"/>
-                        <path fill="url(#a)" d="M59 13.61a5.62 5.62 0 0 1-1.46 3.77L39 37.77V49a2 2 0 0 1-.75 1.56l-6.25 5V8h21.39A5.61 5.61 0 0 1 59 13.61z"/>
-                    </svg>
+                    <svg id="filter-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 64 64">
+                        <path d="M53.39 8H10.61a5.61 5.61 0 0 0-4.15 9.38L25 37.77V57a2 2 0 0 0 1.13 1.8 1.94 1.94 0 0 0 .87.2 2 2 0 0 0 1.25-.44l10-8A2 2 0 0 0 39 49V37.77l18.54-20.39A5.61 5.61 0 0 0 53.39 8z"
+                            fill="#ededed"
+                            stroke="#ededed"
+                            stroke-width="5" />
+                    </svg>                      
                 </span>
             </h2>
-              
-        
             <div id="active-log-box" class="log-box empty">
                 <p id="empty-active-message" class="empty-log-message">No active messages.</p>
                 <!-- Active messages requiring pilot action will appear here -->
