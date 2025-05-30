@@ -1,5 +1,6 @@
 import { enableButtons } from "../ui/buttons-ui.js";
-import { renderConnectionState } from "./connectionEvents.js";
+import { renderConnectionState } from "../socket-events/connectionEvents.js";
+import { handleAtcResponse } from "../socket-events/atcResponse.js";
 import { state } from "../state/state.js";
 
 const socket = io("http://localhost:5321");
@@ -62,7 +63,6 @@ export function listenToSocketEvents() {
         }
     });
 
-    socket.on("atcResponse", (data) => {
-    })
+    socket.on("atcResponse", (data) => handleAtcResponse(data));
 }
 
