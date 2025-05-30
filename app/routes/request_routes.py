@@ -2,16 +2,22 @@
 from flask import Blueprint, jsonify # type: ignore
 from app.ingsvc import Echo
 from app.state import pilot_state
-from app.constants import DEFAULT_ATC_RESPONSES
 from app.socket.sockets import socket_manager
 import threading
+
 
 request_bp = Blueprint("request", __name__)
 agent = Echo()
 
 def delayed_socket_emit(action):
     from app.constants import DEFAULT_ATC_RESPONSES
-    socket_manager.send_message(DEFAULT_ATC_RESPONSES[action])
+    from app.utils.helpers import get_current_timestamp
+    socket_manager.send_message(
+        action=action,
+        message=DEFAULT_ATC_RESPONSES[action],
+        status="responded",
+        timestamp = get_current_timestamp()
+    )
 
 #! for now, faking http req to ATC, after opting for async (with websockets)
 @request_bp.route("/request/<action>", methods=["GET"])

@@ -23,12 +23,15 @@ class SocketManager:
         time.sleep(5)
         self.socketio.emit("disconnectedFromATC")
 
-    def send_message(self, message):
-        print(f"[SOCKET] Sending message: {message}")
-        self.socketio.emit("atcResponse", {"data": message})
+    def send_message(self, action, message, status="responded", timestamp=None):
+        payload = {
+            "action": action,
+            "status": status,
+            "message": message,
+            "timestamp": timestamp
+        }
+        self.socketio.emit("atcResponse", payload)
         
-
-
     def run(self, app, **kwargs):
         self.socketio.run(app, **kwargs)
 
