@@ -48,3 +48,18 @@ export function changeFilterIcon(isFiltered) {
   const svg = document.getElementById("filter-icon");
   if(svg) svg.classList.toggle("filtered");
 }
+
+export function ensureMessageBoxNotEmpty(divId='history-log-box') {
+  const historyLogBox = document.getElementById(divId);
+  const noMessages = document.getElementById('empty-history-message');
+  if (historyLogBox.classList.contains('empty')) {
+      historyLogBox.classList.remove('empty');
+      noMessages?.classList.add('hidden');
+      clearMessageBox(divId);
+  }
+}
+
+export function clearMessageBox(boxId) {
+  const box = document.getElementById(boxId);
+  if (box) box.innerHTML = '';
+}

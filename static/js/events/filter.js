@@ -1,10 +1,9 @@
 import { state } from "../state/state.js";
-import { createHistoryLog, clearMessageBox, createGroupedLog } from "../messages/historyLogs.js";
-import { changeFilterIcon } from "../ui/ui.js";
+import { createHistoryLog, createGroupedLog } from "../messages/historyLogs.js";
+import { changeFilterIcon, ensureMessageBoxNotEmpty } from "../ui/ui.js";
 
 export const filterHistoryLogs = () => {
-  console.log(state.history.length)
-    if(state.history.length > 0) clearMessageBox('history-log-box');
+    ensureMessageBoxNotEmpty();
     state.isFiltered ? displayNonFilteredLogs() : displayFilteredLogs();
 }
 
@@ -25,12 +24,12 @@ function displayNonFilteredLogs() {
     allEntries.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   
     allEntries.forEach(entry => {
-      createHistoryLog({
-        action: entry.action,
-        timestamp: entry.timestamp,
-        message: entry.message,
-        status: entry.status
-      });
+      createHistoryLog(
+        entry.action,
+        entry.timestamp,
+        entry.message,
+        entry.status
+      );
     });
   }
   

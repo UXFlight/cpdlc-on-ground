@@ -1,13 +1,8 @@
+import { MSG_STATUS } from '../state/status.js';
+import { ensureMessageBoxNotEmpty } from '../ui/ui.js';
+
 //DOM UTILITIES //
 const historyLogBox = document.getElementById('history-log-box');
-const noMessages = document.getElementById('empty-history-message');
-
-function ensureMessageBoxNotEmpty() {
-    if (historyLogBox.classList.contains('empty')) {
-        historyLogBox.classList.remove('empty');
-        noMessages?.classList.add('hidden');
-    }
-}
 
 export function playNotificationSound() {
     const audio = new Audio('/static/mp3/notif.mp3');
@@ -20,7 +15,7 @@ export function flashElement(div) {
     setTimeout(() => div.classList.remove('flash'), 1000);
 }
 
-export function createHistoryLog({ action, timestamp, message, status = 'NEW' }) {
+export function createHistoryLog(action, timestamp, message, status = MSG_STATUS.NEW) {
     if (!action) return;
     ensureMessageBoxNotEmpty();
 
@@ -46,13 +41,11 @@ export function createHistoryLog({ action, timestamp, message, status = 'NEW' })
 // GROUPED MESSAGE //
 import { state } from '../state/state.js';
 
-export function appendToLog(stepKey, message, timestamp) {
-    console.log('history', state.history);
+export function appendToLog(stepKey, message, timestamp, status = MSG_STATUS.NEW) {
     const group = state.history.find(g => g.stepKey === stepKey);
-    console.log('group', group)
 
     const newEntry = {
-        status: 'new',
+        status,
         message,
         timestamp
     };
@@ -174,21 +167,15 @@ export function createResponse(message, div) {
 
 // STATUS UPDATER //
 export function updateMessageStatus(action, newStatus) {
-    const message = document.querySelector(`.new-message[data-action="${action}"][data-status="new"]`);
+    const message = document.querySelector(`.new-message[data-action="${action}"]`);
     if (!message) return;
 
     const statusEl = message.querySelector('.status');
     if (!statusEl) return;
 
-    statusEl.classList.remove('new', 'closed', 'cancelled'); // extend here if needed
+    Object.values(MSG_STATUS).forEach(status => statusEl.classList.remove(status.toLowerCase()));
+
     statusEl.textContent = newStatus.toUpperCase();
     statusEl.classList.add(newStatus.toLowerCase());
-
     message.dataset.status = newStatus.toLowerCase();
-}
-
-// UTILS //
-export function clearMessageBox(boxId) {
-    const box = document.getElementById(boxId);
-    if (box) box.innerHTML = '';
 }
