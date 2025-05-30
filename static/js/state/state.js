@@ -74,7 +74,7 @@ function createStep(label, extra = {}) {
 export const status = {
   CLOSED: 'closed', // success
   CANCELLED: 'cancelled',
-  PENDING: 'pending',
+  NEW: 'new',
   ERROR: 'error',
   LOAD: 'load', // will separate this in the future
   WILCO: 'wilco',

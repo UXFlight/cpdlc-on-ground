@@ -28,9 +28,9 @@ export function createHistoryLog({ action, timestamp, message }) {
     const div = document.createElement('div');
     div.classList.add('new-message');
     div.dataset.action = action.toLowerCase();
-    div.dataset.status = 'open';
+    div.dataset.status = 'new';
 
-    const header = createHeader({ timestamp, title: action, status: 'open' });
+    const header = createHeader({ timestamp, title: action, status: 'new' });
     div.appendChild(header);
 
     if (message) {
@@ -46,19 +46,20 @@ export function createHistoryLog({ action, timestamp, message }) {
 import { state } from '../state/state.js';
 
 export function appendToLog(stepKey, message, timestamp) {
+    console.log('history', state.history);
     const group = state.history.find(g => g.stepKey === stepKey);
+    console.log('group', group)
 
     const newEntry = {
-        status: 'open',
+        status: 'new',
         message,
         timestamp
     };
 
     if (group) {
-        group.entries.push(newEntry);
         const latest = group.entries[group.entries.length - 1];
         return refreshGroupedLog(group, latest);
-    } 
+    }
 
     const label = state.steps[stepKey]?.label || stepKey;
     const newGroup = {
@@ -171,14 +172,13 @@ export function createResponse(message, div) {
 
 // STATUS UPDATER //
 export function updateMessageStatus(action, newStatus) {
-    const message = document.querySelector(`.new-message[data-action="${action}"][data-status="open"]`);
-    console.log('Updating message status:', action, newStatus, message);
+    const message = document.querySelector(`.new-message[data-action="${action}"][data-status="new"]`);
     if (!message) return;
 
     const statusEl = message.querySelector('.status');
     if (!statusEl) return;
 
-    statusEl.classList.remove('open', 'closed', 'cancelled'); // extend here if needed
+    statusEl.classList.remove('new', 'closed', 'cancelled'); // extend here if needed
     statusEl.textContent = newStatus.toUpperCase();
     statusEl.classList.add(newStatus.toLowerCase());
 

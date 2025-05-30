@@ -1,16 +1,16 @@
 import { state, status } from '../state/state.js';
 // small utils functions
 export function invalidRequest(action) {
-  return (!action || checkPendingRequest() || blockSecondRequest(action) || action === "pushback" && !state.steps[action].direction)
+  return (!action || checkNewRequest() || blockSecondRequest(action) || action === "pushback" && !state.steps[action].direction)
 }
 
-export function checkPendingRequest() {
-  return Object.values(state.steps).some(step => step.status === status.PENDING || step.status === status.LOAD); // for now, blocking all other requests
+export function checkNewRequest() {
+  return Object.values(state.steps).some(step => step.status === status.NEW || step.status === status.LOAD); // for now, blocking all other requests
 }
 
 function blockSecondRequest(action) {
   const currentStatus = state.steps[action]?.status;
-  return currentStatus === status.CLOSED || currentStatus === status.PENDING || currentStatus === status.LOAD;
+  return currentStatus === status.CLOSED || currentStatus === status.NEW || currentStatus === status.LOAD;
 }
 
 export function closeCurrentOverlay() {

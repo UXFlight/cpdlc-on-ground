@@ -9,7 +9,7 @@ export const sendRequestEvent = async (action) => {
   if (invalidRequest(action)) return;
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
   
-  updateStep(status.PENDING); //! change status to pending asap : still frontend only, will work on ws later
+  updateStep(status.NEW); //! change status to NEW asap : still frontend only, will work on ws later
 
   showSpinner(action);
   disableActionButtons(status.LOAD);

@@ -63,7 +63,7 @@
     background-color: #1f1f1f;
 }
 
-.new-message.open {
+.new-message.new {
     border-left-color: #6cc24a;
 }
 
@@ -116,7 +116,7 @@
 }
 
 /* STATUS */
-.status.open {
+.status.new {
     background-color: #6cc24a;
     color: #000;
 }

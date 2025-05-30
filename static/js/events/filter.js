@@ -20,12 +20,11 @@ function displayFilteredLogs() {
     clearMessageBox("history-log-box");
     state.history.forEach(group => {
         const latest = group.entries[group.entries.length - 1];
-        const container = createGroupedLog({
+        createGroupedLog({
             stepKey: group.stepKey,
             label: group.label,
             latest: latest,
             history: group.entries
         });
-        document.getElementById("history-log-box").append(container);
     });
 }

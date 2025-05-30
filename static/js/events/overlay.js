@@ -1,5 +1,5 @@
 import { state, status } from '../state/state.js';
-import { checkPendingRequest, closeCurrentOverlay } from '../utils/utils.js';
+import { checkNewRequest, closeCurrentOverlay } from '../utils/utils.js';
 
 // overlay event
 export const toggleOverlay = (overlay, e) => {
@@ -13,7 +13,7 @@ export const toggleOverlay = (overlay, e) => {
   if (state.steps[action].status === status.CLOSED) return;
 
   overlay.classList.add("open");
-  if (action && !checkPendingRequest()) state.currentRequest = action;
+  if (action && !checkNewRequest()) state.currentRequest = action;
 };
 
 
