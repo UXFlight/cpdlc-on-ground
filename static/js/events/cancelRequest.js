@@ -1,4 +1,4 @@
-import { updateMessageStatus } from "../messages/messages.js";
+import { updateMessageStatus } from "../messages/historyLogs.js";
 import { hideSpinner } from "../ui/ui.js";
 import { disableActionButtons, enableAllRequestButtons } from "../ui/buttons-ui.js";
 import { state, status, updateDirection, updateStep } from '../state/state.js';
@@ -15,7 +15,6 @@ export async function cancelRequestEvent(action) {
     document.getElementById("pushback-left").classList.remove("active");
     document.getElementById("pushback-right").classList.remove("active");
     updateDirection(null);
-    
   }
 
   if (requestBtn) {

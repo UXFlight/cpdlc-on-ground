@@ -1,9 +1,8 @@
 import { sendRequest } from '../api/api.js'
 import { showSpinner, showTick } from "../ui/ui.js";
-import { createLog } from "../messages/messages.js";
-import { closeCurrentOverlay } from "../utils/utils.js";
+import { appendToLog, createHistoryLog, playNotificationSound } from "../messages/historyLogs.js";
+import { closeCurrentOverlay, getLatestEntry, invalidRequest } from "../utils/utils.js";
 import { state, status, updateStep } from '../state/state.js';
-import { checkPendingRequest, blockSecondRequest } from "../utils/utils.js";
 import { disableActionButtons, enableButtons, disableCancelButtons, disableAllRequestButtons } from "../ui/buttons-ui.js";
 
 export const sendRequestEvent = async (action) => {
@@ -20,16 +19,29 @@ export const sendRequestEvent = async (action) => {
   try {
     if (cancelBtn) cancelBtn.disabled = false;
     const data = await sendRequest(action);
-    if (state.steps[action].status === status.CANCELLED) return; // if cancelled, do not proceed // might send request to server
+    if (state.steps[action].status === status.CANCELLED) return; // if cancelled, do not proceed //! will send request to server
     if (!data.error) {
-      state.steps[action].message = data.message;
-      createLog({timestamp : data.timestamp, action : state.currentRequest, message : data.message});
+      const lastestEntry = getLatestEntry(action);
+      lastestEntry.message = data.message; //! temp, will check logic later
+      state.isFiltered ? 
+          appendToLog(
+                state.currentRequest, 
+                data.message, 
+                data.timestamp
+              )
+          : createHistoryLog(
+            { 
+              action, 
+              timestamp : data.timestamp, 
+              message : data.message
+            });
+      playNotificationSound();
       enableButtons(action);
     } else {
-      showTick(action, true)
+      showTick(action, true);
       closeCurrentOverlay();
       disableCancelButtons(action);
-      updateStep(status.ERROR, data.message)
+      updateStep(status.ERROR, data.message);
     }
   } catch (err) {
     showTick(action, true)
@@ -37,8 +49,4 @@ export const sendRequestEvent = async (action) => {
     updateStep(status.ERROR, err)
     console.error("Network error:", err);
   }
-}
-
-function invalidRequest(action) {
-    return (!action || checkPendingRequest() || blockSecondRequest(action) || action === "pushback" && !state.steps[action].direction)
 }

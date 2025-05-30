@@ -1,27 +1,21 @@
+/* TAXI BOX */
 .taxi-clearance-box {
     padding: 12px 0;
     border-radius: 6px;
     transition: all 0.3s ease;
 }
 
-.taxi-clearance-box h2 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    transition: color 0.3s ease;
-}
-
-.taxi-clearance-box:not(.active) h2 {
-    color: #ccc;
-}
-
+/* INACTIVE STATE */
 .taxi-clearance-box:not(.active) .clearance-box {
     color: #bbb;
     font-style: italic;
+    background-color: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* ACTIVE STATE */
 .taxi-clearance-box.active h2 {
     color: #6cc24a;
 }
@@ -33,6 +27,7 @@
     font-style: normal;
 }
 
+/* MESSAGE BOX */
 .clearance-box {
     padding: 10px;
     border-radius: 4px;
@@ -43,4 +38,12 @@
     overflow-y: auto;
     white-space: pre-wrap;
     transition: all 0.3s ease;
+    background-color: #0a0a0a;
+}
+
+/* PLACEHOLDER */
+#clearance-placeholder {
+    color: #888;
+    font-style: italic;
+    margin: 0;
 }

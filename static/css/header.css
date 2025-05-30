@@ -1,0 +1,181 @@
+/* HEADER */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #101010;
+    padding: 20px 28px;
+    border-bottom: 1px solid #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* TITLE */
+.header-title {
+    font-size: 1.8rem;
+    color: #f5f5f5;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* CONNECTION BLOCK */
+.connection-status-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: default;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #1c1c1c;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    transition: all 0.2s ease;
+}
+
+/* CONNECTION TEXT */
+#connection-text {
+    min-width: 240px;
+    color: #ddd;
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* INDICATOR */
+.status-indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: grey;
+    position: relative;
+}
+
+/* SPINNER */
+.status-indicator.connecting::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+/* STATUS COLORS */
+.status-indicator.connected {
+    background-color: #2ecc71;
+}
+
+.status-indicator.disconnected {
+    background-color: #e74c3c;
+}
+
+.status-indicator.partial {
+    background-color: #f1c40f;
+}
+
+/* === TOOLTIP === */
+.tooltip {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background-color: #181818;
+    color: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    min-width: 300px;
+    z-index: 100;
+    white-space: nowrap;
+    line-height: 1.6;
+    transition: opacity 0.2s ease-in-out;
+    border: 1px solid #333;
+  }
+  
+  .connection-status-wrapper:hover .tooltip {
+    display: block;
+  }
+  
+  /* === LIGNES DE STATUT === */
+  .status-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .status-label {
+    font-weight: 600;
+    color: #aaa;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  
+  .status-text {
+    flex-grow: 1;
+    color: #f5f5f5;
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  .status-dot.success {
+    background-color: #27ae60;
+  }
+  
+  .status-dot.failure {
+    background-color: #c0392b;
+  }
+  
+  .status-dot.pending {
+    background-color: #f1c40f;
+  }
+  
+  .status-dot.pulse {
+    animation: pulse 1s ease-in-out infinite;
+  }
+  
+  /* === DIVISEUR === */
+  .tooltip-divider {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 12px 0;
+  }
+  
+  /* === TIMESTAMP === */
+  .timestamp-line {
+    display: flex;
+    justify-content: space-between;
+    color: #bbb;
+    font-size: 0.9rem;
+  }
+  
+  .timestamp-label {
+    font-weight: 500;
+  }
+  
+  .timestamp-value {
+    font-style: italic;
+    color: #999;
+  }
+  

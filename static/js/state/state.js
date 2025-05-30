@@ -1,12 +1,13 @@
 // Global state
 export const state = {
+  currentRequest: null,
+  isFiltered: true, // used to filter history logs
   connection: {
     backend: "connecting",   // "connecting" | "connected" | "disconnected"
     atc: {status : "pending", // "pending" | "connected" | "disconnected"
       facility: null, 
-    },          
+    },
   },
-  currentRequest: null,
   steps: {
     able_intersection_departure: createStep("Able Intersection Departure"),
     expected_taxi_clearance: createStep("Expected Taxi Clearance"),
@@ -26,26 +27,35 @@ export const state = {
     de_icing_complete: createStep("De-Icing Complete"),
     for_de_icing: createStep("For De-Icing"),
     no_de_icing_required: createStep("No De-Icing Required")
-  }
+  },
+  history: [], // history logs
 };
 
-export function updateStep(newStatus, newMessage = null) { //! keeping it stricly bc we dont have async ws implemented yet
-  console.log('STEP LOGS : ', state.steps[state.currentRequest]);
-  const step = state.steps[state.currentRequest];
+export function updateStep(newStatus, newMessage = null) {
+  const key = state.currentRequest;
+  const step = state.steps[key];
   if (!step) return;
 
-  if(!step.status || !step.message || !step.timestamp) {
-    step.history.push({
-      status: step.status,
-      message: step.message,
-      timestamp: step.timestamp
-    });
-  }
+  const entry = {
+    status: newStatus,
+    message: newMessage,
+    timestamp: new Date().toISOString().replace('T', ' ').split('.')[0]
+  };
 
   step.status = newStatus;
   step.message = newMessage;
-  step.timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
+  step.timestamp = entry.timestamp;
+
+  // grouping by request type
+  let group = state.history.find(h => h.stepKey === key);
+  if (!group) {
+    group = { stepKey: key, label: step.label, entries: [] };
+    state.history.push(group);
+  }
+  group.entries.push(entry);
 }
+
+
 
 export function updateDirection(direction) {
   state.steps["pushback"].direction = direction;
@@ -57,7 +67,6 @@ function createStep(label, extra = {}) {
     status: null,
     message: null,
     timestamp: null,
-    history: [],
     ...extra
   };
 }

@@ -14,7 +14,6 @@ export async function postAction(action) {
 }
 
 export async function postLoad(requestType) {
-  console.log("postLoad called with:", requestType);
   const response = await fetch('/load', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

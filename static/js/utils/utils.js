@@ -1,10 +1,14 @@
 import { state, status } from '../state/state.js';
 // small utils functions
+export function invalidRequest(action) {
+  return (!action || checkPendingRequest() || blockSecondRequest(action) || action === "pushback" && !state.steps[action].direction)
+}
+
 export function checkPendingRequest() {
   return Object.values(state.steps).some(step => step.status === status.PENDING || step.status === status.LOAD); // for now, blocking all other requests
 }
 
-export function blockSecondRequest(action) {
+function blockSecondRequest(action) {
   const currentStatus = state.steps[action]?.status;
   return currentStatus === status.CLOSED || currentStatus === status.PENDING || currentStatus === status.LOAD;
 }
@@ -12,4 +16,9 @@ export function blockSecondRequest(action) {
 export function closeCurrentOverlay() {
     const open = document.querySelector(".overlay.open");
     if (open) open.classList.remove("open");
+}
+
+export function getLatestEntry(stepKey) {
+  const group = state.history.find(h => h.stepKey === stepKey);
+  return group?.entries[group.entries.length - 1] ?? null;
 }

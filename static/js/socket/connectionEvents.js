@@ -38,36 +38,44 @@ function updateTooltip(connection) {
     const backendIcon = document.getElementById("backend-icon");
     const atcText = document.getElementById("atc-text");
     const atcIcon = document.getElementById("atc-icon");
+    const timestampEl = document.getElementById("connection-timestamp");
 
-    if (!backendText || !backendIcon || !atcText || !atcIcon) return;
+    if (!backendText || !backendIcon || !atcText || !atcIcon || !timestampEl) return;
 
     backendText.textContent =
-    connection.backend === "connected"
-        ? "Connected"
-        : connection.backend === "disconnected"
-        ? "Disconnected"
-        : "Connecting...";
+        connection.backend === "connected"
+            ? "Connected"
+            : connection.backend === "disconnected"
+            ? "Disconnected"
+            : "Connecting...";
 
     atcText.textContent =
-    connection.atc.status === "connected"
-        ? `Connected to ${connection.atc.facility}`
-        : connection.atc.status === "disconnected"
-        ? "Disconnected"
-        : "Waiting...";
+        connection.atc.status === "connected"
+            ? `Connected to ${connection.atc.facility}`
+            : connection.atc.status === "disconnected"
+            ? "Disconnected"
+            : "Waiting...";
 
     backendIcon.className = "status-dot " + (
-    connection.backend === "connected"
-        ? "success"
-        : connection.backend === "disconnected"
-        ? "failure"
-        : "pending"
+        connection.backend === "connected"
+            ? "success"
+            : connection.backend === "disconnected"
+            ? "failure"
+            : "pending"
     );
 
     atcIcon.className = "status-dot " + (
-    connection.atc.status === "connected"
-        ? "success"
-        : connection.atc.status === "disconnected"
-        ? "failure"
-        : "pending"
+        connection.atc.status === "connected"
+            ? "success"
+            : connection.atc.status === "disconnected"
+            ? "failure"
+            : "pending"
     );
+
+    if (connection.backend === "connected") {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        timestampEl.textContent = timeStr;
+    }
 }
+

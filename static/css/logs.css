@@ -3,26 +3,49 @@
     flex-direction: column;
     height: 100%;
     padding: 10px;
+    gap: 20px;
 }
 
+/* HEADER ICON*/
+#message-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #f2f2f2;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  
+  #message-header .icon-wrap svg {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    opacity: 0.85;
+    cursor: pointer;
+  }
+  
+
+/* ACTIVE & HISTORY LOGS */
 .log-box {
-    flex-grow: 1;
-    background-color: #0a0a0a;
-    padding: 12px;
-    overflow-y: auto;
-    border-radius: 6px;
     display: flex;
     flex-direction: column-reverse;
+    background-color: #0a0a0a;
+    overflow-y: scroll;
+    border-radius: 6px;
     border: 1px solid #333;
-    margin-bottom: 12px;
+    gap: 10px;
+    flex-grow: 1;
+    flex-basis: 0;
+    flex-shrink: 0;
+    max-height: 100%;
 }
 
-#message-box {
-    display: flex;
-    flex-direction: column-reverse;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    gap: 12px;
+.log-box.empty {
+    justify-content: center;
+    align-items: center;
 }
 
 /* LOGS */
@@ -138,7 +161,6 @@
 }
 
 /* NOTIF */
-/* NOTIF */
 .new-message.flash {
     animation: flash-in 1s ease-in-out;
 }
@@ -146,10 +168,21 @@
 @keyframes flash-in {
     0% {
         background-color: #2f577e;
-        filter: brightness(1.2); /* plus lumineux */
+        filter: brightness(1.2); 
     }
     100% {
         background-color: #141414;
-        filter: brightness(1); /* normal */
+        filter: brightness(1);
     }
+}
+
+/* EMPTY MESSAGE */
+.empty-log-message {
+    color: #888;
+    font-style: italic;
+    font-size: 1rem;
+}
+
+.empty-log-message.hidden {
+    display: none;
 }

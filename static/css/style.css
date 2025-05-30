@@ -16,10 +16,6 @@ body {
     padding: 0;
 }
 
-.container {
-    padding: 20px;
-}
-
 /* TYPOGRAPHY */
 h1 {
     font-size: 24px;
@@ -28,27 +24,19 @@ h1 {
 
 h2 {
     font-size: 18px;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
-    margin-bottom: 10px;
+    margin: 16px 0 8px;
     text-transform: uppercase;  
-}
-
-/* HEADER */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    border-bottom: 1px solid #333;
+    color: #ddd;
 }
 
 /* MAIN CONTENT */
 .content {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    height: calc(100vh - 100px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    height: calc(100vh - 80px);
     background-color: #000;
     padding: 10px;
 }
@@ -56,7 +44,7 @@ header {
 .message-log,
 .request-menu {
     flex: 1;
-    padding: 20px;
+    padding: 12px;
 }
 
 /* BUTTON */
@@ -65,4 +53,16 @@ button:disabled {
     cursor: not-allowed;
     pointer-events: none;
 }
-  
+
+/* GRID LAYOUT */
+.taxi-clearance-box {
+    grid-row: 2;
+}
+
+.message-log {
+    grid-row: 1;
+}
+
+.request-menu {
+    grid-row: 1 / -1;
+}

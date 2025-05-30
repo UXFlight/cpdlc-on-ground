@@ -12,7 +12,6 @@ export function listenToSocketEvents() {
     });
       
     socket.on("connectedToATC", (data) => {
-        console.log(`[SOCKET] Connected to ATC at ${data.facility}`);
         state.connection.atc.status = "connected";
         state.connection.atc.facility = data.facility;
         renderConnectionState(state.connection);
@@ -20,7 +19,6 @@ export function listenToSocketEvents() {
     
     // disconnection events
     socket.on("disconnect", () => {
-        console.log("[SOCKET] Disconnected from backend");
         state.connection.backend = "disconnected";
         state.connection.atc.status = "disconnected"; // if backend down, cannot communicate w ATC
         state.connection.atc.facility = null;
@@ -28,7 +26,6 @@ export function listenToSocketEvents() {
     });
     
     socket.on("disconnectedFromATC", () => {
-        console.log("[SOCKET] ATC disconnected");
         state.connection.atc.status = "disconnected";
         state.connection.atc.facility = null;
         renderConnectionState(state.connection);
@@ -48,8 +45,6 @@ export function listenToSocketEvents() {
         }
 
         enableButtons(state.currentRequest);
-    
-        console.log(`[SOCKET] Load update from backend:`, requestType, data);
     });
 
 
@@ -63,10 +58,11 @@ export function listenToSocketEvents() {
         state.steps[action].timestamp = timestamp;
 
         if (data.history_entry) {
-        state.steps[action].history.push(data.history_entry);
+        state.history.push(data.history_entry);
         }
-
-        console.log(`[SOCKET] Step updated from backend:`, action, data);
     });
+
+    socket.on("atcResponse", (data) => {
+    })
 }
 

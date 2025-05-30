@@ -10,7 +10,7 @@
    <link rel="stylesheet" href="./static/css/pilot-buttons.css">
    <link rel="stylesheet" href="/static/css/request.css">
    <link rel="stylesheet" href="/static/css/taxi-clearance.css">
-   <link rel="stylesheet" href="/static/css/connection.css">
+   <link rel="stylesheet" href="/static/css/header.css">
 
    <!-- socket io -->
    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>   
@@ -20,94 +20,107 @@
 
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1 class="header-title">CPDLC Ground</h1>
-            <div class="connection-status-wrapper">
-                <div class="connection-status" id="connection-status">
-                    <span class="status-indicator connecting" id="connection-indicator"></span>
-                    <span id="connection-text">Connecting to server...</span>
-                    <div class="tooltip" id="connection-tooltip">
-                        <div class="status-line">
-                            <span class="status-label">Server:</span>
-                            <span id="backend-text" class="status-text">Connecting...</span>
-                            <span id="backend-icon" class="status-dot"></span>
-                        </div>
-                        <div class="status-line">
-                            <span class="status-label">ATC:</span>
-                            <span id="atc-text" class="status-text">Waiting...</span>
-                            <span id="atc-icon" class="status-dot"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>          
-
-       <div class="content">
-           <!-- Message Log -->
-           <div class="message-log">
-                <h2>Message Log</h2>
-                <div id="message-box" class="log-box">
-                    <!-- Dynamic content will be appended here -->
-                </div>
-            
-                <!-- Dynamic Action Buttons -->
-                {% for group in action_groups %}
-                <div class="action-buttons-grp">
-                {% for btn in group.buttons %}
-                    <button
-                    id="{{ btn.id }}"
-                    class="action-button {{ group.group_class }} {{ btn.extra_class }}"
-                    disabled
-                    >
-                    {{ btn.label }}
-                    </button>
-                {% endfor %}
-                </div>
-                {% endfor %}
-            
-                <div class="taxi-clearance-box">
-                    <h2>Taxi Clearance</h2>
-                    <div id="taxi-clearance-message" class="clearance-box">
-                        <!-- Dynamically updated -->
-                    </div>
-                </div>
-            </div>
+    <header class="main-header">
+        <h1 class="header-title">CPDLC Ground</h1>
     
-            <!-- Request Menu -->
-            <div class="request-menu">
-                <h2>Request</h2>
-                <div  class="request-list">
-                    <!-- Request button for Expected Taxi Clearance -->
-                    {% for item in request_overlays %}
-                        <div class="overlay" data-action="{{ item.action }}">
-                            <div class="overlay-button">
-                            <span class="label">{{ item.number }}. {{ item.label }}</span>
-                            <div class="status-icons">
-                                <div class="spinner" id="{{ item.action }}_spinner"></div>
-                                <span class="tick-icon success" id="{{ item.action }}_tick">&#10003;</span>
-                            </div>
-                            </div>
+        <div class="connection-status-wrapper">
+        <div class="connection-status" id="connection-status">
+            <span class="status-indicator connecting" id="connection-indicator"></span>
+            <span id="connection-text">Connecting to server...</span>
+            <div class="tooltip" id="connection-tooltip">
+                <div class="status-line">
+                    <span class="status-label">Server:</span>
+                    <span id="backend-text" class="status-text">Connecting...</span>
+                    <span id="backend-icon" class="status-dot pending pulse"></span>
+                </div>
+                <div class="status-line">
+                    <span class="status-label">ATC:</span>
+                    <span id="atc-text" class="status-text">Waiting...</span>
+                    <span id="atc-icon" class="status-dot pending pulse"></span>
+                </div>
+                <hr class="tooltip-divider" />
+                <div class="timestamp-line">
+                    <span class="timestamp-label">Last connected:</span>
+                    <span id="connection-timestamp" class="timestamp-value">--</span>
+                </div>
+            </div>
+        </div>
+        </div>
+    </header>
 
-                            <div class="overlay-actions{% if item.type == 'pushback' %} pushback-overlay{% endif %}">
-                            {% if item.type == 'pushback' %}
-                                <div class="pushback-direction">
-                                <button class="direction-button" id="pushback-left">L</button>
-                                <button class="direction-button" id="pushback-right">R</button>
-                                </div>
-                            {% endif %}
+    <div class="content">
+        <!-- Message Log -->
+        <div class="message-log">
+            <h2 id="message-header">
+                Messages
+                <span id="filter-btn" class="icon-wrap">
+                    <!-- Ton SVG intégré -->
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="22" height="22" viewBox="0 0 64 64">
+                        <defs>
+                        <linearGradient id="a" x1="59.5" x2="31.92" y1="31.78" y2="31.78" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#ffffff" stop-opacity="0.22" offset="0"></stop>
+                            <stop stop-color="#eeeeee" stop-opacity="1" offset="1"></stop>
+                        </linearGradient>
+                        </defs>
+                        <path fill="#ededed" d="M53.39 8H10.61a5.61 5.61 0 0 0-4.15 9.38L25 37.77V57a2 2 0 0 0 1.13 1.8 1.94 1.94 0 0 0 .87.2 2 2 0 0 0 1.25-.44l10-8A2 2 0 0 0 39 49V37.77l18.54-20.39A5.61 5.61 0 0 0 53.39 8z"/>
+                        <path fill="url(#a)" d="M59 13.61a5.62 5.62 0 0 1-1.46 3.77L39 37.77V49a2 2 0 0 1-.75 1.56l-6.25 5V8h21.39A5.61 5.61 0 0 1 59 13.61z"/>
+                    </svg>
+                </span>
+            </h2>
+              
+        
+            <div id="active-log-box" class="log-box empty">
+                <p id="empty-active-message" class="empty-log-message">No active messages.</p>
+                <!-- Active messages requiring pilot action will appear here -->
+            </div>
+        
+            <div id="history-log-box" class="log-box empty">
+                <!-- Past messages and sent requests will appear here -->
+                <p id="empty-history-message" class="empty-log-message">No message history.</p>
+            </div>
+        </div>
+        
+        <div class="taxi-clearance-box">
+            <h2>Taxi Clearance</h2>
+            <div id="taxi-clearance-message" class="clearance-box">
+                <p class="clearance-placeholder">No clearance given yet.</p>
+                <!-- Dynamically updated -->
+            </div>
+        </div>          
 
-                            <button class="request-button" id="{{ item.action | replace('_', '-') }}-btn" data-action="{{ item.action }}"
-                                    {% if item.type == 'pushback' %}disabled{% endif %}>
-                                Request
-                            </button>
-                            <button class="cancel-button" data-action="{{ item.action }}" disabled>Cancel</button>
-                            </div>
+        <!-- Request Menu -->
+        <div class="request-menu">
+            <h2>Request</h2>
+            <div  class="request-list">
+                <!-- Request button for Expected Taxi Clearance -->
+                {% for item in request_overlays %}
+                    <div class="overlay" data-action="{{ item.action }}">
+                        <div class="overlay-button">
+                        <span class="label">{{ item.number }}. {{ item.label }}</span>
+                        <div class="status-icons">
+                            <div class="spinner" id="{{ item.action }}_spinner"></div>
+                            <span class="tick-icon success" id="{{ item.action }}_tick">&#10003;</span>
                         </div>
-                    {% endfor %}
-                </div>   
-           </div>
-       </div>
+                        </div>
+
+                        <div class="overlay-actions{% if item.type == 'pushback' %} pushback-overlay{% endif %}">
+                        {% if item.type == 'pushback' %}
+                            <div class="pushback-direction">
+                            <button class="direction-button" id="pushback-left">L</button>
+                            <button class="direction-button" id="pushback-right">R</button>
+                            </div>
+                        {% endif %}
+
+                        <button class="request-button" id="{{ item.action | replace('_', '-') }}-btn" data-action="{{ item.action }}"
+                                {% if item.type == 'pushback' %}disabled{% endif %}>
+                            Request
+                        </button>
+                        <button class="cancel-button" data-action="{{ item.action }}" disabled>Cancel</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>   
+        </div>
    </div>
 </body>
 </html>

@@ -18,10 +18,15 @@ class SocketManager:
     def simulate_atc_connection(self):
         time.sleep(5)
         self.socketio.emit("connectedToATC", {"status": "connected", "facility": "KLAX"})
+
+    def disconnect_from_atc(self):
         time.sleep(5)
         self.socketio.emit("disconnectedFromATC")
-        time.sleep(5)
-        self.socketio.emit("connectedToATC", {"status": "connected", "facility": "KLAX"})
+
+    def send_message(self, message):
+        print(f"[SOCKET] Sending message: {message}")
+        self.socketio.emit("atcResponse", {"data": message})
+        
 
 
     def run(self, app, **kwargs):

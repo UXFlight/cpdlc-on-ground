@@ -3,7 +3,7 @@ import { state, status, updateStep } from '../state/state.js';
 import { showSpinner, showTick } from '../ui/ui.js';
 import { disableActionButtons, disableAllButtons, disableCancelButtons, enableAllRequestButtons } from '../ui/buttons-ui.js';
 import { postAction } from '../api/api.js';
-import { updateMessageStatus, createLog } from '../messages/messages.js';
+import { updateMessageStatus, createHistoryLog } from '../messages/historyLogs.js';
 
 // willco, standby, unable event
 export const actionEvent = async (action, e) => {
@@ -22,7 +22,7 @@ export const actionEvent = async (action, e) => {
     if (!data.error) {
       currentRequest.status = action === status.WILCO ? status.CLOSED : action;
       currentRequest.message = data.message; // recheck this //? saving server response but for what ?
-      createLog(data);
+      createHistoryLog(data);
       updateMessageStatus(state.currentRequest, currentRequest.status);
       updateStep(currentRequest.status, currentRequest.message);
       if (action === status.WILCO) {
