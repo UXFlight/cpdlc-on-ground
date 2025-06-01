@@ -1,7 +1,6 @@
 import { state, updateStep } from '../state/state.js';
 import { MSG_STATUS } from '../state/status.js';
 import { postExecute } from '../api/api.js';
-import { disableActionButtons, enableActionButtons, enableButtons } from '../ui/buttons-ui.js';
 
 // execute event
 export const executeEvent = async (e) => {
@@ -22,12 +21,8 @@ export const executeEvent = async (e) => {
   clearanceBox.innerHTML = `<p>${data.message}</p>`;
 
   updateStep(MSG_STATUS.EXECUTED, data.message)
-  disableActionButtons(MSG_STATUS.LOAD);
-  enableActionButtons(MSG_STATUS.WILCO);
 }
 
 export const cancelExecuteEvent = async (e) => {
   e.stopPropagation();
-  disableActionButtons(MSG_STATUS.LOAD);
-  enableButtons(state.currentRequest);
 };

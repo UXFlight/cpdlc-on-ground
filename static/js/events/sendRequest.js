@@ -1,10 +1,11 @@
 import { sendRequest } from '../api/api.js'
 import { showSpinner, showTick } from "../ui/ui.js";
-import { appendToLog, createHistoryLog, playNotificationSound } from "../messages/historyLogs.js";
+import { playNotificationSound } from '../ui/ui.js';
 import { closeCurrentOverlay, getLatestEntry, invalidRequest } from "../utils/utils.js";
 import { state, updateStep } from '../state/state.js';
 import { MSG_STATUS } from '../state/status.js';
-import { disableActionButtons, enableButtons, disableCancelButtons, disableAllRequestButtons } from "../ui/buttons-ui.js";
+import { disableCancelButtons, disableAllRequestButtons } from "../ui/buttons-ui.js";
+import { filterHistoryLogs } from './filter.js';
 
 export const sendRequestEvent = async (action) => {
   if (invalidRequest(action)) return;
@@ -13,8 +14,6 @@ export const sendRequestEvent = async (action) => {
   updateStep(MSG_STATUS.NEW); //! change status to NEW asap : still frontend only, will work on ws later
 
   showSpinner(action);
-  disableActionButtons(MSG_STATUS.LOAD);
-  disableActionButtons(MSG_STATUS.WILCO);
   disableAllRequestButtons();
 
   try {
@@ -25,21 +24,8 @@ export const sendRequestEvent = async (action) => {
       const lastestEntry = getLatestEntry(action);
       lastestEntry.message = data.message; //! temp, will check logic later
       lastestEntry.status = data.status
-      state.isFiltered ? 
-          appendToLog(
-                state.currentRequest, 
-                data.message, 
-                data.timestamp,
-                data.status
-              )
-          : createHistoryLog(
-              action, 
-              data.timestamp, 
-              data.message,
-              data.status
-            );
+      filterHistoryLogs();
       playNotificationSound();
-      enableButtons(action);
     } else {
       showTick(action, true);
       closeCurrentOverlay();

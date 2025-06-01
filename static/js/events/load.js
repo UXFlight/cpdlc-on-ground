@@ -1,4 +1,3 @@
-import { enableButtons } from "../ui/buttons-ui.js";
 import { state, updateStep } from '../state/state.js';
 import { MSG_STATUS } from "../state/status.js";
 import { postLoad } from "../api/api.js";
@@ -24,7 +23,6 @@ export async function loadEvent(e) {
     const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
     clearanceMessageBox.classList.add("active");
 
-    enableButtons(state.currentRequest);
 
     this.disabled = true;
     updateStep(MSG_STATUS.LOAD)

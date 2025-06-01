@@ -1,10 +1,12 @@
 import { updateMessageStatus } from "../messages/historyLogs.js";
 import { hideSpinner } from "../ui/ui.js";
-import { disableActionButtons, enableAllRequestButtons } from "../ui/buttons-ui.js";
+import { enableAllRequestButtons } from "../ui/buttons-ui.js";
 import { state, updateDirection, updateStep } from '../state/state.js';
 import { MSG_STATUS } from "../state/status.js";
+import { appendToLog, createHistoryLog } from "../messages/historyLogs.js";
+import { filterHistoryLogs } from "./filter.js";
 
-export async function cancelRequestEvent(action) {   
+export async function cancelRequestEvent(action) {
   if (!action || this.disabled) return;
 
   const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
@@ -29,11 +31,11 @@ export async function cancelRequestEvent(action) {
       if (messageBox) messageBox.innerHTML = '';
    * 
    * 
-   */
+  */
+
+  filterHistoryLogs();
 
   this.disabled = true;
   hideSpinner(action);
-  disableActionButtons(MSG_STATUS.LOAD);
-  disableActionButtons(MSG_STATUS.WILCO);
   enableAllRequestButtons();
 }
