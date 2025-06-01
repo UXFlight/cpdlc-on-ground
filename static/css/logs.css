@@ -11,22 +11,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #f2f2f2;
-    margin-bottom: 16px;
-    letter-spacing: 0.5px;
-  }
-  
-  #message-header .icon-wrap svg {
-    width: 30px;
-    height: 30px;
+}
+
+#message-header .icon-wrap svg {
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
     opacity: 0.85;
     cursor: pointer;
-  }
-  
+}
+
 
 /* ACTIVE & HISTORY LOGS */
 .log-box {
@@ -297,4 +291,9 @@
     width: 100%;
     padding: 14px 10px;
     background-color: #1f1f1f;
+}
+
+/* TOGGLE ARROW */
+.toggle-arrow {
+    font-size: 1.2rem;
 }
