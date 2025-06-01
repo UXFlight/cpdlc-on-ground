@@ -1,7 +1,4 @@
-
-import { loadEvent } from "../events/load.js";
-import { executeEvent, cancelExecuteEvent } from "../events/execute.js";
-import { actionEvent } from "../events/action.js";
+import { handlerMap } from "../state/handlerMap.js";
 
 // buttons functions
 export function disableCancelButtons(action) {
@@ -55,35 +52,22 @@ export function createButton(action) {
 
 function createActionButton(label, id = null, action, disabled = false) {
     const btn = document.createElement('button');
-    btn.disabled = disabled;
     btn.classList.add('action-button');
-    if (id) btn.id = id;
     btn.textContent = label.toUpperCase();
+    if (id) btn.id = id + `-${action}`;
     btn.dataset.actionType = label.toLowerCase();
-
-    btn.onclick = (e) => {
-        const status = label.toLowerCase();
-
-        console.log(`[LOG] ${label} clicked (actionType: ${status}, from: ${action})`);
-
-        switch (status) {
-            case MSG_STATUS.LOAD:
-                loadEvent.call(btn, e); 
-                break;
-            case MSG_STATUS.EXECUTE:
-                executeEvent(e);
-                break;
-            case MSG_STATUS.CANCEL:
-                cancelExecuteEvent(e);
-                break;
-            case MSG_STATUS.WILCO:
-            case MSG_STATUS.STANDBY:
-            case MSG_STATUS.UNABLE:
-                actionEvent(status, e);
-                break;
-            default:
-                console.warn(`Unhandled action type: ${status}`);
-        }
-    };
+    btn.disabled = disabled;
+  
+    const status = label.toLowerCase();
+    const handlerFactory = handlerMap[status];
+    if (handlerFactory) {
+      const clickHandler = handlerFactory(btn, action);
+      btn.addEventListener('click', clickHandler);
+    } else {
+      console.warn(`No handler defined for status: ${status}`);
+    }
+    
+  
     return btn;
-}
+  }
+  

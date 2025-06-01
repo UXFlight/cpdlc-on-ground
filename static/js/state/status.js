@@ -5,7 +5,7 @@ export const MSG_STATUS = {
     CANCELLED: 'cancelled',
     CANCEL: 'cancel',
     ERROR: 'error',
-    LOAD: 'load',
+    LOADED: 'loaded',
     WILCO: 'wilco',
     STANDBY: 'standby',
     UNABLE: 'unable',

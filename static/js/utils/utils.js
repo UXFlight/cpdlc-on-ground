@@ -6,12 +6,12 @@ export function invalidRequest(action) {
 }
 
 export function checkNewRequest() {
-  return Object.values(state.steps).some(step => step.status === MSG_STATUS.NEW || step.status === MSG_STATUS.LOAD); // for now, blocking all other requests
+  return Object.values(state.steps).some(step => step.status === MSG_STATUS.NEW || step.status === MSG_STATUS.LOADED); // for now, blocking all other requests
 }
 
 function blockSecondRequest(action) {
   const currentStatus = state.steps[action]?.status;
-  return currentStatus === MSG_STATUS.CLOSED || currentStatus === MSG_STATUS.NEW || currentStatus === MSG_STATUS.LOAD;
+  return currentStatus === MSG_STATUS.CLOSED || currentStatus === MSG_STATUS.NEW || currentStatus === MSG_STATUS.LOADED;
 }
 
 export function closeCurrentOverlay() {

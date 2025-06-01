@@ -7,9 +7,10 @@ import { postAction } from '../api/api.js';
 import { updateMessageStatus, createHistoryLog } from '../messages/historyLogs.js';
 
 // willco, standby, unable event
-export const actionEvent = async (action, e) => {
+export const actionEvent = async (e, action, status) => {
+  console.log(`Action event triggered for action: ${action} with status: ${status}`);
   e.stopPropagation();
-  if (!action) return;
+  if (!status) return;
 
   showSpinner(action);
   //? Disable all buttons
@@ -17,14 +18,14 @@ export const actionEvent = async (action, e) => {
   try {
 
     const currentRequest = state.steps[state.currentRequest];
-    const data = await postAction(action);
+    const data = await postAction(status);
     if (!data.error) {
-      currentRequest.status = action === MSG_STATUS.WILCO ? MSG_STATUS.CLOSED : action;
+      currentRequest.status = status === MSG_STATUS.WILCO ? MSG_STATUS.CLOSED : status;
       currentRequest.message = data.message; // recheck this //? saving server response but for what ?
       createHistoryLog(data);
       updateMessageStatus(state.currentRequest, currentRequest.status);
       updateStep(currentRequest.status, currentRequest.message);
-      if (action === MSG_STATUS.WILCO) {
+      if (status === MSG_STATUS.WILCO) {
         showTick(state.currentRequest);
       } else {
         const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
