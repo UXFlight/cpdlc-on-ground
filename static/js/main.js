@@ -1,15 +1,12 @@
-import { MSG_STATUS } from './state/status.js';
 // all events imported
-import { loadEvent } from './events/load.js';
-import { actionEvent } from './events/action.js';
 import { sendRequestEvent } from './events/sendRequest.js';
 import { cancelRequestEvent } from './events/cancelRequest.js';
 import { toggleOverlay, closeOverlay } from './events/overlay.js';
-import { executeEvent, cancelExecuteEvent } from './events/execute.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
 import { enableAllRequestButtons } from './ui/buttons-ui.js';
 import { listenToSocketEvents } from './socket/socket.js';
 import { filterHistoryLogs } from './events/filter.js';
+import { state } from './state/state.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   listenToSocketEvents() // ok
@@ -40,15 +37,7 @@ function listenToButtonEvents() {
 
   const filterButton = document.getElementById("filter-btn");
 
-  // const loadButton = document.getElementById("load-button");
-  // const executeButton = document.getElementById("execute-button");
-  // const cancelExecuteButton = document.getElementById("cancel-execute-button");
-  
-  // const wilcoButton = document.getElementById("wilco");
-  // const standbyButton = document.getElementById("standby");
-  // const unableButton = document.getElementById("unable");
-
-  const wilcoButtonsGrp = document.querySelectorAll('.wilco-grp');
+  const wilcoButtonsGrp = document.querySelectorAll('.wilco-grp'); //! revoir
 
   // request btns event
   requestButtons.forEach(btn => {
@@ -72,16 +61,6 @@ function listenToButtonEvents() {
   leftButton.addEventListener("click", () => selectPushbackDirection("left"));
   rightButton.addEventListener("click", () => selectPushbackDirection("right"));
 
-  // load buttons event
-  // loadButton.addEventListener("click", function (e) {loadEvent.call(this, e)});
-  // executeButton.addEventListener("click", async (e) => executeEvent(e));
-  // cancelExecuteButton.addEventListener("click", async (e) => cancelExecuteEvent(e));
-
-  // wilco buttons event
-  // wilcoButton.addEventListener("click", (e) => actionEvent(MSG_STATUS.WILCO, e));
-  // standbyButton.addEventListener("click", (e) => actionEvent(MSG_STATUS.STANDBY, e));
-  // unableButton.addEventListener("click", (e) => actionEvent(MSG_STATUS.UNABLE, e));
-
   wilcoButtonsGrp.forEach((btn) => 
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -89,5 +68,8 @@ function listenToButtonEvents() {
     })
   );
 
-  filterButton.addEventListener("click", () => filterHistoryLogs());
+  filterButton.addEventListener("click", () => {
+    state.isFiltered = !state.isFiltered;
+    filterHistoryLogs()
+  });
 }
