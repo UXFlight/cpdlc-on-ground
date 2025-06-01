@@ -1,6 +1,12 @@
-import { createActiveLogs } from "../messages/activeLogs.js";
+import { updateMessageStatus } from "../messages/historyLogs.js";
+import { state, updateStep } from "../state/state.js";
+import { appendToLog } from "../messages/historyLogs.js";
+import { filterHistoryLogs } from "../events/filter.js";
 
 export const handleAtcResponse = (data) => {
-    console.log("ATC Response:", data);
-    createActiveLogs(data);
+    updateStep(data.status, data.message);
+    updateMessageStatus(data.action, data.status);
+    if(state.isFiltered) return appendToLog(data.action, data.timestamp, data.message, data.status);
+    state.isFiltered = true;
+    filterHistoryLogs();
 }

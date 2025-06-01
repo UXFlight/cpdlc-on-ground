@@ -44,7 +44,7 @@ export function hideTick(tickId) {
   }
 }
 
-export function changeFilterIcon(isFiltered) {
+export function changeFilterIcon() {
   const svg = document.getElementById("filter-icon");
   if(svg) svg.classList.toggle("filtered");
 }
@@ -55,11 +55,23 @@ export function ensureMessageBoxNotEmpty(divId='history-log-box') {
   if (historyLogBox.classList.contains('empty')) {
       historyLogBox.classList.remove('empty');
       noMessages?.classList.add('hidden');
-      clearMessageBox(divId);
   }
 }
 
-export function clearMessageBox(boxId) {
+export function clearMessageBox(boxId='history-log-box') {
+  ensureMessageBoxNotEmpty();
   const box = document.getElementById(boxId);
   if (box) box.innerHTML = '';
+}
+
+
+export function playNotificationSound() {
+    const audio = new Audio('/static/mp3/notif.mp3');
+    audio.volume = 0.3;
+    audio.play().catch(err => console.warn('Unable to play sound:', err));
+}
+
+export function flashElement(div) {
+    div.classList.add('flash');
+    setTimeout(() => div.classList.remove('flash'), 1000);
 }

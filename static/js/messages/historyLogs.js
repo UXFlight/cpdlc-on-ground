@@ -1,23 +1,13 @@
 import { MSG_STATUS } from '../state/status.js';
-import { ensureMessageBoxNotEmpty } from '../ui/ui.js';
+import { state } from '../state/state.js';
+import { flashElement } from '../ui/ui.js';
+import { createButton } from '../ui/buttons-ui.js';
 
 //DOM UTILITIES //
 const historyLogBox = document.getElementById('history-log-box');
 
-export function playNotificationSound() {
-    const audio = new Audio('/static/mp3/notif.mp3');
-    audio.volume = 0.3;
-    audio.play().catch(err => console.warn('Unable to play sound:', err));
-}
-
-export function flashElement(div) {
-    div.classList.add('flash');
-    setTimeout(() => div.classList.remove('flash'), 1000);
-}
-
-export function createHistoryLog(action, timestamp, message, status = MSG_STATUS.NEW) {
+export function createHistoryLog(action, timestamp, message, status = MSG_STATUS.REQUESTED) {
     if (!action) return;
-    ensureMessageBoxNotEmpty();
 
     const normalizedStatus = status.toLowerCase();
 
@@ -29,17 +19,11 @@ export function createHistoryLog(action, timestamp, message, status = MSG_STATUS
     const header = createHeader({ timestamp, title: action, status: normalizedStatus });
     div.appendChild(header);
 
-    if (message) {
-        const response = createResponseParagraph(message);
-        div.appendChild(response);
-    }
+    if (message) div.appendChild(createResponseParagraph(message))
 
     historyLogBox.prepend(div);
     flashElement(div);
 }
-
-// GROUPED MESSAGE //
-import { state } from '../state/state.js';
 
 export function appendToLog(stepKey, message, timestamp, status = MSG_STATUS.NEW) {
     const group = state.history.find(g => g.stepKey === stepKey);
@@ -77,10 +61,7 @@ export function refreshGroupedLog(group, latest) {
     });
 }
   
-
 export function createGroupedLog({ stepKey, label, latest, history }) {
-    ensureMessageBoxNotEmpty();
-
     const div = document.createElement('div');
     div.classList.add('new-message');
     div.dataset.action = stepKey;
@@ -101,13 +82,20 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
         div.appendChild(response);
     }
 
+    
     const historyContainer = createHistoryDetails(history.slice(0, -1));
     div.appendChild(historyContainer);
-
+    
+    if (latest.status === MSG_STATUS.RESPONDED) {
+        const btnContainer = createButton(stepKey);
+        div.appendChild(btnContainer);
+    }
+    
     div.addEventListener("click", (e) => toggleMessage(e, historyContainer, toggle));
     historyLogBox.prepend(div);
     flashElement(div);
 }
+
 
 const toggleMessage = (e, historyContainer, toggle)=> { 
     e.stopPropagation();

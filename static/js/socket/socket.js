@@ -1,4 +1,3 @@
-import { enableButtons } from "../ui/buttons-ui.js";
 import { renderConnectionState } from "../socket-events/connectionEvents.js";
 import { handleAtcResponse } from "../socket-events/atcResponse.js";
 import { state } from "../state/state.js";
@@ -45,7 +44,6 @@ export function listenToSocketEvents() {
             state.steps[requestType].history.push(data.history_entry);
         }
 
-        enableButtons(state.currentRequest);
     });
 
 
