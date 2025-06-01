@@ -2,7 +2,7 @@
 import { state, updateStep } from '../state/state.js';
 import { MSG_STATUS } from '../state/status.js';
 import { showSpinner, showTick } from '../ui/ui.js';
-import { disableActionButtons, disableAllButtons, disableCancelButtons, enableAllRequestButtons } from '../ui/buttons-ui.js';
+import { disableCancelButtons } from '../ui/buttons-ui.js';
 import { postAction } from '../api/api.js';
 import { updateMessageStatus, createHistoryLog } from '../messages/historyLogs.js';
 
@@ -13,8 +13,6 @@ export const actionEvent = async (action, e) => {
 
   showSpinner(action);
   //? Disable all buttons
-  disableActionButtons(MSG_STATUS.LOAD); 
-  disableActionButtons(MSG_STATUS.WILCO);
 
   try {
 
@@ -27,7 +25,6 @@ export const actionEvent = async (action, e) => {
       updateMessageStatus(state.currentRequest, currentRequest.status);
       updateStep(currentRequest.status, currentRequest.message);
       if (action === MSG_STATUS.WILCO) {
-        disableAllButtons(state.currentRequest);
         showTick(state.currentRequest);
       } else {
         const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
