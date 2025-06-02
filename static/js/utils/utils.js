@@ -2,7 +2,7 @@ import { state } from '../state/state.js';
 import { MSG_STATUS } from '../state/status.js';
 // small utils functions
 export function invalidRequest(action) {
-  return (!action || checkNewRequest() || blockSecondRequest(action) || action === "pushback" && !state.steps[action].direction)
+  return (!action /*|| checkNewRequest()*/ || blockSecondRequest(action) || action === "pushback" && !state.steps[action].direction)
 }
 
 export function checkNewRequest() {
@@ -22,4 +22,18 @@ export function closeCurrentOverlay() {
 export function getLatestEntry(stepKey) {
   const group = state.history.find(h => h.stepKey === stepKey);
   return group?.entries[group.entries.length - 1] ?? null;
+}
+
+export function getActionInfoFromEvent(e) {
+  const target = e.target.closest("button");
+
+  if (!target) return null;
+
+  const idParts = target.id.split("-button-");
+  if (idParts.length !== 2) return null;
+
+  const actionType = target.dataset.actionType; // action type
+  const requestType = idParts[1];               // request type
+
+  return { actionType, requestType };
 }

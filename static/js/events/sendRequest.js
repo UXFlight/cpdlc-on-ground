@@ -3,7 +3,7 @@ import { showSpinner, showTick } from "../ui/ui.js";
 import { closeCurrentOverlay, getLatestEntry, invalidRequest } from "../utils/utils.js";
 import { state, updateStep } from '../state/state.js';
 import { MSG_STATUS } from '../state/status.js';
-import { disableCancelButtons, disableAllRequestButtons } from "../ui/buttons-ui.js";
+import { disableCancelButtons } from "../ui/buttons-ui.js";
 import { filterHistoryLogs } from './filter.js';
 
 export const sendRequestEvent = async (action) => {
@@ -12,11 +12,11 @@ export const sendRequestEvent = async (action) => {
   
   updateStep(MSG_STATUS.REQUESTED); //! change status to NEW asap : still frontend only, will work on ws later
   showSpinner(action);
-  disableAllRequestButtons();
 
   try {
     if (cancelBtn) cancelBtn.disabled = false;
     const data = await sendRequest(action);
+    console.log("Request data:", data);
     if (state.steps[action].status === MSG_STATUS.CANCELLED) return; // if cancelled, do not proceed //! will send request to server
     if (!data.error) {
       const lastestEntry = getLatestEntry(action);

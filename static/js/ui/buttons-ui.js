@@ -57,19 +57,19 @@ function createActionButton(label, id = null, action, disabled = false) {
     if (id) btn.id = id + `-${action}`;
     btn.dataset.actionType = label.toLowerCase();
     btn.disabled = disabled;
-  
+
     const status = label.toLowerCase();
     const handlerFactory = handlerMap[status];
     if (handlerFactory) {
-      const clickHandler = handlerFactory(btn, action);
-      btn.addEventListener('click', clickHandler);
+        const clickHandler = handlerFactory(btn, action);
+        btn.addEventListener('click', clickHandler);
     } else {
-      console.warn(`No handler defined for status: ${status}`);
+        console.warn(`No handler defined for status: ${status}`);
     }
-  
+
     return btn;
-  }
-  
+}
+
 
 // enables loadButton
 export function enableLoadButton(action) {
@@ -81,6 +81,25 @@ export function enableLoadButton(action) {
 export function enableExecutionButtons(action) {
     const executeButton = document.getElementById(`execute-button-${action}`);
     const cancelExecuteButton = document.getElementById(`cancel-execute-button-${action}`);
+
+    if (executeButton) executeButton.disabled = false;
+    if (cancelExecuteButton) cancelExecuteButton.disabled = false;
+}
+
+// enables wilcoButtons
+export function enableWilcoButtons(requestType) {
+    const wilcoButton = document.getElementById(`wilco-button-${requestType}`);
+    const standbyButton = document.getElementById(`standby-${requestType}`);
+    const unableButton = document.getElementById(`unable-${requestType}`);
+    if (wilcoButton) wilcoButton.disabled = false;
+    if (standbyButton) standbyButton.disabled = false;
+    if (unableButton) unableButton.disabled = false;
+}
+
+// enables executeButtons
+export function enableExecuteButtons(requestType) {
+    const executeButton = document.getElementById(`execute-button-${requestType}`);
+    const cancelExecuteButton = document.getElementById(`cancel-execute-button-${requestType}`);
 
     if (executeButton) executeButton.disabled = false;
     if (cancelExecuteButton) cancelExecuteButton.disabled = false;
