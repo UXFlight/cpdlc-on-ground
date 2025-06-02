@@ -4,22 +4,22 @@ import { actionEvent } from "../events/action.js";
 import { MSG_STATUS } from "./status.js";
 
 export const handlerMap = {
-  load: (btn, action) => (e) => {
-    loadEvent.call(btn, e, action);  // si loadEvent a besoin d'action
+  load: (btn) => (e) => {
+    loadEvent.call(btn, e);
   },
-  execute: (_, action) => (e) => {
-    executeEvent(e, action); // idem ici
+  execute: () => (e) => {
+    executeEvent(e);
   },
-  cancel: (_, action) => (e) => {
-    cancelExecuteEvent(e, action);
+  cancel: () => (e) => {
+    cancelExecuteEvent(e);
   },
-  wilco: (_, action) => (e) => {
-    actionEvent(e, action, MSG_STATUS.WILCO);
+  wilco: () => (e) => {
+    actionEvent(e);
   },
-  standby: (_, action) => (e) => {
-    actionEvent(e, action, MSG_STATUS.STANDBY);
+  standby: () => (e) => {
+    actionEvent(e);
   },
-  unable: (_, action) => (e) => {
-    actionEvent(e, action, MSG_STATUS.UNABLE);
+  unable: (_) => (e) => {
+    actionEvent(e);
   },
 };

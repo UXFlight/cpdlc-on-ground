@@ -3,10 +3,8 @@ export async function sendRequest(action) {
   return response.json();
 }
 
-export async function postAction(action, requestType=null) {
-  const body = requestType
-    ? JSON.stringify({ action, requestType })
-    : JSON.stringify({ action });
+export async function postAction(action, requestType) {
+  const body = JSON.stringify({ action, requestType })
 
   const response = await fetch(`/action`, {
     method: 'POST',
