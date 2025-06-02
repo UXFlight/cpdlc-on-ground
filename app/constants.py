@@ -1,4 +1,9 @@
-# app/constants.py
+import json
+from pathlib import Path
+
+with open(Path(__file__).resolve().parent.parent / "shared" / "msg_status.json") as f:
+    MSG_STATUS = json.load(f)
+
 
 REQUEST_OUTPUTS = [
     "able_intersection_departure",
@@ -37,3 +42,42 @@ DEFAULT_ATC_RESPONSES = {
 
 TAXI_CLEARANCE_MESSAGE = "TAXI VIA C, C1, B, B1, RWY 25R"
 INVALID_DATA_ERROR = "Invalid data"
+
+ACTION_DEFINITIONS = {
+    "execute": {
+        "status": "executed",
+        "message": lambda _: TAXI_CLEARANCE_MESSAGE,
+        "requiredType": True,
+        "allowedTypes": ["taxi_clearance"]
+    },
+    "load": {
+        "status": "loaded",
+        "message": lambda rt: DEFAULT_ATC_RESPONSES.get(rt, "LOAD OK"),
+        "requiredType": True,
+        "allowedTypes": ["taxi_clearance", "expected_taxi_clearance"]
+    },
+    "cancel": {
+        "status": "cancelled",
+        "message": lambda _: None,
+        "requiredType": False,
+        "fixedType": "taxi_clearance"
+    },
+    "wilco": {
+        "status": "closed",
+        "message": lambda _: "WILCO acknowledged",
+        "requiredType": True,
+        "allowedTypes": REQUEST_OUTPUTS
+    },
+    "standby": {
+        "status": "standby",
+        "message": lambda _: "STANDBY - Awaiting ATC",
+        "requiredType": True,
+        "allowedTypes": REQUEST_OUTPUTS
+    },
+    "unable": {
+        "status": "unable",
+        "message": lambda _: "UNABLE to comply",
+        "requiredType": True,
+        "allowedTypes": REQUEST_OUTPUTS
+    }
+}
