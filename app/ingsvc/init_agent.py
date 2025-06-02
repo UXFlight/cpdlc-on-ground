@@ -1,6 +1,6 @@
 import sys
 import signal
-import ingescape as igs
+import ingescape as igs # type: ignore
 from app.ingsvc import Echo
 from app.ingsvc.callbacks import (
     reset_callback,

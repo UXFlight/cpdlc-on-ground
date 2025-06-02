@@ -1,6 +1,5 @@
-# coding: utf-8
 from datetime import datetime
-import ingescape as igs
+import ingescape as igs # type: ignore
 
 class Singleton(type):
     _instances = {}
