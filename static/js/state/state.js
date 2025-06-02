@@ -1,3 +1,5 @@
+import { updateMessageStatus } from "../messages/historyLogs.js";
+
 // Global state
 export const state = {
   currentRequest: null,
@@ -64,9 +66,9 @@ export function updateStep(newStatus, newMessage = null) {
     state.history.push(group);
   }
   group.entries.push(entry);
+
+  updateMessageStatus(key, newStatus);
 }
-
-
 
 export function updateDirection(direction) {
   state.steps["pushback"].direction = direction;

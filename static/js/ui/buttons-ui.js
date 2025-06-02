@@ -66,8 +66,22 @@ function createActionButton(label, id = null, action, disabled = false) {
     } else {
       console.warn(`No handler defined for status: ${status}`);
     }
-    
   
     return btn;
   }
   
+
+// enables loadButton
+export function enableLoadButton(action) {
+    const loadButton = document.getElementById(`load-button-${action}`);
+    if (loadButton) loadButton.disabled = false;
+}
+
+// enables executeButtons
+export function enableExecutionButtons(action) {
+    const executeButton = document.getElementById(`execute-button-${action}`);
+    const cancelExecuteButton = document.getElementById(`cancel-execute-button-${action}`);
+
+    if (executeButton) executeButton.disabled = false;
+    if (cancelExecuteButton) cancelExecuteButton.disabled = false;
+}

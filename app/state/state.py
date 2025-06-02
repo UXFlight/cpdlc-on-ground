@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timezone
+from app.constants import MSG_STATUS
 
 def current_timestamp():
-    return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 def create_step(label, extra=None):
     step = {
@@ -15,12 +16,12 @@ def create_step(label, extra=None):
         step.update(extra)
     return step
 
-class PilotState: # Singleton
+class PilotState:
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(PilotState, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
             cls._instance._init_state()
         return cls._instance
 
@@ -60,6 +61,7 @@ class PilotState: # Singleton
         step["status"] = status
         step["message"] = message
         step["timestamp"] = current_timestamp()
+        self.current_request = step_name
 
     def update_pushback_direction(self, direction):
         if "pushback" in self.steps:
@@ -83,4 +85,40 @@ class PilotState: # Singleton
         return {
             "current_request": self.current_request,
             "steps": self.steps
+        }
+
+    def simulate_backend_action(self, step_name, status, message=None):
+        """
+        Fonction interne si tu veux simuler une action simple (ex: pour test, reset, etc.)
+        Ne pas utiliser dans la logique métier du service.
+        """
+        if step_name not in self.steps:
+            return {"error": f"Unknown step: {step_name}"}
+
+        self.update_step(step_name, status, message)
+        return {
+            "status": status,
+            "message": message,
+            "stepKey": step_name,
+            "state": self.get_state()
+        }
+    
+    def cancel_request(self, step_name):
+        step = self.steps.get(step_name)
+        if not step:
+            return {"error": f"Unknown request: {step_name}"}
+        if step["status"] != "requested":
+            return {"error": f"Cannot cancel: current status is '{step['status']}'"}
+
+        step["status"] = "cancelled"
+        step["message"] = "Request cancelled by pilot"
+        step["timestamp"] = current_timestamp()
+        step["cancelled"] = True
+        self.current_request = None
+
+        return {
+            "status": "cancelled",
+            "requestType": step_name,
+            "message": step["message"],
+            "timestamp": step["timestamp"]
         }

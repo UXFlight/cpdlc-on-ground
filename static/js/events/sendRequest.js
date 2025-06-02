@@ -1,6 +1,5 @@
 import { sendRequest } from '../api/api.js'
 import { showSpinner, showTick } from "../ui/ui.js";
-import { playNotificationSound } from '../ui/ui.js';
 import { closeCurrentOverlay, getLatestEntry, invalidRequest } from "../utils/utils.js";
 import { state, updateStep } from '../state/state.js';
 import { MSG_STATUS } from '../state/status.js';
@@ -11,8 +10,7 @@ export const sendRequestEvent = async (action) => {
   if (invalidRequest(action)) return;
   const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
   
-  updateStep(MSG_STATUS.NEW); //! change status to NEW asap : still frontend only, will work on ws later
-
+  updateStep(MSG_STATUS.REQUESTED); //! change status to NEW asap : still frontend only, will work on ws later
   showSpinner(action);
   disableAllRequestButtons();
 
@@ -25,7 +23,6 @@ export const sendRequestEvent = async (action) => {
       lastestEntry.message = data.message; //! temp, will check logic later
       lastestEntry.status = data.status
       filterHistoryLogs();
-      playNotificationSound();
     } else {
       showTick(action, true);
       closeCurrentOverlay();

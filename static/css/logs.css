@@ -86,7 +86,7 @@
     border-left: 4px solid #45a049;
 }
 
-.new-message[data-status="load"] {
+.new-message[data-status="loaded"] {
     border-left: 4px solid #00bcd4;
 }
 
@@ -138,7 +138,7 @@
     color: #45a049;
 }
 
-.new-message[data-status="load"] .timestamp {
+.new-message[data-status="loaded"] .timestamp {
     color: #00bcd4;
 }
 
@@ -204,7 +204,7 @@
     background-color: #45a049;
 }
 
-.status.load {
+.status.loaded {
     background-color: #00bcd4;
 }
 

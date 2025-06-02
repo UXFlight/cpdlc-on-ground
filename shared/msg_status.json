@@ -1,0 +1,14 @@
+{
+  "CLOSED": "closed",
+  "REQUESTED": "requested",
+  "RESPONDED": "responded",
+  "CANCELLED": "cancelled",
+  "CANCEL": "cancel",
+  "ERROR": "error",
+  "LOADED": "loaded",
+  "WILCO": "wilco",
+  "STANDBY": "standby",
+  "UNABLE": "unable",
+  "EXECUTED": "executed",
+  "EXECUTE": "execute"
+}

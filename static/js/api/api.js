@@ -1,32 +1,32 @@
-// Basic template for API calls : GET and POST
 export async function sendRequest(action) {
   const response = await fetch(`/request/${action}`);
   return response.json();
 }
 
-export async function postAction(action) {
-  const response = await fetch(`/action/${action}`, {
+export async function postAction(action, requestType=null) {
+  const body = requestType
+    ? JSON.stringify({ action, requestType })
+    : JSON.stringify({ action });
+
+  const response = await fetch(`/action`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action }),
+    body,
   });
+
   return response.json();
 }
 
-export async function postLoad(requestType) {
-  const response = await fetch('/load', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ requestType }),
+export async function postCancelRequest(action) {
+  const response = await fetch(`/cancel-request/${action}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
   });
-  return response.json();
+
+  return await response.json();
 }
 
-export async function postExecute(requestType) {
-  const response = await fetch(`/execute`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ requestType }),
-  });
+export async function getState() {
+  const response = await fetch('/state');
   return response.json();
 }

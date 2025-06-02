@@ -4,39 +4,35 @@ import { MSG_STATUS } from '../state/status.js';
 import { showSpinner, showTick } from '../ui/ui.js';
 import { disableCancelButtons } from '../ui/buttons-ui.js';
 import { postAction } from '../api/api.js';
-import { updateMessageStatus, createHistoryLog } from '../messages/historyLogs.js';
+import { filterHistoryLogs } from './filter.js';
+import { closeCurrentOverlay } from '../utils/utils.js';
 
 // willco, standby, unable event
 export const actionEvent = async (e, action, status) => {
-  console.log(`Action event triggered for action: ${action} with status: ${status}`);
   e.stopPropagation();
   if (!status) return;
 
   showSpinner(action);
   //? Disable all buttons
-
   try {
-
-    const currentRequest = state.steps[state.currentRequest];
-    const data = await postAction(status);
-    if (!data.error) {
-      currentRequest.status = status === MSG_STATUS.WILCO ? MSG_STATUS.CLOSED : status;
-      currentRequest.message = data.message; // recheck this //? saving server response but for what ?
-      createHistoryLog(data);
-      updateMessageStatus(state.currentRequest, currentRequest.status);
-      updateStep(currentRequest.status, currentRequest.message);
-      if (status === MSG_STATUS.WILCO) {
-        showTick(state.currentRequest);
-      } else {
-        const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
-        clearanceMessageBox.classList.remove("active");
-        disableCancelButtons(state.currentRequest);
-        showTick(state.currentRequest, true)
-      }
-    } else {
-      console.warn(`Server error on '${action}'`, data.error);
+    const data = await postAction(status, state.currentRequest);
+    if (data.error) {
+      console.warn(`Server error on '${action}':`, data.error);
       showTick(action, true);
+      updateStep(MSG_STATUS.ERROR, data.error);
+      filterHistoryLogs(); //!!!!! wth
+      return;
     }
+    updateStep(data.status, data.message);
+    filterHistoryLogs();
+    if (status !== MSG_STATUS.WILCO) {
+      const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
+      clearanceMessageBox.classList.remove("active");
+      disableCancelButtons(state.currentRequest);
+    }
+    showTick(state.currentRequest,  data.status !== MSG_STATUS.CLOSED);
+    closeCurrentOverlay();
+
   } catch (err) {
     console.error(`Error handling action '${action}'`, err);
     showTick(action, true);

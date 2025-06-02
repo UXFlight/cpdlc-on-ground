@@ -8,6 +8,7 @@ export function showSpinner(action) {
 }
 
 export function showTick(action, isError = false) {
+  console.log("showTick called for action:", action, "isError:", isError);
   const spinner = document.getElementById(`${action}_spinner`);
   const tick = document.getElementById(`${action}_tick`);
   const wrapper = document.querySelector(`.overlay[data-action="${action}"]`);
@@ -74,4 +75,11 @@ export function playNotificationSound() {
 export function flashElement(div) {
     div.classList.add('flash');
     setTimeout(() => div.classList.remove('flash'), 1000);
+}
+
+export function updateTaxiClearanceMsg(message = null) {
+  const clearanceBox = document.getElementById('taxi-clearance-message');
+  const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
+  clearanceBox.innerHTML = `<p>${message}</p>`;
+  message ? clearanceMessageBox.classList.add("active") : clearanceMessageBox.classList.remove("active");
 }

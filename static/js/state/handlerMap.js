@@ -5,7 +5,6 @@ import { MSG_STATUS } from "./status.js";
 
 export const handlerMap = {
   load: (btn, action) => (e) => {
-    console.log(`Load event triggered for action: ${action}`);
     loadEvent.call(btn, e, action);  // si loadEvent a besoin d'action
   },
   execute: (_, action) => (e) => {

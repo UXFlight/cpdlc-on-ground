@@ -2,6 +2,7 @@ import { MSG_STATUS } from '../state/status.js';
 import { state } from '../state/state.js';
 import { flashElement } from '../ui/ui.js';
 import { createButton } from '../ui/buttons-ui.js';
+import { playNotificationSound } from '../ui/ui.js';
 
 //DOM UTILITIES //
 const historyLogBox = document.getElementById('history-log-box');
@@ -89,6 +90,7 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
     if (latest.status === MSG_STATUS.RESPONDED) {
         const btnContainer = createButton(stepKey);
         div.appendChild(btnContainer);
+        playNotificationSound();
     }
     
     div.addEventListener("click", (e) => toggleMessage(e, historyContainer, toggle));

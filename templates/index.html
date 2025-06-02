@@ -100,8 +100,7 @@
                             </div>
                         {% endif %}
 
-                        <button class="request-button" id="{{ item.action | replace('_', '-') }}-btn" data-action="{{ item.action }}"
-                                {% if item.type == 'pushback' %}disabled{% endif %}>
+                        <button class="request-button" id="{{ item.action | replace('_', '-') }}-btn" data-action="{{ item.action }}" disabled>
                             Request
                         </button>
                         <button class="cancel-button" data-action="{{ item.action }}" disabled>Cancel</button>
