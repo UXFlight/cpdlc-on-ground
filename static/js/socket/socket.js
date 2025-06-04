@@ -2,6 +2,7 @@ import { renderConnectionState } from "../socket-events/connectionEvents.js";
 import { handleAtcResponse } from "../socket-events/atcResponse.js";
 import { state } from "../state/state.js";
 import { enableAllRequestButtons, disableAllRequestButtons } from "../ui/buttons-ui.js";
+import { tickUpdate, timeoutEvent } from "../socket-events/timeoutEvent.js";
 
 const socket = io("http://localhost:5321");
 
@@ -36,5 +37,11 @@ export function listenToSocketEvents() {
 
     // atc response events
     socket.on("atcResponse", (data) => handleAtcResponse(data));
+
+    // time event
+    socket.on("tick", (data) => tickUpdate(data))
+
+    // timeout event
+    socket.on("timeout", (data) => timeoutEvent(data))
 }
 

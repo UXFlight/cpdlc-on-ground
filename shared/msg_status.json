@@ -10,5 +10,6 @@
   "STANDBY": "standby",
   "UNABLE": "unable",
   "EXECUTED": "executed",
-  "EXECUTE": "execute"
+  "EXECUTE": "execute",
+  "TIMEOUT": "timeout"
 }
