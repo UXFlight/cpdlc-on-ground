@@ -84,6 +84,7 @@ class Echo(metaclass=Singleton):
         for name in self._actions:
             self.set_action(name, False)
         igs.info("[Echo] All outputs reset.")
+        #! send reset impulse 
 
     def get_history(self):
         return getattr(self, "_history", [])

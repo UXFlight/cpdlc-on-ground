@@ -1,6 +1,4 @@
-# main.py
-
-from flask import Flask
+from flask import Flask  # type: ignore
 from app.ingsvc import initialize_agent
 from app.routes import all_blueprints
 from app.socket.sockets import socket_manager
