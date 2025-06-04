@@ -1,6 +1,6 @@
 from app.state import pilot_state
 from app.ingsvc import Echo
-from app.constants import DEFAULT_ATC_RESPONSES, TIMER_DURATION
+from app.utils.constants import DEFAULT_ATC_RESPONSES, TIMER_DURATION
 from app.utils.helpers import get_current_timestamp
 from app.services import log_event
 import threading
