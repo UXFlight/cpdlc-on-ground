@@ -83,13 +83,13 @@
             <div  class="request-list">
                 <!-- Request button for Expected Taxi Clearance -->
                 {% for item in request_overlays %}
-                    <div class="overlay" data-action="{{ item.action }}">
+                    <div class="overlay" data-requestType="{{ item.requestType }}">
                         <div class="overlay-button">
-                        <span class="label">{{ item.number }}. {{ item.label }}</span>
-                        <div class="status-icons">
-                            <div class="spinner" id="{{ item.action }}_spinner"></div>
-                            <span class="tick-icon success" id="{{ item.action }}_tick">&#10003;</span>
-                        </div>
+                            <span class="label">{{ item.number }}. {{ item.label }}</span>
+                            <div class="status-icons">
+                                <div class="spinner" id="{{ item.requestType }}_spinner"></div>
+                                <span class="tick-icon success" id="{{ item.requestType }}_tick">&#10003;</span>
+                            </div>
                         </div>
 
                         <div class="overlay-actions{% if item.type == 'pushback' %} pushback-overlay{% endif %}">
@@ -100,15 +100,16 @@
                             </div>
                         {% endif %}
 
-                        <button class="request-button" id="{{ item.action | replace('_', '-') }}-btn" data-action="{{ item.action }}" disabled>
+                        <button class="request-button" id="{{ item.requestType | replace('_', '-') }}-btn" data-requestType="{{ item.requestType }}" disabled>
                             Request
                         </button>
-                        <button class="cancel-button" data-action="{{ item.action }}" disabled>Cancel</button>
+                        <button class="cancel-button" data-requestType="{{ item.requestType }}" disabled>Cancel</button>
                         </div>
                     </div>
                 {% endfor %}
             </div>   
         </div>
    </div>
+   <div id="snackbar-container"></div>
 </body>
 </html>

@@ -83,7 +83,7 @@
     background-color: #f1c40f;
 }
 
-/* === TOOLTIP === */
+/* TOOLTIP */
 .tooltip {
     display: none;
     position: absolute;
@@ -107,7 +107,7 @@
     display: block;
   }
   
-  /* === LIGNES DE STATUT === */
+  /* LIGNES DE STATUT */
   .status-line {
     display: flex;
     align-items: center;
@@ -155,14 +155,14 @@
     animation: pulse 1s ease-in-out infinite;
   }
   
-  /* === DIVISEUR === */
+  /* DIVISEUR */
   .tooltip-divider {
     border: none;
     border-top: 1px solid #444;
     margin: 12px 0;
   }
   
-  /* === TIMESTAMP === */
+  /* TIMESTAMP */
   .timestamp-line {
     display: flex;
     justify-content: space-between;

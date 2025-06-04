@@ -71,14 +71,14 @@
 }
 
 .overlay.open .overlay-button .label {
-    transform: translateY(-225%) scale(0.95); 
+    transform: translateY(-200%) scale(0.95); 
     opacity: 0.9;
     color: #6cc24a;
     font-weight: 800;
 }
 
 .overlay.open .overlay-button .status-icons {
-    transform: translateY(-225%) scale(0.95); 
+    transform: translateY(-275%) scale(0.95); 
 }
 
 .overlay[data-status="error"] .overlay-button .label {

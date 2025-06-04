@@ -66,3 +66,46 @@ button:disabled {
 .request-menu {
     grid-row: 1 / -1;
 }
+
+/* SNACKBAR */
+#snackbar-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.snackbar {
+  color: white;
+  padding: 14px 24px;
+  margin-top: 10px;
+  border-radius: 8px;
+  min-width: 260px;
+  max-width: 90%;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  transition: all 0.4s ease;
+  opacity: 1;
+}
+
+.snackbar-error {
+  background-color: #e74c3c;
+}
+
+.snackbar-success {
+  background-color: #2ecc71;
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
