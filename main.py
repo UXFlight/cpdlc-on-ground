@@ -1,19 +1,22 @@
-from flask import Flask  # type: ignore
-from app.ingsvc import initialize_agent
-from app.routes import all_blueprints
-from app.socket.sockets import socket_manager
+from flask import Flask # type: ignore
+from flask_socketio import SocketIO # type: ignore
+from app.managers.pilot_manager import PilotManager
+from app.classes.socket.socket import SocketService
+from app.managers.socket_manager import SocketManager
 
-app = Flask(__name__)
-
-for bp in all_blueprints:
-    app.register_blueprint(bp)
-
-socket_manager.init_app(app)
+def create_app():
+    app = Flask(__name__)
+    socketio = SocketIO(app, cors_allowed_origins="*")
+    return app, socketio
 
 if __name__ == '__main__':
-    port = 5670
-    agent_name = "Pilot_CPDLC_APP"
-    device = "wlp0s20f3"
+    app, socketio = create_app()
 
-    agent = initialize_agent(agent_name, device, port)
-    socket_manager.run(app, host='0.0.0.0', port=5321)
+    socket_service = SocketService(socketio)
+    pilot_manager = PilotManager()
+    socket_manager = SocketManager(socket_service, pilot_manager)
+
+    socket_manager.init_events()
+
+    socketio.run(app, host="0.0.0.0", port=5321)
+

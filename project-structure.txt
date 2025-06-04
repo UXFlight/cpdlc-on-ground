@@ -1,14 +1,26 @@
 .
 ├── app
-│   ├── config.py
-│   ├── constants.py
+│   ├── classes
+│   │   ├── ingsvc
+│   │   │   └── agent.py
+│   │   ├── log
+│   │   │   ├── __init__.py
+│   │   │   └── logger.py
+│   │   ├── pilot
+│   │   │   └── pilot.py
+│   │   ├── socket
+│   │   │   └── socket.py
+│   │   └── state
+│   │       ├── state.py
+│   │       └── step.py
 │   ├── ingsvc
-│   │   ├── agent.py
 │   │   ├── callbacks.py
 │   │   ├── init_agent.py
 │   │   └── __init__.py
-│   ├── __init__.py
 │   ├── logs
+│   ├── managers
+│   │   ├── pilot_manager.py
+│   │   └── socket_manager.py
 │   ├── routes
 │   │   ├── action_routes.py
 │   │   ├── general.py
@@ -23,12 +35,10 @@
 │   ├── socket
 │   │   ├── __init__.py
 │   │   └── sockets.py
-│   ├── state
-│   │   ├── __init__.py
-│   │   └── state.py
 │   └── utils
-│       ├── helpers.py
-│       └── __init__.py
+│       ├── constants.py
+│       ├── __init__.py
+│       └── time_utils.py
 ├── main.py
 ├── project-structure.txt
 ├── README.md
@@ -81,4 +91,4 @@
 └── templates
     └── index.html
 
-23 directories, 59 files
+29 directories, 63 files
