@@ -4,12 +4,11 @@ from app.utils.time_utils import get_current_timestamp
 
 class LogManager:
     def __init__(self, logs_dir: Path = None):
-        self.logs_dir = logs_dir or Path(__file__).resolve().parent.parent / "logs"
+        self.logs_dir = logs_dir or Path(__file__).resolve().parents[2] / "logs"
         self.logs_dir.mkdir(parents=True, exist_ok=True)
         self.main_log = self.logs_dir / "cpdlc_backend.log"
         self.error_log = self.logs_dir / "cpdlc_errors.log"
 
-        # In-memory store
         self.logs = {
             "events": [],
             "requests": [],
