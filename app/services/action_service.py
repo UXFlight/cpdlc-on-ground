@@ -1,8 +1,8 @@
 from app.state import pilot_state
 from app.ingsvc import Echo
-from app.constants import ACTION_DEFINITIONS
+from app.utils.constants import ACTION_DEFINITIONS
 from app.services import log_json, cancel_timer
-from app.constants import MSG_STATUS
+from app.utils.constants import MSG_STATUS
 
 agent = Echo()
 
