@@ -15,10 +15,10 @@ Cette application web, construite avec **Flask**, fournit une interface utilisat
 1. **Cloner le dépôt**
 
    ```bash
-   git clone https://github.com/CPDLC-research-program/cpdlc-flask-app.git
+   git clone https://github.com/UXFlight/cpdlc-flask-app.git
    cd cpdlc-flask-app
    ```
-
+#
 2. **Créer un environnement virtuel**
 
    ```bash
@@ -56,43 +56,89 @@ Cette application web, construite avec **Flask**, fournit une interface utilisat
 ```
 cpdlc-flask-app/
 .
-├── agent.py
 ├── app
-│   ├── config.py
-│   ├── __init__.py
-│   ├── routes
-│   │   └── __init__.py
-│   ├── services
-│   │   └── __init__.py
-│   └── utils
-│       └── helpers.py
-├── img
-│   └── project.png
+│   ├── config.py
+│   ├── constants.py
+│   ├── ingsvc
+│   │   ├── agent.py
+│   │   ├── callbacks.py
+│   │   ├── init_agent.py
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── logs
+│   ├── routes
+│   │   ├── action_routes.py
+│   │   ├── general.py
+│   │   ├── __init__.py
+│   │   └── request_routes.py
+│   ├── services
+│   │   ├── action_service.py
+│   │   ├── __init__.py
+│   │   ├── log_manager.py
+│   │   ├── request_service.py
+│   │   └── socket_event_service.py
+│   ├── socket
+│   │   ├── __init__.py
+│   │   └── sockets.py
+│   ├── state
+│   │   ├── __init__.py
+│   │   └── state.py
+│   └── utils
+│       ├── helpers.py
+│       └── __init__.py
 ├── main.py
 ├── project-structure.txt
 ├── README.md
 ├── requirements.txt
-├── services
+├── shared
+│   └── msg_status.json
 ├── static
-│   ├── css
-│   │   ├── logs.css
-│   │   ├── pilot-buttons.css
-│   │   ├── request.css
-│   │   ├── style.css
-│   │   └── taxi-clearance.css
-│   ├── favicon.ico
-│   ├── js
-│   │   ├── api.js
-│   │   ├── main.js
-│   │   ├── state.js
-│   │   └── ui.js
-│   └── mp3
-│       └── notif.mp3
+│   ├── css
+│   │   ├── header.css
+│   │   ├── logs.css
+│   │   ├── pilot-buttons.css
+│   │   ├── request.css
+│   │   ├── style.css
+│   │   └── taxi-clearance.css
+│   ├── favicon.ico
+│   ├── js
+│   │   ├── api
+│   │   │   └── api.js
+│   │   ├── events
+│   │   │   ├── action.js
+│   │   │   ├── cancelRequest.js
+│   │   │   ├── execute.js
+│   │   │   ├── filter.js
+│   │   │   ├── load.js
+│   │   │   ├── overlay.js
+│   │   │   ├── pushbackDirection.js
+│   │   │   └── sendRequest.js
+│   │   ├── main.js
+│   │   ├── messages
+│   │   │   └── historyLogs.js
+│   │   ├── socket
+│   │   │   └── socket.js
+│   │   ├── socket-events
+│   │   │   ├── atcResponse.js
+│   │   │   ├── connectionEvents.js
+│   │   │   └── timeoutEvent.js
+│   │   ├── state
+│   │   │   ├── handlerMap.js
+│   │   │   ├── init.js
+│   │   │   ├── state.js
+│   │   │   └── status.js
+│   │   ├── ui
+│   │   │   ├── buttons-ui.js
+│   │   │   ├── timer-ui.js
+│   │   │   └── ui.js
+│   │   └── utils
+│   │       └── utils.js
+│   └── mp3
+│       └── notif.mp3
 └── templates
     └── index.html
 
-12 directories, 23 files
-
+23 directories, 59 files
 ```
 
 # Visualisation

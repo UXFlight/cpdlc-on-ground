@@ -1,56 +1,84 @@
 .
 ├── app
 │   ├── config.py
+│   ├── constants.py
 │   ├── ingsvc
 │   │   ├── agent.py
+│   │   ├── callbacks.py
+│   │   ├── init_agent.py
 │   │   └── __init__.py
 │   ├── __init__.py
-│   ├── requirements.txt
+│   ├── logs
 │   ├── routes
-│   │   └── __init__.py
-│   ├── run.py
+│   │   ├── action_routes.py
+│   │   ├── general.py
+│   │   ├── __init__.py
+│   │   └── request_routes.py
 │   ├── services
-│   │   └── __init__.py
+│   │   ├── action_service.py
+│   │   ├── __init__.py
+│   │   ├── log_manager.py
+│   │   ├── request_service.py
+│   │   └── socket_event_service.py
 │   ├── socket
+│   │   ├── __init__.py
 │   │   └── sockets.py
 │   ├── state
 │   │   ├── __init__.py
 │   │   └── state.py
 │   └── utils
-│       └── helpers.py
+│       ├── helpers.py
+│       └── __init__.py
+├── main.py
 ├── project-structure.txt
 ├── README.md
-└── static
-    ├── css
-    │   ├── logs.css
-    │   ├── pilot-buttons.css
-    │   ├── request.css
-    │   ├── style.css
-    │   └── taxi-clearance.css
-    ├── favicon.ico
-    ├── index.html
-    ├── js
-    │   ├── api
-    │   │   └── api.js
-    │   ├── events
-    │   │   ├── action.js
-    │   │   ├── cancelRequest.js
-    │   │   ├── execute.js
-    │   │   ├── load.js
-    │   │   ├── overlay.js
-    │   │   ├── pushbackDirection.js
-    │   │   └── sendRequest.js
-    │   ├── main.js
-    │   ├── messages
-    │   │   └── messages.js
-    │   ├── state
-    │   │   └── state.js
-    │   ├── ui
-    │   │   ├── buttons-ui.js
-    │   │   └── ui.js
-    │   └── utils
-    │       └── utils.js
-    └── mp3
-        └── notif.mp3
+├── requirements.txt
+├── shared
+│   └── msg_status.json
+├── static
+│   ├── css
+│   │   ├── header.css
+│   │   ├── logs.css
+│   │   ├── pilot-buttons.css
+│   │   ├── request.css
+│   │   ├── style.css
+│   │   └── taxi-clearance.css
+│   ├── favicon.ico
+│   ├── js
+│   │   ├── api
+│   │   │   └── api.js
+│   │   ├── events
+│   │   │   ├── action.js
+│   │   │   ├── cancelRequest.js
+│   │   │   ├── execute.js
+│   │   │   ├── filter.js
+│   │   │   ├── load.js
+│   │   │   ├── overlay.js
+│   │   │   ├── pushbackDirection.js
+│   │   │   └── sendRequest.js
+│   │   ├── main.js
+│   │   ├── messages
+│   │   │   └── historyLogs.js
+│   │   ├── socket
+│   │   │   └── socket.js
+│   │   ├── socket-events
+│   │   │   ├── atcResponse.js
+│   │   │   ├── connectionEvents.js
+│   │   │   └── timeoutEvent.js
+│   │   ├── state
+│   │   │   ├── handlerMap.js
+│   │   │   ├── init.js
+│   │   │   ├── state.js
+│   │   │   └── status.js
+│   │   ├── ui
+│   │   │   ├── buttons-ui.js
+│   │   │   ├── timer-ui.js
+│   │   │   └── ui.js
+│   │   └── utils
+│   │       └── utils.js
+│   └── mp3
+│       └── notif.mp3
+└── templates
+    └── index.html
 
-18 directories, 36 files
+23 directories, 59 files
