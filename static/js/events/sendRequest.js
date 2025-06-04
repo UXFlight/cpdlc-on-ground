@@ -1,38 +1,48 @@
 import { sendRequest } from '../api/api.js'
 import { showSpinner, showTick } from "../ui/ui.js";
-import { closeCurrentOverlay, getLatestEntry, invalidRequest } from "../utils/utils.js";
+import { closeCurrentOverlay, getLatestEntry, getRequestTypeFromEvent, invalidRequest } from "../utils/utils.js";
 import { state, updateStep } from '../state/state.js';
 import { MSG_STATUS } from '../state/status.js';
-import { disableCancelButtons } from "../ui/buttons-ui.js";
 import { filterHistoryLogs } from './filter.js';
 
-export const sendRequestEvent = async (action) => {
-  if (invalidRequest(action)) return;
-  const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
-  
-  updateStep(MSG_STATUS.REQUESTED); //! change status to NEW asap : still frontend only, will work on ws later
-  showSpinner(action);
+export async function sendRequestEvent(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  this.disabled = true;
+
+  const requestType = getRequestTypeFromEvent(e);
+  if (!requestType || invalidRequest(requestType)) return;
+
+  const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${requestType}"]`);
+
+  showSpinner(requestType);
 
   try {
-    if (cancelBtn) cancelBtn.disabled = false;
-    const data = await sendRequest(action);
-    console.log("Request data:", data);
-    if (state.steps[action].status === MSG_STATUS.CANCELLED) return; // if cancelled, do not proceed //! will send request to server
-    if (!data.error) {
-      const lastestEntry = getLatestEntry(action);
-      lastestEntry.message = data.message; //! temp, will check logic later
-      lastestEntry.status = data.status
-      filterHistoryLogs();
-    } else {
-      showTick(action, true);
+    const response = await sendRequest(requestType);
+
+    if (response.error || !response.status) {
+      showTick(requestType, true);
       closeCurrentOverlay();
-      disableCancelButtons(action);
-      updateStep(MSG_STATUS.ERROR, data.message);
+      if (cancelBtn) cancelBtn.disabled = true;
+      updateStep(requestType, MSG_STATUS.ERROR, response.error || "Request failed");
+      return;
     }
+
+    updateStep(requestType, MSG_STATUS.REQUESTED, "Request sent to ATC");
+    if (cancelBtn) cancelBtn.disabled = false;
+    if (state.steps[requestType].status === MSG_STATUS.CANCELLED) return;
+    showTick(requestType);
+
+    const latestEntry = getLatestEntry(requestType);
+    latestEntry.message = response.message || "Request acknowledged";
+    latestEntry.status = response.status || MSG_STATUS.REQUESTED;
+
+    filterHistoryLogs();
+
   } catch (err) {
-    showTick(action, true)
+    showTick(requestType, true);
     closeCurrentOverlay();
-    updateStep(MSG_STATUS.ERROR, err)
+    updateStep(requestType, MSG_STATUS.ERROR, err.message || "Network error");
     console.error("Network error:", err);
   }
-}
+};

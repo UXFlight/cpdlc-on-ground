@@ -1,44 +1,36 @@
 
+import { MSG_STATUS } from "../state/status.js";
+
 // loader
-export function showSpinner(action) {
-  const spinner = document.getElementById(`${action}_spinner`);
-  const tick = document.getElementById(`${action}_tick`);
+export function showSpinner(requestType) {
+  const spinner = document.getElementById(`${requestType}_spinner`);
   if (spinner) spinner.style.display = "inline-block";
-  if (tick) tick.style.display = "none";
+
+  hideTick(requestType);
 }
 
-export function showTick(action, isError = false) {
-  console.log("showTick called for action:", action, "isError:", isError);
-  const spinner = document.getElementById(`${action}_spinner`);
-  const tick = document.getElementById(`${action}_tick`);
-  const wrapper = document.querySelector(`.overlay[data-action="${action}"]`);
+export function showTick(requestType, isError = false) {
+  const tick = document.getElementById(`${requestType}_tick`);
+  const wrapper = document.querySelector(`.overlay[data-requestType="${requestType}"]`);
 
-  if (spinner) spinner.style.display = "none";
+  hideSpinner(requestType);
 
-  if (tick) {
-    tick.style.display = "inline-block";
-    if (isError) {
-      tick.textContent = "✖";
-      tick.classList.add('error');
-      tick.classList.remove('success');
-    } else {
-      tick.textContent = "✔"; 
-      tick.classList.add('success');
-      tick.classList.remove('error');
-    }
-  }
-  if (wrapper) {
-    wrapper.setAttribute('data-status', isError ? 'error' : 'fulfilled');
-  }
+  if (wrapper) wrapper.setAttribute('data-status', isError ? 'error' : 'fulfilled');
+  if (!tick) return;
+
+  tick.style.display = "inline-block";
+  tick.textContent = isError ? "✖" : "✔";
+  tick.classList.toggle('error', isError);
+  tick.classList.toggle('success', !isError);
 }
 
-export function hideSpinner(action) {
-  const spinner = document.getElementById(`${action}_spinner`);
+export function hideSpinner(requestType) {
+  const spinner = document.getElementById(`${requestType}_spinner`);
   if (spinner) spinner.style.display = "none";
 }
 
-export function hideTick(tickId) {
-  const tick = document.getElementById(tickId);
+export function hideTick(requestType) {
+  const tick = document.getElementById(`${requestType}_tick`);
   if (tick) {
     tick.style.display = 'none';
     tick.classList.remove('error');
@@ -83,3 +75,59 @@ export function updateTaxiClearanceMsg(message = null) {
   clearanceBox.innerHTML = `<p>${message}</p>`;
   message ? clearanceMessageBox.classList.add("active") : clearanceMessageBox.classList.remove("active");
 }
+
+// display snackbar messages
+export function updateSnackbar(requestType, status, customMessage = null, isError = true) {
+  let message;
+
+  switch (status) {
+    case MSG_STATUS.CANCELLED:
+      message = `${formatLabel(requestType)} request cancelled.`;
+      break;
+    case MSG_STATUS.ERROR:
+      message = customMessage || `An error occurred on ${formatLabel(requestType)}.`;
+      break;
+    case "success":
+      message = customMessage || "Operation successful.";
+      isError = false;
+      break;
+    default:
+      message = customMessage || formatLabel(status);
+  }
+
+  showSnackbar(message, isError);
+}
+
+export function showSnackbar(message, isError = true) {
+  const container = document.getElementById("snackbar-container");
+  if (!container) return;
+
+  container.innerHTML = '';
+  const snackbar = document.createElement("div");
+  snackbar.className = `snackbar ${isError ? "snackbar-error" : "snackbar-success"}`;
+  snackbar.textContent = message;
+
+  container.appendChild(snackbar);
+
+  setTimeout(() => {
+    snackbar.classList.add("fade-out");
+  }, 1500);
+
+  setTimeout(() => {
+    snackbar.remove();
+  }, 2000);
+}
+
+function formatLabel(text) {
+  return text
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, char => char.toUpperCase());
+}
+
+export function formatRequestType(requestType) {
+  if (!requestType) return null;
+  return requestType
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+}
+

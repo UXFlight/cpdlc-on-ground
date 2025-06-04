@@ -1,8 +1,9 @@
 import { updateMessageStatus } from "../messages/historyLogs.js";
+import { updateSnackbar } from "../ui/ui.js";
+import { MSG_STATUS } from "./status.js";
 
 // Global state
 export const state = {
-  currentRequest: null,
   isFiltered: true, // used to filter history logs
   history: [], // history logs
   connection: {
@@ -40,26 +41,30 @@ function createStep(label, extra = {}) {
     status: null,
     message: null,
     timestamp: null,
+    timeLeft : null,
     ...extra
   };
 }
 
-export function updateStep(newStatus, newMessage = null) {
-  const key = state.currentRequest;
+export function updateStep(requestType, newStatus, newMessage = null, timestamp = null, timeLeft = null) {
+  const key = requestType;
   const step = state.steps[key];
   if (!step) return;
 
   const entry = {
     status: newStatus,
     message: newMessage,
-    timestamp: new Date().toISOString().replace('T', ' ').split('.')[0]
+    timestamp: timestamp || new Date().toISOString().replace('T', ' ').split('.')[0]
   };
 
   step.status = newStatus;
   step.message = newMessage;
   step.timestamp = entry.timestamp;
 
-  // grouping by request type
+  if (timeLeft !== null) {
+    step.timeLeft = timeLeft;
+  }
+
   let group = state.history.find(h => h.stepKey === key);
   if (!group) {
     group = { stepKey: key, label: step.label, entries: [] };

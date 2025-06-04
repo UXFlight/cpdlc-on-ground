@@ -1,23 +1,23 @@
 import { MSG_STATUS } from '../state/status.js';
 import { state } from '../state/state.js';
-import { flashElement } from '../ui/ui.js';
+import { flashElement, formatRequestType } from '../ui/ui.js';
 import { createButton } from '../ui/buttons-ui.js';
-import { playNotificationSound } from '../ui/ui.js';
+import { createTimer } from '../ui/timer-ui.js';
 
 //DOM UTILITIES //
 const historyLogBox = document.getElementById('history-log-box');
 
-export function createHistoryLog(action, timestamp, message, status = MSG_STATUS.REQUESTED) {
-    if (!action) return;
+export function createHistoryLog(requestType, timestamp, message, status = MSG_STATUS.REQUESTED) {
+    if (!requestType) return;
 
     const normalizedStatus = status.toLowerCase();
 
     const div = document.createElement('div');
     div.classList.add('new-message');
-    div.dataset.action = action.toLowerCase();
+    div.dataset.requesttype = requestType.toLowerCase();
     div.dataset.status = normalizedStatus;
 
-    const header = createHeader({ timestamp, title: action, status: normalizedStatus });
+    const header = createHeader({ timestamp, title: requestType, status: normalizedStatus });
     div.appendChild(header);
 
     if (message) div.appendChild(createResponseParagraph(message))
@@ -28,7 +28,6 @@ export function createHistoryLog(action, timestamp, message, status = MSG_STATUS
 
 export function appendToLog(stepKey, message, timestamp, status = MSG_STATUS.NEW) {
     const group = state.history.find(g => g.stepKey === stepKey);
-
     const newEntry = {
         status,
         message,
@@ -51,7 +50,7 @@ export function appendToLog(stepKey, message, timestamp, status = MSG_STATUS.NEW
 }
 
 export function refreshGroupedLog(group, latest) {
-    const old = document.querySelector(`.new-message[data-action="${group.stepKey}"]`);
+    const old = document.querySelector(`.new-message[data-requesttype="${group.stepKey}"]`);
     if (old) old.remove();
 
     createGroupedLog({
@@ -65,37 +64,28 @@ export function refreshGroupedLog(group, latest) {
 export function createGroupedLog({ stepKey, label, latest, history }) {
     const div = document.createElement('div');
     div.classList.add('new-message');
-    div.dataset.action = stepKey;
+    div.dataset.requesttype = stepKey;
     div.dataset.status = latest.status;
     div.style.cursor = 'pointer';
 
-    const toggle = document.createElement('span');
-    toggle.textContent = '▾';
-    toggle.classList.add('toggle-arrow');
-    toggle.style.marginLeft = '10px';
-
-    const header = createHeader({ timestamp: latest.timestamp, title: label, status: latest.status });
-    header.appendChild(toggle);
+    
+    const historyContainer = createHistoryDetails(history.slice(0, -1));
+    const header = createHeader({ timestamp: latest.timestamp, title: label, status: latest.status }, historyContainer);
     div.appendChild(header);
 
     if (latest.message) {
         const response = createResponseParagraph(latest.message);
         div.appendChild(response);
     }
-
-    
-    const historyContainer = createHistoryDetails(history.slice(0, -1));
     div.appendChild(historyContainer);
     
     if (latest.status === MSG_STATUS.RESPONDED) {
         const btnContainer = createButton(stepKey);
         div.appendChild(btnContainer);
-        playNotificationSound();
+        flashElement(div);
     }
     
-    div.addEventListener("click", (e) => toggleMessage(e, historyContainer, toggle));
     historyLogBox.prepend(div);
-    flashElement(div);
 }
 
 
@@ -107,7 +97,7 @@ const toggleMessage = (e, historyContainer, toggle)=> {
 }
 
 // SUBCOMPONENTS //
-function createHeader({ timestamp, title, status }) {
+function createHeader({ timestamp, title, status }, historyContainer) {
     const p = document.createElement('p');
 
     const ts = document.createElement('span');
@@ -123,6 +113,29 @@ function createHeader({ timestamp, title, status }) {
     statusEl.textContent = status.toUpperCase();
 
     p.append(ts, titleEl, document.createTextNode(' '), statusEl);
+
+    const requestType = formatRequestType(title);
+    const step = state.steps[requestType];
+
+    const statusIsDone = [MSG_STATUS.EXECUTED, MSG_STATUS.TIMEOUT, MSG_STATUS.CANCELLED, MSG_STATUS.CLOSED, MSG_STATUS.ERROR]
+        .includes(status.toLowerCase());
+
+    const shouldShowTimer = step?.timeLeft && !statusIsDone;
+
+    if (state.isFiltered && shouldShowTimer) {
+        const remaining = step.timeLeft ?? 90;
+        const timerEl = createTimer(requestType, remaining);
+        p.appendChild(timerEl);
+    }
+
+    const toggle = document.createElement('span');
+    toggle.textContent = '▾';
+    toggle.classList.add('toggle-arrow');
+    toggle.style.marginLeft = '10px';
+    p.appendChild(toggle);
+
+    p.addEventListener("click", (e) => toggleMessage(e, historyContainer, toggle));
+
     return p;
 }
 
@@ -156,8 +169,8 @@ export function createResponse(message, div) {
 }
 
 // STATUS UPDATER //
-export function updateMessageStatus(action, newStatus) {
-    const message = document.querySelector(`.new-message[data-action="${action}"]`);
+export function updateMessageStatus(requestType, newStatus) {
+    const message = document.querySelector(`.new-message[data-requesttype="${requestType}"]`);
     if (!message) return;
 
     const statusEl = message.querySelector('.status');

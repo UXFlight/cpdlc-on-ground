@@ -3,14 +3,15 @@ import { sendRequestEvent } from './events/sendRequest.js';
 import { cancelRequestEvent } from './events/cancelRequest.js';
 import { toggleOverlay, closeOverlay } from './events/overlay.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
-import { enableAllRequestButtons } from './ui/buttons-ui.js';
 import { listenToSocketEvents } from './socket/socket.js';
 import { filterHistoryLogs } from './events/filter.js';
 import { state } from './state/state.js';
+import { initState } from './state/init.js';
 
 document.addEventListener("DOMContentLoaded", () => {
+  // initState(); // Initialize the state object
   listenToSocketEvents() // ok
-  listenToButtonEvents();
+  listenToButtonEvents(); // ok
   listenToGlobalClickEvents(); // ok
 });
 
@@ -19,10 +20,7 @@ function listenToGlobalClickEvents() {
 
   overlays.forEach(overlay => {
     const button = overlay.querySelector(".overlay-button");
-    button.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleOverlay(overlay, e)
-    });
+    button.addEventListener("click", (e) => { toggleOverlay(overlay, e); });
   });
 
   document.addEventListener("click", (event) => closeOverlay(event));
@@ -37,23 +35,17 @@ function listenToButtonEvents() {
 
   const filterButton = document.getElementById("filter-btn");
 
-  const wilcoButtonsGrp = document.querySelectorAll('.wilco-grp'); //! revoir
-
-  // request btns event
+  // request buttons
   requestButtons.forEach(btn => {
-    btn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      await sendRequestEvent(btn.dataset.action);
+    btn.addEventListener("click", function (e) {
+      sendRequestEvent.call(this, e);
     });
   });
 
-  // ancel buttons
+  // cancel buttons
   cancelButtons.forEach(btn => {
     btn.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      cancelRequestEvent.call(this, btn.dataset.action);
+      cancelRequestEvent.call(this, e);
     });
   });
 
@@ -61,13 +53,7 @@ function listenToButtonEvents() {
   leftButton.addEventListener("click", () => selectPushbackDirection("left"));
   rightButton.addEventListener("click", () => selectPushbackDirection("right"));
 
-  wilcoButtonsGrp.forEach((btn) => 
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      enableAllRequestButtons();
-    })
-  );
-
+  // filter btn event
   filterButton.addEventListener("click", () => {
     state.isFiltered = !state.isFiltered;
     filterHistoryLogs()

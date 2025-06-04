@@ -1,8 +1,8 @@
 import { handlerMap } from "../state/handlerMap.js";
 
 // buttons functions
-export function disableCancelButtons(action) {
-    const cancelBtn = document.querySelector(`.cancel-button[data-action="${action}"]`);
+export function disableCancelButtons(requestType) {
+    const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${requestType}"]`);
     if (cancelBtn) cancelBtn.disabled = true;
 }
 
@@ -22,73 +22,57 @@ export const enableAllRequestButtons = () => {
     });
 }
 
-export function createButton(action) {
+export function createButton(requestType) {
     const btnContainer = document.createElement('div');
     btnContainer.classList.add('action-buttons-grp');
 
     let buttons = [];
 
-    const isTaxi = ["expected_taxi_clearance", "taxi_clearance"].includes(action);
+    const isTaxi = ["expected_taxi_clearance", "taxi_clearance"].includes(requestType);
 
     if (isTaxi) buttons.push(
-        { label: 'LOAD', id: 'load-button', disabled: !isTaxi },
-        { label: 'EXECUTE', id: 'execute-button', disabled: true },
-        { label: 'CANCEL', id: 'cancel-execute-button', disabled: true }
+        { action: 'LOAD', id: 'load', disabled: !isTaxi },
+        { action: 'EXECUTE', id: 'execute', disabled: true },
+        { action: 'CANCEL', id: 'cancel-execute', disabled: true }
     )
 
     buttons.push(
-        { label: 'WILCO', id: 'wilco-button', disabled: isTaxi },
-        { label: 'STANDBY', id: 'standby', disabled: isTaxi },
-        { label: 'UNABLE', id: 'unable', disabled: isTaxi },
+        { action: 'WILCO', id: 'wilco', disabled: isTaxi },
+        { action: 'STANDBY', id: 'standby', disabled: isTaxi },
+        { action: 'UNABLE', id: 'unable', disabled: isTaxi },
     );
 
 
-    buttons.forEach(({ label, id, disabled }) => {
-        btnContainer.appendChild(createActionButton(label, id, action, disabled));
+    buttons.forEach(({ action, id, disabled }) => {
+        btnContainer.appendChild(createActionButton(requestType, action, id, disabled));
     });
 
     return btnContainer;
 }
 
-function createActionButton(label, id = null, action, disabled = false) {
+function createActionButton(requestType, action, id = null, disabled = false) {
     const btn = document.createElement('button');
     btn.classList.add('action-button');
-    btn.textContent = label.toUpperCase();
-    if (id) btn.id = id + `-${action}`;
-    btn.dataset.actionType = label.toLowerCase();
+    btn.textContent = action.toUpperCase();
+    if (id) btn.id = id + `-${requestType}`;
+    btn.dataset.actionType = action.toLowerCase();
     btn.disabled = disabled;
 
-    const status = label.toLowerCase();
+    const status = action.toLowerCase();
     const handlerFactory = handlerMap[status];
-    if (handlerFactory) {
-        const clickHandler = handlerFactory(btn, action);
-        btn.addEventListener('click', clickHandler);
-    } else {
-        console.warn(`No handler defined for status: ${status}`);
-    }
-
+    if (handlerFactory) btn.addEventListener('click', handlerFactory(btn, requestType));
     return btn;
 }
 
-
 // enables loadButton
-export function enableLoadButton(action) {
-    const loadButton = document.getElementById(`load-button-${action}`);
+export function enableLoadButton(requestType) {
+    const loadButton = document.getElementById(`load-button-${requestType}`);
     if (loadButton) loadButton.disabled = false;
-}
-
-// enables executeButtons
-export function enableExecutionButtons(action) {
-    const executeButton = document.getElementById(`execute-button-${action}`);
-    const cancelExecuteButton = document.getElementById(`cancel-execute-button-${action}`);
-
-    if (executeButton) executeButton.disabled = false;
-    if (cancelExecuteButton) cancelExecuteButton.disabled = false;
 }
 
 // enables wilcoButtons
 export function enableWilcoButtons(requestType) {
-    const wilcoButton = document.getElementById(`wilco-button-${requestType}`);
+    const wilcoButton = document.getElementById(`wilco-${requestType}`);
     const standbyButton = document.getElementById(`standby-${requestType}`);
     const unableButton = document.getElementById(`unable-${requestType}`);
     if (wilcoButton) wilcoButton.disabled = false;
@@ -97,10 +81,10 @@ export function enableWilcoButtons(requestType) {
 }
 
 // enables executeButtons
-export function enableExecuteButtons(requestType) {
-    const executeButton = document.getElementById(`execute-button-${requestType}`);
-    const cancelExecuteButton = document.getElementById(`cancel-execute-button-${requestType}`);
+export function setExecuteButtonState(isDisabled = false) {
+    const executeButton = document.getElementById('execute-taxi_clearance');
+    const cancelExecuteButton = document.getElementById('cancel-execute-taxi_clearance');
 
-    if (executeButton) executeButton.disabled = false;
-    if (cancelExecuteButton) cancelExecuteButton.disabled = false;
+    if (executeButton) executeButton.disabled = isDisabled;
+    if (cancelExecuteButton) cancelExecuteButton.disabled = isDisabled;
 }

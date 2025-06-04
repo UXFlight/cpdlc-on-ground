@@ -10,11 +10,10 @@ export const toggleOverlay = (overlay, e) => {
     open.classList.remove("open");
   });
 
-  const action = overlay.dataset.action;
-  if (state.steps[action].status === MSG_STATUS.CLOSED) return;
+  const action = overlay.dataset.requesttype;
+  if (!action || state.steps[action].status === MSG_STATUS.CLOSED) return;
 
   overlay.classList.add("open");
-  if (action && !checkNewRequest()) state.currentRequest = action;
 };
 
 

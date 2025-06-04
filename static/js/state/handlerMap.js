@@ -1,7 +1,6 @@
 import { loadEvent } from "../events/load.js";
 import { executeEvent, cancelExecuteEvent } from "../events/execute.js";
 import { actionEvent } from "../events/action.js";
-import { MSG_STATUS } from "./status.js";
 
 export const handlerMap = {
   load: (btn) => (e) => {

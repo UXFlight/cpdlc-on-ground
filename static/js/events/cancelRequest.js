@@ -4,40 +4,36 @@ import { updateDirection, updateStep } from '../state/state.js';
 import { MSG_STATUS } from "../state/status.js";
 import { filterHistoryLogs } from "./filter.js";
 import { postCancelRequest } from "../api/api.js";
+import { getRequestTypeFromEvent } from "../utils/utils.js";
 
-export async function cancelRequestEvent(action) {
-  if (!action || this.disabled) return;
+export async function cancelRequestEvent(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const requestType = getRequestTypeFromEvent(e);
+  if (!requestType || this.disabled) return;
+  const requestBtn = document.getElementById(`${requestType.replace(/_/g, "-")}-btn`);
 
   try {
-
-    const data = await postCancelRequest(action);
-
-    if (!data.ok) {
-      console.warn("Cancel failed:", data.error);
-      updateStep(MSG_STATUS.ERROR, `Cancel failed: ${data.error}`);
-      return;
-    }
-
-    updateStep(MSG_STATUS.CANCELLED, data.message || MSG_STATUS.CANCELLED);
+    const data = await postCancelRequest(requestType);
+    updateStep(requestType, MSG_STATUS.CANCELLED, data.message || MSG_STATUS.CANCELLED);
     this.disabled = true;
 
-    const requestBtn = document.getElementById(`${action.replace(/_/g, "-")}-btn`);
     if (requestBtn) {
       requestBtn.disabled = false;
       requestBtn.classList.remove("active");
     }
 
-    if (action === "pushback") {
+    if (requestType === "pushback") {
       document.getElementById("pushback-left")?.classList.remove("active");
       document.getElementById("pushback-right")?.classList.remove("active");
       updateDirection(null);
     }
 
     filterHistoryLogs();
-    hideSpinner(action);
+    hideSpinner(requestType);
     enableAllRequestButtons();
   } catch (err) {
     console.error("Cancel error:", err);
-    updateStep(MSG_STATUS.ERROR, "Network error during cancellation");
+    updateStep(requestType, MSG_STATUS.ERROR, "Network error during cancellation");
   }
 }

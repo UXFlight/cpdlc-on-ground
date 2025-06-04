@@ -1,30 +1,32 @@
-export async function sendRequest(action) {
-  const response = await fetch(`/request/${action}`);
-  return response.json();
+async function handleJsonResponse(response) { // returs data + res.ok + status
+  const data = await response.json();
+  return { ok: response.ok, status: response.status, ...data };
+}
+
+export async function sendRequest(requestType) {
+  const response = await fetch(`/request/${requestType}`);
+  return handleJsonResponse(response);
 }
 
 export async function postAction(action, requestType) {
-  const body = JSON.stringify({ action, requestType })
-
+  const body = JSON.stringify({ action, requestType });
   const response = await fetch(`/action`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body,
   });
-
-  return response.json();
+  return handleJsonResponse(response);
 }
 
-export async function postCancelRequest(action) {
-  const response = await fetch(`/cancel-request/${action}`, {
+export async function postCancelRequest(requestType) {
+  const response = await fetch(`/cancel-request/${requestType}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   });
-
-  return await response.json();
+  return handleJsonResponse(response);
 }
 
 export async function getState() {
   const response = await fetch('/state');
-  return response.json();
+  return handleJsonResponse(response);
 }

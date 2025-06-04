@@ -3,37 +3,44 @@ import { MSG_STATUS } from "../state/status.js";
 import { postAction } from "../api/api.js";
 import { updateTaxiClearanceMsg } from '../ui/ui.js';
 import { getActionInfoFromEvent } from '../utils/utils.js';
-import { enableExecuteButtons, enableWilcoButtons } from '../ui/buttons-ui.js';
+import { setExecuteButtonState, enableWilcoButtons } from '../ui/buttons-ui.js';
 
 export async function loadEvent(e) {
-  const info = getActionInfoFromEvent(e);
-  if (!info) return;
-
   e.stopPropagation();
+  const { action, requestType } = getActionInfoFromEvent(e);
+  if (!action || !requestType) return;
 
   try {
-    const data = await postAction(info.actionType, info.requestType);
+    const response = await postAction(action, requestType);
+    const { ok, status, message, error } = response;
 
-    if (data.error) {
-      console.error("Load error:", data.error);
+    if (!ok) {
+      console.error("Load error:", error || `HTTP ${status}`);
+      updateStep(requestType, MSG_STATUS.ERROR, error || `Load failed (status ${status})`);
       return;
     }
 
-    if (data.message === null) return;
+    if (message === null) {
+      updateStep(requestType, MSG_STATUS.LOADED, "Loaded, awaiting ATC clearance...");
+      return;
+    }
 
-    updateTaxiClearanceMsg(data.message);
-    updateStep(MSG_STATUS.LOADED, data.message);
-    
-    this.disabled = true;
-    if (info.requestType === "taxi_clearance") {
-      enableExecuteButtons(info.requestType);
+    updateTaxiClearanceMsg(message);
+    updateStep(requestType, MSG_STATUS.LOADED, message);
+
+    if (e.target && e.target.disabled !== undefined) {
+      e.target.disabled = true;
+    }
+
+    if (requestType === "taxi_clearance") {
+      setExecuteButtonState();
     } else {
-      enableWilcoButtons(info.requestType);
+      enableWilcoButtons(requestType);
     }
 
   } catch (err) {
     console.error("Network error:", err);
-    updateStep(MSG_STATUS.ERROR, err.message || "Network error during load");
+    updateStep(requestType, MSG_STATUS.ERROR, err.message || "Network error during load");
     alert("Error communicating with server.");
   }
 }

@@ -2,7 +2,8 @@ import { state, updateDirection } from '../state/state.js';
 
 // pushback direction
 export const selectPushbackDirection = (direction) => {
-  if (state.steps[state.currentRequest].direction === direction) return;
+  const requestType = "pushback";
+  if (state.steps[requestType].direction === direction) return;
 
   const pushbackBtn = document.getElementById("pushback-btn");
   const cancelPushbackBtn = document.getElementById("cancel-pushback-btn");

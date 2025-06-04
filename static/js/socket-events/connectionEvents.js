@@ -9,7 +9,6 @@ export function renderConnectionState(connection) {
   }
   
 function updateMainIndicator(connection) {
-
     indicator.className = "status-indicator";
     const { backend, atc } = connection;
 
