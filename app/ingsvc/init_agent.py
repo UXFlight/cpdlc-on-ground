@@ -8,7 +8,7 @@ from app.ingsvc.callbacks import (
     on_agent_event_callback,
     signal_handler
 )
-from app.constants import REQUEST_OUTPUTS, ACTION_OUTPUTS
+from app.utils.constants import REQUEST_OUTPUTS, ACTION_OUTPUTS
 
 def initialize_agent(agent_name: str, device: str, port: int) -> Echo:
     # ingescape configuration
