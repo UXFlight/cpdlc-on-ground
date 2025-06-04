@@ -81,3 +81,5 @@ ACTION_DEFINITIONS = {
         "allowedTypes": REQUEST_OUTPUTS
     }
 }
+
+TIMER_DURATION = 90  # en secondes

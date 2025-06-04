@@ -10,11 +10,12 @@ def create_step(label, extra=None):
         "status": None,
         "message": None,
         "timestamp": None,
-        "history": []
+        "timeLeft": None
     }
     if extra:
         step.update(extra)
     return step
+
 
 class PilotState:
     _instance = None
@@ -26,7 +27,7 @@ class PilotState:
         return cls._instance
 
     def _init_state(self):
-        self.current_request = None
+        self.history = []
         self.steps = {
             "able_intersection_departure": create_step("Able Intersection Departure"),
             "expected_taxi_clearance": create_step("Expected Taxi Clearance"),
@@ -48,48 +49,80 @@ class PilotState:
             "no_de_icing_required": create_step("No De-Icing Required")
         }
 
-    def update_step(self, step_name, status, message=None):
+    def update_step(self, step_name, status, message=None, time_left=None):
         step = self.steps.get(step_name)
         if not step:
             return
-        if step["status"] or step["message"] or step["timestamp"]:
-            step["history"].append({
-                "status": step["status"],
-                "message": step["message"],
-                "timestamp": step["timestamp"]
-            })
+
+        timestamp = current_timestamp()
+        self.history.append({
+            "stepKey": step_name,
+            "label": step["label"],
+            "status": step.get("status"),
+            "message": step.get("message"),
+            "timestamp": step.get("timestamp"),
+            "timeLeft": step.get("timeLeft")
+        })
+
         step["status"] = status
         step["message"] = message
-        step["timestamp"] = current_timestamp()
-        self.current_request = step_name
+        step["timestamp"] = timestamp
 
-    def update_pushback_direction(self, direction):
-        if "pushback" in self.steps:
-            self.steps["pushback"]["direction"] = direction
+        if time_left is not None:
+            step["timeLeft"] = time_left
+
+        if status in ("executed", "loaded", "timeout", "cancelled"):
+            step["timeLeft"] = None
+
+
+    def update_pushback_direction(self, direction): #! have to validate if good direction
+        self.steps["pushback"]["direction"] = direction
 
     def reset(self):
-        for step in self.steps.values():
-            step["history"].append({
-                "status": step["status"],
-                "message": step["message"],
-                "timestamp": step["timestamp"]
+        for step_name, step in self.steps.items():
+            self.history.append({
+                "stepKey": step_name,
+                "label": step["label"],
+                "status": step.get("status"),
+                "message": step.get("message"),
+                "timestamp": step.get("timestamp"),
             })
             step["status"] = None
             step["message"] = None
             step["timestamp"] = None
+            step["timeLeft"] = None
             if "direction" in step:
                 step["direction"] = None
-        self.current_request = None
 
     def get_state(self):
         return {
-            "current_request": self.current_request,
-            "steps": self.steps
+            "ok": True,
+            "steps": self.steps,
+            "history": self.history 
         }
 
+    def cancel_request(self, step_name):
+        step = self.steps.get(step_name)
+        if not step:
+            return {"error": f"Unknown request: {step_name}"}
+        if step["status"] != "requested":
+            return {"error": f"Cannot cancel: current status is '{step['status']}'"}
+
+        step["status"] = "cancelled"
+        step["message"] = "Request cancelled by pilot"
+        step["timestamp"] = current_timestamp()
+        step["cancelled"] = True
+
+        return {
+            "status": "cancelled",
+            "requestType": step_name,
+            "message": step["message"],
+            "timestamp": step["timestamp"]
+        }
+    
     def simulate_backend_action(self, step_name, status, message=None):
         """
-        Fonction interne si tu veux simuler une action simple (ex: pour test, reset, etc.)
+        Fonction interne si pour simuler une action simple
         Ne pas utiliser dans la logique métier du service.
         """
         if step_name not in self.steps:
@@ -103,22 +136,3 @@ class PilotState:
             "state": self.get_state()
         }
     
-    def cancel_request(self, step_name):
-        step = self.steps.get(step_name)
-        if not step:
-            return {"error": f"Unknown request: {step_name}"}
-        if step["status"] != "requested":
-            return {"error": f"Cannot cancel: current status is '{step['status']}'"}
-
-        step["status"] = "cancelled"
-        step["message"] = "Request cancelled by pilot"
-        step["timestamp"] = current_timestamp()
-        step["cancelled"] = True
-        self.current_request = None
-
-        return {
-            "status": "cancelled",
-            "requestType": step_name,
-            "message": step["message"],
-            "timestamp": step["timestamp"]
-        }

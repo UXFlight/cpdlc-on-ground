@@ -1,7 +1,8 @@
 from app.state import pilot_state
 from app.ingsvc import Echo
 from app.constants import ACTION_DEFINITIONS
-from app.services import log_json
+from app.services import log_json, cancel_timer
+from app.constants import MSG_STATUS
 
 agent = Echo()
 
@@ -19,6 +20,10 @@ def process_action(action_name: str, request_type: str | None):
 
     agent.set_action(action_name, True)
     pilot_state.update_step(request_type, config["status"], message)
+
+    # if action_name in [MSG_STATUS.WILCO, MSG_STATUS.STANDBY, MSG_STATUS.UNABLE]:
+    #     cancel_timer(request_type)
+    #     pilot_state.steps[request_type]["timeLeft"] = None 
 
     log_json("ACTION", {
         "action": action_name,
