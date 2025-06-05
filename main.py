@@ -3,9 +3,11 @@ from flask_socketio import SocketIO # type: ignore
 from app.managers.pilot_manager import PilotManager
 from app.classes.socket.socket import SocketService
 from app.managers.socket_manager import SocketManager
+from app.routes.general import general_bp
 
 def create_app():
     app = Flask(__name__)
+    app.register_blueprint(general_bp)
     socketio = SocketIO(app, cors_allowed_origins="*")
     return app, socketio
 

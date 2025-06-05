@@ -36,7 +36,6 @@ class PilotState:
         step.timestamp = get_current_timestamp()
         step.time_left = time_left if status not in ("executed", "loaded", "timeout", "cancelled") else None
 
-        return {"ok": True}
 
     def cancel_request(self, step_name):
         step = self.steps.get(step_name)

@@ -3,14 +3,14 @@ import { sendRequestEvent } from './events/sendRequest.js';
 import { cancelRequestEvent } from './events/cancelRequest.js';
 import { toggleOverlay, closeOverlay } from './events/overlay.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
-import { listenToSocketEvents } from './socket/socket.js';
+import { setupSocketListeners } from './socket/socket-listens.js';
 import { filterHistoryLogs } from './events/filter.js';
 import { state } from './state/state.js';
 import { initState } from './state/init.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   // initState(); // Initialize the state object
-  listenToSocketEvents() // ok
+  setupSocketListeners() // ok
   listenToButtonEvents(); // ok
   listenToGlobalClickEvents(); // ok
 });

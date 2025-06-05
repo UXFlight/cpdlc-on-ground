@@ -1,5 +1,7 @@
 from flask import request
 from app.classes.log import log_manager
+import random
+import threading
 
 class SocketManager:
     def __init__(self, socket_service, pilot_manager):
@@ -20,7 +22,7 @@ class SocketManager:
         self.socket.listen("sendAction", self.on_action_event)
 
     ### === Connect Event === ###
-    def on_connect(self):
+    def on_connect(self, auth=None):
         sid = request.sid
         self.logger.log_event("SOCKET", f"✅ Pilot connected: {sid}")
         self.pilots.get_or_create(sid)
@@ -38,6 +40,12 @@ class SocketManager:
         result = pilot.process_request(data)
         self._emit_all(sid, result)
 
+        request_type = data.get("requestType")
+        if request_type:
+            delay = random.uniform(4.0, 8.0)
+            threading.Timer(delay, lambda: self._simulate_and_emit_response(pilot, sid, request_type)).start()
+
+
     ### === CancelRequest Event === ###
     def on_cancel_request(self, data):
         sid = request.sid
@@ -49,5 +57,43 @@ class SocketManager:
     def on_action_event(self, data):
         sid = request.sid
         pilot = self.pilots.get_or_create(sid)
-        result = pilot.process_action(data)
-        self._emit_all(sid, result)
+
+        action = data.get("action")
+        request_type = data.get("requestType")
+
+        if not action:
+            self.logger.log_error("ACTION", "Missing 'action' field from client")
+            self.socket.send("error", {"message": "Missing 'action'"}, room=sid)
+            return
+
+        try:
+            result = pilot.process_action({"action": action, "requestType": request_type})
+            self._emit_all(sid, result)
+
+        except Exception as e:
+            self.logger.log_error("ACTION", e)
+            self.socket.send("error", {"message": str(e)}, room=sid)
+
+
+    ### Simulates ATC response and emits event
+    def _simulate_and_emit_response(self, pilot, sid, request_type):
+        pilot.state.update_step(request_type, "responded", "ATC has responded.")
+        pilot.agent.set_request(request_type, False)
+
+        self.logger.log_request(
+            pilot_id=pilot.sid,
+            request_type=request_type,
+            status="responded",
+            message="Simulated ATC response"
+        )
+
+        step = pilot.state.steps.get(request_type)
+        if not step:
+            return
+
+        self.socket.send("atcResponse", {
+            "requestType": request_type,
+            "status": "responded",
+            "message": "ATC has responded.",
+            "timestamp": step.timestamp
+        }, room=sid)
