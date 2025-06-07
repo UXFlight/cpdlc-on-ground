@@ -4,7 +4,8 @@ from app.utils.time_utils import get_current_timestamp
 
 class LogManager:
     def __init__(self, base_logs_dir: Path = None):
-        self.base_logs_dir = base_logs_dir or Path(__file__).resolve().parents[2] / "logs"
+        self.base_logs_dir = base_logs_dir or Path(__file__).resolve().parents[1] / "../../logs"
+        self.base_logs_dir = self.base_logs_dir.resolve()
         self.base_logs_dir.mkdir(parents=True, exist_ok=True)
 
     # PRIVATE
