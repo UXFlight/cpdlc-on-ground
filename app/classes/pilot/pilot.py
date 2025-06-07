@@ -1,7 +1,7 @@
 
 from app.classes.state.state import PilotState
 from app.classes.ingsvc.agent import Echo
-from app.classes.log import log_manager
+from app.managers import log_manager
 from app.utils.constants import ACTION_DEFINITIONS
 from app.utils.time_utils import get_current_timestamp
 
@@ -97,7 +97,11 @@ class Pilot:
         try:
             self.agent.set_action(action, True)
             self.state.update_step(final_type, config["status"], message)
-            self.logger.log_action(self.sid, action, config["status"], message)
+            self.logger.log_action(
+                pilot_id=self.sid, 
+                action_type=action, 
+                status=config["status"], 
+                message=message)
 
             return {
                 "responses": [
@@ -154,7 +158,11 @@ class Pilot:
 
 
     def _error(self, context, message, request_type=None, status="error"):
-        self.logger.log_error(f"{context}:{self.sid}", message)
+        self.logger.log_error(
+            pilot_id=self.sid,
+            context=f"{context}:{self.sid}", 
+            error=message
+            )
         return {
             "responses": [
                 {

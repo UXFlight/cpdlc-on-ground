@@ -33,19 +33,19 @@ class Echo:
         agent_object = my_data
         assert isinstance(agent_object, Echo)
         # add code here if needed
-        # log_event("AGENT_EVENT", f"{event} from {name} ({uuid}) → {event_data}")
+        # log_event(self.pilot_id, "AGENT_EVENT", f"{event} from {name} ({uuid}) → {event_data}")
 
     def on_freeze_callback(my_data):
         agent_object = my_data
         assert isinstance(agent_object, Echo)
         # add code here if needed
-        # log_event("FREEZE", "Ingescape freeze callback triggered")
+        # log_event(self.pilot_id, "FREEZE", "Ingescape freeze callback triggered")
 
     def reset_callback(my_data):
         igs.info(f"Output reset")
         agent_object = my_data
         assert isinstance(agent_object, Echo)
-        # log_event("RESET", "System reset via Ingescape callback")    
+        # log_event(self.pilot_id, "RESET", "System reset via Ingescape callback")    
         agent_object.reset() # reset the agent state
         # pilot_state.reset() # reset the pilot state
 

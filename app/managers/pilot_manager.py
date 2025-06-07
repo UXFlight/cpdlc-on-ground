@@ -1,6 +1,5 @@
 from app.classes.pilot.pilot import Pilot
 
-
 class PilotManager:
     def __init__(self):
         self._pilots = {}

@@ -1,5 +1,5 @@
 from flask import request
-from app.classes.log import log_manager
+from app.managers import log_manager
 import random
 import threading
 
@@ -24,13 +24,21 @@ class SocketManager:
     ### === Connect Event === ###
     def on_connect(self, auth=None):
         sid = request.sid
-        self.logger.log_event("SOCKET", f"✅ Pilot connected: {sid}")
+        self.logger.log_event(
+            pilot_id=sid, 
+            event_type="SOCKET", 
+            message=f"✅ Pilot connected: {sid}"
+            )
         self.pilots.get_or_create(sid)
 
     ### === Disconnect Event === ###
     def on_disconnect(self):
         sid = request.sid
-        self.logger.log_event("SOCKET", f"⚠️ Pilot disconnected: {sid}")
+        self.logger.log_event(
+            pilot_id=sid, 
+            event_type="SOCKET", 
+            message=f"⚠️ Pilot disconnected: {sid}"
+            )
         self.pilots.remove(sid)
 
     ### === SendRequest Event === ###
@@ -62,7 +70,11 @@ class SocketManager:
         request_type = data.get("requestType")
 
         if not action:
-            self.logger.log_error("ACTION", "Missing 'action' field from client")
+            self.logger.log_error(
+                pilot_id=sid,
+                context="ACTION", 
+                error="Missing 'action' field from client"
+                )
             self.socket.send("error", {"message": "Missing 'action'"}, room=sid)
             return
 
@@ -71,7 +83,11 @@ class SocketManager:
             self._emit_all(sid, result)
 
         except Exception as e:
-            self.logger.log_error("ACTION", e)
+            self.logger.log_error(
+                pilot_id=sid, 
+                context="ACTION", 
+                error=e
+                )
             self.socket.send("error", {"message": str(e)}, room=sid)
 
 
