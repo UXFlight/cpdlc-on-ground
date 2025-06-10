@@ -3,7 +3,6 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    gap: 10px;
     font-family: 'Inter', sans-serif;
     overflow-y: auto;
 }
@@ -15,22 +14,28 @@
     justify-content: space-between;
 }
 
-#message-header .icon-wrap svg {
-    width: 24px;
-    height: 24px;
+#filter-icon {
+    width: 20px;
+    height: 20px;
     opacity: 0.8;
     cursor: pointer;
     transition: opacity 0.2s ease;
+    fill: var(--text-primary);
+    stroke: var(--text-primary)
 }
 
-#message-header .icon-wrap svg:hover {
+#filter-icon:hover {
     opacity: 1;
+}
+
+#filter-icon.filtered {
+    fill: var(--bg-black);
 }
 
 /* LOG BOX */
 .log-box {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     border-radius: 12px;
     gap: 16px;
     flex-grow: 1;
@@ -56,9 +61,7 @@
 /* MESSAGE CARD */
 .new-message {
     position: relative;
-    background: var(--bg-card);
-    border: 1px solid var(--border-accent);
-    border-left: 4px solid var(--color-requested);
+    border: 1px solid var(--color-requested);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -70,7 +73,6 @@
 .new-message:hover {
     border-color: var(--border-primary);
     box-shadow: var(--shadow-lg);
-    transform: translateY(-1px);
 }
 
 /* MESSAGE HEADER LINE */
@@ -80,14 +82,13 @@
     justify-content: space-between;
     margin: 0;
     padding: 16px 20px;
-    background: var(--bg-tertiary);
-    border-bottom: 1px solid var(--border-accent);
     cursor: pointer;
     min-height: 56px;
+    border-bottom: 1px solid var(--bg-secondary);
 }
 
 .new-message > p:first-child:hover {
-    background: rgba(74, 168, 255, 0.05);
+    background: var(--hover-blue-bg);
 }
 
 .timestamp {
@@ -123,9 +124,7 @@
 
 /* ATC RESPONSE */
 .message-response {
-    background: var(--bg-response);
-    border-top: 1px solid var(--border-accent);
-    padding: 24px;
+    padding: 16px 12px 6px;
     font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -140,7 +139,7 @@
     content: "ATC RESPONSE";
     font-size: 0.7rem;
     font-weight: 700;
-    color: var(--accent-green);
+    color: var(--color-new);
     background: var(--bg-tertiary);
     border: 1px solid var(--border-primary);
     padding: 6px 12px;
@@ -193,16 +192,14 @@
 
 @keyframes flash-in {
     0% {
-    background: rgba(74, 168, 255, 0.2);
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 20px rgba(74, 168, 255, 0.4);
-    transform: scale(1.02);
+        border-color: var(--text-primary);
+        box-shadow: 0 0 20px var(--flash-blue-glow);
+        transform: scale(1.02);
     }
     100% {
-    background: var(--bg-card);
-    border-color: var(--border-accent);
-    box-shadow: var(--shadow-md);
-    transform: scale(1);
+        border-color: var(--color-new);
+        box-shadow: var(--shadow-md);
+        transform: scale(1);
     }
 }
 
@@ -266,12 +263,12 @@
 }
 
 .new-message > p:first-child:focus {
-    outline: 2px solid var(--accent-blue);
+    outline: 2px solid var(--text-primary);
     outline-offset: 2px;
 }
 
 .toggle-arrow:focus {
-    outline: 2px solid var(--accent-blue);
+    outline: 2px solid var(--text-primary);
     outline-offset: 2px;
 }
 
@@ -301,11 +298,11 @@
 }
 
 .circular-timer .bg {
-    stroke: #e5e7eb; 
+    stroke: var(--timer-bg); 
 }
 
 .circular-timer .progress {
-    stroke: #3b82f6; 
+    stroke: var(--color-requested); 
     stroke-dasharray: 113;
     stroke-dashoffset: 0;
     transition: stroke-dashoffset 0.3s linear;
@@ -316,5 +313,5 @@
     position: absolute;
     font-size: 10px;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--white);
 }

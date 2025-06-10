@@ -14,7 +14,7 @@
 /* TITLE */
 .header-title {
   font-size: 2rem;
-  color: #fdfdfd;
+  color: var(--text-primary);
   font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
@@ -59,7 +59,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: grey;
+  background-color: var(--color-closed);
   position: relative;
 }
 
@@ -79,15 +79,15 @@
 
 /* STATUS COLORS */
 .status-indicator.connected {
-  background-color: #4caf50;
+  background-color: var(--color-wilco);
 }
 
 .status-indicator.disconnected {
-  background-color: #e74c3c;
+  background-color: var(--color-error);
 }
 
 .status-indicator.partial {
-  background-color: #fbc02d;
+  background-color: var(--color-standby);
 }
 
 /* TOOLTIP */
@@ -96,7 +96,7 @@
   top: 45px;
   left: 0;
   background-color: #000;
-  color: #fff;
+  color: var(--text-light);
   padding: 16px 20px;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -137,7 +137,7 @@
 }
 
 .status-text {
-  color: #fff;
+  color: var(--white);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -151,15 +151,15 @@
 }
 
 .status-dot.success {
-  background-color: #27ae60;
+  background-color: var(--color-success);
 }
 
 .status-dot.failure {
-  background-color: #c0392b;
+  background-color: var(--color-error);
 }
 
 .status-dot.pending {
-  background-color: #f1c40f;
+  background-color: var(--color-standby);
 }
 
 .status-dot.pulse {
@@ -188,7 +188,7 @@
 .timestamp-line {
   display: flex;
   justify-content: space-between;
-  color: #bbb;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -198,7 +198,7 @@
 
 .timestamp-value {
   font-style: italic;
-  color: #aaa;
+  color: var(--text-secondary);
 }
 
 /* SETTING ICON */

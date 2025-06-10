@@ -10,6 +10,5 @@ def index():
         {"label": "Pushback", "requestType": "pushback", "type": "pushback"},
         {"label": "Taxi Clearance", "requestType": "taxi_clearance"},
         {"label": "De-Icing", "requestType": "de_icing"},
-        {"label": "Voice Contact", "requestType": "request_voice_contact"},
     ]
     return render_template("index.html", request_overlays=request_overlays)

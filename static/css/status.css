@@ -24,7 +24,7 @@
 .overlay.status-cancelled,
 .overlay.status-timeout {
     border-color: var(--color-error);
-    box-shadow: 0 0 12px 3px var(--color-error-glow);
+    box-shadow: var(--color-error-glow);
     font-weight: 600;
 }
 
@@ -125,7 +125,7 @@
 .overlay.status-unable.touched,
 .overlay.status-cancelled.touched,
 .overlay.status-timeout.touched {
-    box-shadow: 0 0 16px var(--color-error-glow);
+    box-shadow: var(--color-error-glow);
 }
 
 .overlay.status-closed.touched {
@@ -139,16 +139,16 @@
 .tick-icon.error   { color: var(--color-error); }
 
 /* TIMESTAMP & BORDER LEFT BASED ON STATUS */
-.new-message[data-status="new"]       { border-left-color: var(--color-new);       }
-.new-message[data-status="closed"]    { border-left-color: var(--color-closed);    }
-.new-message[data-status="cancelled"] { border-left-color: var(--color-cancelled); }
-.new-message[data-status="requested"] { border-left-color: var(--color-requested); }
-.new-message[data-status="loaded"]    { border-left-color: var(--color-loaded);    }
-.new-message[data-status="wilco"]     { border-left-color: var(--color-wilco);     }
-.new-message[data-status="standby"]   { border-left-color: var(--color-standby);   }
-.new-message[data-status="unable"]    { border-left-color: var(--color-unable);    }
-.new-message[data-status="executed"]  { border-left-color: var(--color-executed);  }
-.new-message[data-status="error"]     { border-left-color: var(--color-error);     }
+.new-message[data-status="new"]       { border-color: var(--color-new);       }
+.new-message[data-status="closed"]    { border-color: var(--color-closed);    }
+.new-message[data-status="cancelled"] { border-color: var(--color-cancelled); }
+.new-message[data-status="requested"] { border-color: var(--color-requested); }
+.new-message[data-status="loaded"]    { border-color: var(--color-loaded);    }
+.new-message[data-status="wilco"]     { border-color: var(--color-wilco);     }
+.new-message[data-status="standby"]   { border-color: var(--color-standby);   }
+.new-message[data-status="unable"]    { border-color: var(--color-unable);    }
+.new-message[data-status="executed"]  { border-color: var(--color-executed);  }
+.new-message[data-status="error"]     { border-color: var(--color-error);     }
 
 .new-message[data-status="new"]       .timestamp { color: var(--color-new);       }
 .new-message[data-status="closed"]    .timestamp { color: var(--color-closed);    }
@@ -160,6 +160,18 @@
 .new-message[data-status="unable"]    .timestamp { color: var(--color-unable);    }
 .new-message[data-status="executed"]  .timestamp { color: var(--color-executed);  }
 .new-message[data-status="error"]     .timestamp { color: var(--color-error);     }
+
+.new-message[data-status="new"] > p:first-child { border-color: var(--color-new);       }
+.new-message[data-status="closed"] > p:first-child    { border-color: var(--color-closed);    }
+.new-message[data-status="cancelled"] > p:first-child { border-color: var(--color-cancelled); }
+.new-message[data-status="requested"] > p:first-child { border-color: var(--color-requested); }
+.new-message[data-status="loaded"] > p:first-child    { border-color: var(--color-loaded);    }
+.new-message[data-status="wilco"] > p:first-child     { border-color: var(--color-wilco);     }
+.new-message[data-status="standby"] > p:first-child   { border-color: var(--color-standby);   }
+.new-message[data-status="unable"] > p:first-child    { border-color: var(--color-unable);    }
+.new-message[data-status="executed"] > p:first-child  { border-color: var(--color-executed);  }
+.new-message[data-status="error"] > p:first-child     { border-color: var(--color-error);     }
+
 
 /* STATUS COLORS */
 .status.requested { background-color: var(--color-requested); }
@@ -175,12 +187,12 @@
 /* STATUS LABEL BACKGROUNDS */
 .status.new       { background-color: var(--color-new); }
 .status.closed    { background-color: var(--color-closed); color: var(--color-fg-dark); }
-.status.cancelled { background-color: var(--color-cancelled); color: #fff; }
-.status.requested { background-color: var(--color-requested); color: #fff; }
+.status.cancelled { background-color: var(--color-cancelled); color: var(--white); }
+.status.requested { background-color: var(--color-requested); color: var(--white); }
 .status.loaded    { background-color: var(--color-loaded); }
 .status.wilco     { background-color: var(--color-wilco); color: var(--color-fg-dark); }
 .status.standby   { background-color: var(--color-standby); }
 .status.unable    { background-color: var(--color-unable); }
-.status.executed  { background-color: var(--color-executed); color: #fff; }
-.status.error     { background-color: var(--color-error); color: #fff; }
+.status.executed  { background-color: var(--color-executed); color: var(--white); }
+.status.error     { background-color: var(--color-error); color: var(--white); }
 

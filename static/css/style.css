@@ -13,36 +13,58 @@
 
     /* Tick + overlay base */
     --color-success:     #6cc24a;
-    --color-error-glow:  rgba(255, 76, 76, 0.55);
-    --color-bg-dim:      #1a1a1a;
+    --color-error-glow:  0 0 12px 3px rgba(255, 76, 76, 0.55);
     --color-fg-dark:     #222;
     
     /* General theme */
-    --bg-primary: #0b0c10;
-    --bg-secondary: #121317;
-    --bg-tertiary: #1c1e24;
-    --bg-card: #1a1b1f;
-    --bg-response: #101217;
-    --border-primary: #2c2f36;
-    --border-accent: #202328;
-    --text-primary: #e4e9f0;
-    --text-secondary: #aeb6c1;
-    --text-muted: #79818d;
-    --accent-blue: #4aa8ff;
-    --accent-green: #2ecc71;
+    --bg-primary: #010101;
+    --bg-secondary: #111317;
+    --bg-tertiary: #16181e;
+    --bg-card: #1a1c23;
+    --bg-response: #101216;
+    --border-primary: #2a2d34;
+    --text-primary: #e0e3ea;
+    --text-secondary: #a0a6b4;
+    --text-muted: #6c7380;
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+    --selection-bg: rgba(255, 255, 255, 0.12);
+    --selection-glow: 0 0 6px rgba(255, 255, 255, 0.4);
+    --text-light: #d5d8e0;
+
+    --hover-blue-bg: rgba(74, 168, 255, 0.05);
+    --flash-blue-bg: rgba(74, 168, 255, 0.2);
+    --flash-blue-glow: rgba(74, 168, 255, 0.4);
+    --timer-bg: #e5e7eb;
+    --white: #ffffff;
+    --bg-black: #000000;
+
+    --btn-gradient-dark-top: #3c3c3c;
+    --btn-gradient-dark-bottom: #2a2a2a;
+    --btn-bg: #2b2b2b;
+
+    --color-wilco-disabled: #a5d6a7;
+    --color-error-hover: #d32f2f;
+    --color-error-disabled: #ef9a9a;
+    --shadow-error-soft: 0 4px 10px rgba(214, 19, 5, 0.5);
+    --text-inverse: #0e1012;
+
+    --hover-token-bg: #233447;
+    --text-disabled: #4f5562;
+    --token-next-bg: #1f2a3f;
 }
+
 ::selection {
-    background: rgba(255, 255, 255, 0.12);
-    color: #f5f5f5;
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+    background: var(--selection-bg);
+    color: var(--text-light);
+    text-shadow: var(--selection-glow);
 }
 
 ::-moz-selection {
-    background: rgba(255, 255, 255, 0.12);
-    color: #f5f5f5;
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+    background: var(--selection-bg);
+    color: var(--text-light);
+    text-shadow:var(--selection-glow);
 }
 
 * {
@@ -57,10 +79,9 @@ body, html {
 
 body {
     font-family: 'Inter', sans-serif;
-    color: #fff;
     margin: 0;
     padding: 0;
-    background-color: #000;
+    background-color: var(--bg-black);
 }
 
 /* TYPOGRAPHY */
@@ -89,7 +110,7 @@ h2 {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr auto;
     height: calc(100vh - 100px);
-    padding: 5px 15px;
+    padding: 5px 12px;
     gap: 20px;
 }
 
@@ -140,18 +161,18 @@ button:disabled {
   text-align: center;
   font-size: 15px;
   font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   pointer-events: auto;
   transition: all 0.4s ease;
   opacity: 1;
 }
 
 .snackbar-error {
-  background-color: #e74c3c;
+  background-color: var(--color-error);
 }
 
 .snackbar-success {
-  background-color: #2ecc71;
+  background-color: var(--color-success);
 }
 
 .fade-out {

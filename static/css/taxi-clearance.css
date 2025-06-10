@@ -3,7 +3,7 @@
     border-radius: 8px;
     border: 1px solid #333;
     max-width: 100%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    box-shadow: var(--shadow-lg);
     transition: all 0.3s ease;
     grid-row: 2;
 }
@@ -22,7 +22,7 @@
     color: var(--color-loaded);
 }
 .taxi-clearance-box.active .clearance-box {
-    color: #e0f0ff;
+    color: var(--text-primary);
 }
 
 @keyframes clearancePulse {
@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #888;
+    color: var(--text-muted);
     font-style: italic;
 }
 
@@ -64,9 +64,9 @@
 
 /* INDIVIDUAL TOKEN */
 .taxi-token {
-    background-color: #1a1a1a;
+    background-color: var(--color-bg-dim);
     border: 1px solid var(--color-loaded);
-    color: #e2eefd;
+    color: var(--text-primary);
     border-radius: 4px;
     padding: 6px 12px;
     font-size: 1rem;
@@ -79,21 +79,21 @@
 }
 
 .taxi-token:hover {
-    background-color: #233447;
+    background-color: var(--hover-token-bg);
 }
 
 /* STATES */
 .taxi-token.done {
-    background-color: #222;
-    color: #777;
-    border-color: #333;
+    background-color: var(--color-fg-dark);
+    color: var(--text-disabled);
+    border-color: var(--border-primary);
     opacity: 0.6;
 }
 
 .taxi-token.next {
-    background-color: #1f2a3f;
+    background-color: var(--token-next-bg);
     border-color: var(--color-loaded);
-    color: #ffffff;
+    color: var(--white);
     font-weight: 600;
 }
 
