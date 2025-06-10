@@ -1,5 +1,5 @@
 
-import { MSG_STATUS } from "../state/status.js";
+import { MSG_STATUS } from '../utils/consts/status.js';
 
 // loader
 export function showSpinner(requestType) {
@@ -69,12 +69,35 @@ export function flashElement(div) {
     setTimeout(() => div.classList.remove('flash'), 1000);
 }
 
-export function updateTaxiClearanceMsg(message = null) {
+// TAXI CLEARANCE
+export function updateTaxiClearanceMsg(message = null, currentIndex = null) {
   const clearanceBox = document.getElementById('taxi-clearance-message');
   const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
-  clearanceBox.innerHTML = `<p>${message}</p>`;
-  message ? clearanceMessageBox.classList.add("active") : clearanceMessageBox.classList.remove("active");
+
+  if (!message) {
+    clearanceBox.innerHTML = `<p id="clearance-placeholder">No clearance received</p>`;
+    clearanceMessageBox.classList.remove("active");
+    return;
+  }
+
+  const tokens = message.split(" ");
+  const rendered = tokens.map((word, i) => {
+    let cls = 'taxi-token';
+    if (currentIndex !== null) {
+      if (i < currentIndex) cls += ' done';
+      else if (i === currentIndex) cls += ' next';
+    }
+    return `<span class="${cls}">${word}</span>`;
+  }).join(" ");
+
+  clearanceBox.innerHTML = `<div class="clearance-grid">${rendered}</div>`;
+  clearanceMessageBox.classList.add("active");
+
+  clearanceMessageBox.classList.remove("pulse");
+  void clearanceMessageBox.offsetWidth; // trigger reflow
+  clearanceMessageBox.classList.add("pulse");
 }
+
 
 // display snackbar messages
 export function updateSnackbar(requestType, status, customMessage = null, isError = true) {
@@ -131,3 +154,55 @@ export function formatRequestType(requestType) {
     .replace(/\s+/g, "_");
 }
 
+// STATUS UPDATER //
+export function updateMessageStatus(requestType, newStatus) {
+  const message = document.querySelector(`.new-message[data-requesttype="${requestType}"]`);
+  if (!message) return;
+
+  const statusEl = message.querySelector('.status');
+  if (!statusEl) return;
+
+  Object.values(MSG_STATUS).forEach(status => statusEl.classList.remove(status.toLowerCase()));
+
+  statusEl.textContent = newStatus.toUpperCase();
+  statusEl.classList.add(newStatus.toLowerCase());
+  message.dataset.status = newStatus.toLowerCase();
+}
+
+export function updateOverlayStatus(requestType, newStatus) {
+  const overlay = document.querySelector(`.overlay[data-requesttype="${requestType}"]`);
+  if (!overlay) return;
+
+  Object.values(MSG_STATUS).forEach(status => {
+      overlay.classList.remove(`status-${status.toLowerCase()}`);
+      overlay.dataset.status = "";
+  });
+
+  const status = newStatus.toLowerCase();
+  overlay.classList.add(`status-${status}`);
+  overlay.dataset.status = status;
+
+  const spinner = overlay.querySelector(`#${requestType}_spinner`);
+  const tick = overlay.querySelector(`#${requestType}_tick`);
+
+  if (!spinner || !tick) return;
+
+  spinner.style.display = 'none';
+  tick.style.display = 'none';
+
+  if (status === 'requested' || status === 'load') {
+      spinner.style.display = 'block';
+  } else if (['wilco', 'executed', 'closed'].includes(status)) {
+      tick.style.display = 'block';
+  }
+}
+
+export function updateTaxiClearanceStatus(action, status) {
+  const tcStatus = document.getElementById('taxi-clearance-status');
+  if (!tcStatus) return;
+
+  tcStatus.textContent = status.toUpperCase();
+  tcStatus.classList.add('active');
+
+  if (action === MSG_STATUS.EXECUTE) { tcStatus.classList.add('executed') }
+}

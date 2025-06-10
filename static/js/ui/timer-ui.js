@@ -13,7 +13,7 @@ export function createTimer(requestType, timeLeft, total = 90) {
       <circle class="progress" r="18" cx="20" cy="20"
         stroke-dasharray="113" stroke-dashoffset="${offset}"></circle>
     </svg>
-    <div class="time-left">${timeLeft}s</div>
+    <div class="time-left">${timeLeft}</div>
   `;
 
   return wrapper;
