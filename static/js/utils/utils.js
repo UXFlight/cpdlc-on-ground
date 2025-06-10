@@ -1,5 +1,5 @@
 import { state } from '../state/state.js';
-import { MSG_STATUS } from '../state/status.js';
+import { MSG_STATUS } from '../utils/consts/status.js';
 
 // small utils functions
 export function invalidRequest(action) {
@@ -44,5 +44,6 @@ export function getActionInfoFromEvent(e) {
 }
 
 export function isConnected() {
-    return state.connection.backend === "connected" && state.connection.atc.status === "connected";
+  return state.connection.backend === "connected" && state.connection.atc.status === "connected";
 }
+
