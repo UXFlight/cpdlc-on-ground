@@ -1,11 +1,10 @@
 /* GROUP CONTAINER */
 .action-buttons-grp {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 12px;
     font-size: 16px;
-    flex-wrap: wrap;
+    padding: 15px;
 }
 
 /* BASE BUTTON STYLE */

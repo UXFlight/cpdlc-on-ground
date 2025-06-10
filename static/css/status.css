@@ -1,0 +1,186 @@
+/* OVERLAY STATUS VARIANTS */
+.overlay.status-requested {
+    border-color: var(--color-requested);
+    box-shadow: 0 0 10px var(--color-requested);
+    font-weight: 600;
+}
+
+.overlay.status-executed,
+.overlay.status-loaded,
+.overlay.status-new {
+    border-color: var(--color-new);
+    box-shadow: 0 0 10px var(--color-new);
+    font-weight: 600;
+}
+
+.overlay.status-standby {
+    border-color: var(--color-standby);
+    box-shadow: 0 0 10px var(--color-standby);
+    font-weight: 600;
+}
+
+.overlay.status-error,
+.overlay.status-unable,
+.overlay.status-cancelled,
+.overlay.status-timeout {
+    border-color: var(--color-error);
+    box-shadow: 0 0 12px 3px var(--color-error-glow);
+    font-weight: 600;
+}
+
+.overlay.status-closed {
+    border-color: var(--color-closed);
+    box-shadow: none;
+    cursor: default;
+    pointer-events: none;
+    user-select: none;
+    filter: grayscale(0.6) brightness(0.6);
+    transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+
+/* DEFAULT LABEL STATE */
+.overlay-title .label {
+    color: #f5f5f5;
+    transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+/* DYNAMIC OPEN STATE */
+.overlay.status-requested .overlay-title .label {
+    color: var(--color-requested);
+}
+
+.overlay.status-executed .overlay-title .label {
+    color: var(--color-executed);
+}
+
+.overlay.status-new .overlay-title .label,
+.overlay.status-loaded .overlay-title .label {
+    color: var(--color-new);
+}
+
+.overlay.status-standby .overlay-title .label {
+    color: var(--color-standby);
+}
+
+.overlay.status-error .overlay-title .label,
+.overlay.status-unable .overlay-title .label,
+.overlay.status-cancelled .overlay-title .label,
+.overlay.status-timeout .overlay-title .label {
+    color: var(--color-error);
+}
+
+.overlay.status-closed .overlay-title .label {
+    color: var(--color-closed);
+    font-weight: 500;
+    opacity: 0.6;
+}
+
+/* DIRECTION BUTTONS */
+.overlay.status-executed .direction-button.active {
+    background-color: var(--color-executed);
+}
+
+.overlay.status-new .direction-button.active,
+.overlay.status-loaded .direction-button.active {
+    background-color: var(--color-new);
+}
+
+.overlay.status-standby .direction-button.active {
+    background-color: var(--color-standby);
+}
+
+.overlay.status-error .direction-button.active,
+.overlay.status-unable .direction-button.active,
+.overlay.status-cancelled .direction-button.active,
+.overlay.status-timeout .direction-button.active {
+    background-color: var(--color-error);
+}
+
+.overlay.status-closed .direction-button.active {
+    background-color: var(--color-closed);
+}
+
+/* MOBILE */
+.overlay.touched:not(.status-closed) {
+    filter: brightness(1.2);
+    box-shadow: 0 0 16px var(--color-requested); 
+}
+
+.overlay.status-requested.touched {
+    box-shadow: 0 0 16px var(--color-requested);
+}
+
+.overlay.status-executed.touched,
+.overlay.status-loaded.touched,
+.overlay.status-new.touched {
+    box-shadow: 0 0 16px var(--color-new);
+}
+
+.overlay.status-standby.touched {
+    box-shadow: 0 0 16px var(--color-standby);
+}
+
+.overlay.status-error.touched,
+.overlay.status-unable.touched,
+.overlay.status-cancelled.touched,
+.overlay.status-timeout.touched {
+    box-shadow: 0 0 16px var(--color-error-glow);
+}
+
+.overlay.status-closed.touched {
+    box-shadow: none;
+    filter: grayscale(0.6) brightness(0.6);
+}
+
+
+/* STATUS ICONS */
+.tick-icon.success { color: var(--color-success); }
+.tick-icon.error   { color: var(--color-error); }
+
+/* TIMESTAMP & BORDER LEFT BASED ON STATUS */
+.new-message[data-status="new"]       { border-left-color: var(--color-new);       }
+.new-message[data-status="closed"]    { border-left-color: var(--color-closed);    }
+.new-message[data-status="cancelled"] { border-left-color: var(--color-cancelled); }
+.new-message[data-status="requested"] { border-left-color: var(--color-requested); }
+.new-message[data-status="loaded"]    { border-left-color: var(--color-loaded);    }
+.new-message[data-status="wilco"]     { border-left-color: var(--color-wilco);     }
+.new-message[data-status="standby"]   { border-left-color: var(--color-standby);   }
+.new-message[data-status="unable"]    { border-left-color: var(--color-unable);    }
+.new-message[data-status="executed"]  { border-left-color: var(--color-executed);  }
+.new-message[data-status="error"]     { border-left-color: var(--color-error);     }
+
+.new-message[data-status="new"]       .timestamp { color: var(--color-new);       }
+.new-message[data-status="closed"]    .timestamp { color: var(--color-closed);    }
+.new-message[data-status="cancelled"] .timestamp { color: var(--color-cancelled); }
+.new-message[data-status="requested"] .timestamp { color: var(--color-requested); }
+.new-message[data-status="loaded"]    .timestamp { color: var(--color-loaded);    }
+.new-message[data-status="wilco"]     .timestamp { color: var(--color-wilco);     }
+.new-message[data-status="standby"]   .timestamp { color: var(--color-standby);   }
+.new-message[data-status="unable"]    .timestamp { color: var(--color-unable);    }
+.new-message[data-status="executed"]  .timestamp { color: var(--color-executed);  }
+.new-message[data-status="error"]     .timestamp { color: var(--color-error);     }
+
+/* STATUS COLORS */
+.status.requested { background-color: var(--color-requested); }
+.status.new { background-color: var(--color-new); }
+.status.loaded { background-color: var(--color-loaded); }
+.status.executed { background-color: var(--color-executed); }
+.status.cancelled { background-color: var(--color-cancelled); }
+.status.error { background-color: var(--color-error); }
+.status.timeout { background-color: var(--color-timeout); }
+.status.closed { background-color: var(--color-closed); }
+.status.unable { background-color: var(--color-unable); }
+
+/* STATUS LABEL BACKGROUNDS */
+.status.new       { background-color: var(--color-new); }
+.status.closed    { background-color: var(--color-closed); color: var(--color-fg-dark); }
+.status.cancelled { background-color: var(--color-cancelled); color: #fff; }
+.status.requested { background-color: var(--color-requested); color: #fff; }
+.status.loaded    { background-color: var(--color-loaded); }
+.status.wilco     { background-color: var(--color-wilco); color: var(--color-fg-dark); }
+.status.standby   { background-color: var(--color-standby); }
+.status.unable    { background-color: var(--color-unable); }
+.status.executed  { background-color: var(--color-executed); color: #fff; }
+.status.error     { background-color: var(--color-error); color: #fff; }
+
