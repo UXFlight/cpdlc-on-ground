@@ -1,0 +1,12 @@
+import { MSG_STATUS } from './status.js';
+
+export const STATUS_PRIORITY = {
+  [MSG_STATUS.NEW]: 3,
+  [MSG_STATUS.EXECUTED]: 2,
+  [MSG_STATUS.LOADED]: 1,
+  [MSG_STATUS.REQUESTED]: 0,
+  [MSG_STATUS.STANDBY]: 0,
+  [MSG_STATUS.UNABLE]: -1,
+  [MSG_STATUS.CLOSED]: -2,
+  [MSG_STATUS.ERROR]: -3
+};
