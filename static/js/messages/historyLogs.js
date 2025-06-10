@@ -1,4 +1,4 @@
-import { MSG_STATUS } from '../state/status.js';
+import { MSG_STATUS } from '../utils/consts/status.js';
 import { state } from '../state/state.js';
 import { flashElement, formatRequestType } from '../ui/ui.js';
 import { createButton } from '../ui/buttons-ui.js';
@@ -6,25 +6,6 @@ import { createTimer } from '../ui/timer-ui.js';
 
 //DOM UTILITIES //
 const historyLogBox = document.getElementById('history-log-box');
-
-export function createHistoryLog(requestType, timestamp, message, status = MSG_STATUS.REQUESTED) {
-    if (!requestType) return;
-
-    const normalizedStatus = status.toLowerCase();
-
-    const div = document.createElement('div');
-    div.classList.add('new-message');
-    div.dataset.requesttype = requestType.toLowerCase();
-    div.dataset.status = normalizedStatus;
-
-    const header = createHeader({ timestamp, title: requestType, status: normalizedStatus });
-    div.appendChild(header);
-
-    if (message) div.appendChild(createResponseParagraph(message))
-
-    historyLogBox.prepend(div);
-    flashElement(div);
-}
 
 export function appendToLog(stepKey, message, timestamp, status = MSG_STATUS.NEW) {
     const group = state.history.find(g => g.stepKey === stepKey);
@@ -78,9 +59,13 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
         div.appendChild(response);
     }
     div.appendChild(historyContainer);
+
+    const hasButtons = 
+            [MSG_STATUS.NEW, MSG_STATUS.LOADED, MSG_STATUS.EXECUTED]
+            .includes(latest.status);
     
-    if (latest.status === MSG_STATUS.RESPONDED) {
-        const btnContainer = createButton(stepKey);
+    if (hasButtons) {
+        const btnContainer = createButton(stepKey, latest.status);
         div.appendChild(btnContainer);
         flashElement(div);
     }
@@ -90,6 +75,7 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
 
 
 const toggleMessage = (e, historyContainer, toggle)=> { 
+    console.log('toggleMessage', e, historyContainer, toggle);
     e.stopPropagation();
     const isOpen = historyContainer.style.display ==='block';
     historyContainer.style.display = isOpen ? 'none' : 'block';
@@ -117,7 +103,7 @@ function createHeader({ timestamp, title, status }, historyContainer) {
     const requestType = formatRequestType(title);
     const step = state.steps[requestType];
 
-    const statusIsDone = [MSG_STATUS.EXECUTED, MSG_STATUS.TIMEOUT, MSG_STATUS.CANCELLED, MSG_STATUS.CLOSED, MSG_STATUS.ERROR]
+    const statusIsDone = [MSG_STATUS.EXECUTED, MSG_STATUS.TIMEOUT, MSG_STATUS.CANCELLED, MSG_STATUS.ERROR, MSG_STATUS.CLOSED, MSG_STATUS.UNABLE]
         .includes(status.toLowerCase());
 
     const shouldShowTimer = step?.timeLeft && !statusIsDone;
@@ -138,7 +124,6 @@ function createHeader({ timestamp, title, status }, historyContainer) {
 
     return p;
 }
-
 
 function createResponseParagraph(message) {
     const p = document.createElement('p');
@@ -166,19 +151,4 @@ function createHistoryDetails(historyEntries) {
 export function createResponse(message, div) {
     const response = createResponseParagraph(message);
     div.append(response);
-}
-
-// STATUS UPDATER //
-export function updateMessageStatus(requestType, newStatus) {
-    const message = document.querySelector(`.new-message[data-requesttype="${requestType}"]`);
-    if (!message) return;
-
-    const statusEl = message.querySelector('.status');
-    if (!statusEl) return;
-
-    Object.values(MSG_STATUS).forEach(status => statusEl.classList.remove(status.toLowerCase()));
-
-    statusEl.textContent = newStatus.toUpperCase();
-    statusEl.classList.add(newStatus.toLowerCase());
-    message.dataset.status = newStatus.toLowerCase();
 }
