@@ -1,5 +1,5 @@
 import { state, updateStep } from '../state/state.js';
-import { MSG_STATUS } from '../state/status.js';
+import { MSG_STATUS } from '../utils/consts/status.js';
 import { postAction } from '../api/api.js';
 import { updateTaxiClearanceMsg } from '../ui/ui.js';
 import { getActionInfoFromEvent } from '../utils/utils.js';
