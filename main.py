@@ -22,4 +22,4 @@ if __name__ == '__main__':
 
     socket_manager.init_events()
 
-    socketio.run(app, host="0.0.0.0", port=5321)
+    socketio.run(app, host="0.0.0.0", port=5321, allow_unsafe_werkzeug=True)
