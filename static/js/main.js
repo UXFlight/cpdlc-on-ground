@@ -1,7 +1,7 @@
 // all events imported
 import { sendRequestEvent } from './events/sendRequest.js';
 import { cancelRequestEvent } from './events/cancelRequest.js';
-import { toggleOverlay, closeOverlay } from './events/overlay.js';
+import { toggleOverlay, touchStartEvent, handleGlobalClick, touchFeedbackButtons } from './events/overlay.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
 import { setupSocketListeners } from './socket/socket-listens.js';
 import { filterHistoryLogs } from './events/filter.js';
@@ -13,18 +13,22 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSocketListeners() // ok
   listenToButtonEvents(); // ok
   listenToGlobalClickEvents(); // ok
+  listenToHeaderEvents();
 });
 
 function listenToGlobalClickEvents() {
   const overlays = document.querySelectorAll(".overlay");
 
   overlays.forEach(overlay => {
-    const button = overlay.querySelector(".overlay-button");
-    button.addEventListener("click", (e) => { toggleOverlay(overlay, e); });
+    overlay.addEventListener("click", () => toggleOverlay(overlay));
   });
 
-  document.addEventListener("click", (event) => closeOverlay(event));
-}
+  document.addEventListener("click", handleGlobalClick);
+  document.addEventListener("touchstart", (e) => {
+    touchStartEvent(e);         // overlays
+    touchFeedbackButtons(e);    // req/cancel btns
+  });
+  }
 
 function listenToButtonEvents() {
   const requestButtons = document.querySelectorAll(".request-button");
@@ -50,12 +54,17 @@ function listenToButtonEvents() {
   });
 
   // left/ right pushback event
-  leftButton.addEventListener("click", () => selectPushbackDirection("left"));
-  rightButton.addEventListener("click", () => selectPushbackDirection("right"));
+  leftButton.addEventListener("click", (e) => selectPushbackDirection(e));
+  rightButton.addEventListener("click", (e) => selectPushbackDirection(e));
 
   // filter btn event
   filterButton.addEventListener("click", () => {
     state.isFiltered = !state.isFiltered;
     filterHistoryLogs()
   });
+}
+
+export function listenToHeaderEvents() {
+  const connectionStatus = document.getElementById('connection-status');
+  connectionStatus.addEventListener('click', () => connectionStatus.classList.toggle('show-tooltip'));
 }

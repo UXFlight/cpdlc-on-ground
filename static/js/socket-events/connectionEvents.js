@@ -1,4 +1,5 @@
-// ui/connection-ui.js
+import { enablePushbackRequest } from "../events/pushbackDirection.js";
+
 const indicator = document.getElementById("connection-indicator");
 const text = document.getElementById("connection-text");
 
@@ -14,13 +15,14 @@ function updateMainIndicator(connection) {
 
     if (backend === "connected" && atc.status === "connected") {
         indicator.classList.add("connected");
-        text.textContent = `Connected to ${atc.facility}`;
+        text.textContent = `connected to ${atc.facility}`;
+        enablePushbackRequest();
     } else if (backend === "connected" && atc.status !== "connected") {
         indicator.classList.add("partial");
-        text.textContent = "Establishing connection to ATC...";
+        text.textContent = "establishing connection to ATC...";
     } else if (backend === "disconnected") {
         indicator.classList.add("disconnected");
-        text.textContent = "Disconnected from server";
+        text.textContent = "disconnected from server";
     } else {
         indicator.classList.add("connecting");
         text.textContent = "Connecting to server...";
