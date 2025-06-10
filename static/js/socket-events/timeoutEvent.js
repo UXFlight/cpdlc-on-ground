@@ -15,6 +15,5 @@ export const tickUpdate = ({ timeLeft, requestType }) => {
 
 export const timeoutEvent = (data) => {
     console.log("Timeout Event:", data);
-    const { requestType, message } = data;
 
 }

@@ -3,25 +3,12 @@ async function handleJsonResponse(response) { // returs data + res.ok + status
   return { ok: response.ok, status: response.status, ...data };
 }
 
-export async function sendRequest(requestType) {
-  const response = await fetch(`/request/${requestType}`);
-  return handleJsonResponse(response);
-}
-
 export async function postAction(action, requestType) {
   const body = JSON.stringify({ action, requestType });
   const response = await fetch(`/action`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body,
-  });
-  return handleJsonResponse(response);
-}
-
-export async function postCancelRequest(requestType) {
-  const response = await fetch(`/cancel-request/${requestType}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
   });
   return handleJsonResponse(response);
 }

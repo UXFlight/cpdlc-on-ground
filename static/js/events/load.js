@@ -1,9 +1,10 @@
 import { updateStep } from '../state/state.js';
-import { MSG_STATUS } from "../state/status.js";
+import { MSG_STATUS } from '../utils/consts/status.js';
 import { postAction } from "../api/api.js";
 import { updateTaxiClearanceMsg } from '../ui/ui.js';
 import { getActionInfoFromEvent } from '../utils/utils.js';
 import { setExecuteButtonState, enableWilcoButtons } from '../ui/buttons-ui.js';
+import { emitAction } from '../socket/socket-emits.js';
 
 export async function loadEvent(e) {
   e.stopPropagation();
@@ -11,32 +12,32 @@ export async function loadEvent(e) {
   if (!action || !requestType) return;
 
   try {
-    const response = await postAction(action, requestType);
-    const { ok, status, message, error } = response;
+    
+    emitAction(action, requestType);
+    
+    // if (!ok) {
+    //   console.error("Load error:", error || `HTTP ${status}`);
+    //   updateStep(requestType, MSG_STATUS.ERROR, error || `Load failed (status ${status})`);
+    //   return;
+    // }
 
-    if (!ok) {
-      console.error("Load error:", error || `HTTP ${status}`);
-      updateStep(requestType, MSG_STATUS.ERROR, error || `Load failed (status ${status})`);
-      return;
-    }
+    // if (message === null) {
+    //   updateStep(requestType, MSG_STATUS.LOADED, "Loaded, awaiting ATC clearance...");
+    //   return;
+    // }
 
-    if (message === null) {
-      updateStep(requestType, MSG_STATUS.LOADED, "Loaded, awaiting ATC clearance...");
-      return;
-    }
+    // updateTaxiClearanceMsg(message);
+    // updateStep(requestType, MSG_STATUS.LOADED, message);
 
-    updateTaxiClearanceMsg(message);
-    updateStep(requestType, MSG_STATUS.LOADED, message);
+    // if (e.target && e.target.disabled !== undefined) {
+    //   e.target.disabled = true;
+    // }
 
-    if (e.target && e.target.disabled !== undefined) {
-      e.target.disabled = true;
-    }
-
-    if (requestType === "taxi_clearance") {
-      setExecuteButtonState();
-    } else {
-      enableWilcoButtons(requestType);
-    }
+    // if (requestType === "taxi_clearance") {
+    //   setExecuteButtonState();
+    // } else {
+    //   enableWilcoButtons(requestType);
+    // }
 
   } catch (err) {
     console.error("Network error:", err);

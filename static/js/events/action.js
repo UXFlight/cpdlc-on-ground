@@ -1,5 +1,5 @@
 import { updateStep } from '../state/state.js';
-import { MSG_STATUS } from '../state/status.js';
+import { MSG_STATUS } from '../utils/consts/status.js';
 import { showSpinner, showTick } from '../ui/ui.js';
 import { disableCancelButtons } from '../ui/buttons-ui.js';
 import { filterHistoryLogs } from './filter.js';

@@ -1,37 +1,29 @@
-import { hideSpinner } from "../ui/ui.js";
-import { enableAllRequestButtons } from "../ui/buttons-ui.js";
 import { updateDirection, updateStep } from '../state/state.js';
-import { MSG_STATUS } from "../state/status.js";
-import { filterHistoryLogs } from "./filter.js";
-import { postCancelRequest } from "../api/api.js";
+import { MSG_STATUS } from '../utils/consts/status.js';
 import { getRequestTypeFromEvent } from "../utils/utils.js";
+import { emitCancelRequest } from "../socket/socket-emits.js";
+import { REQUEST_TYPE } from '../utils/consts/flightConsts.js';
+import { state } from '../state/state.js';
 
 export async function cancelRequestEvent(e) {
-  e.preventDefault();
   e.stopPropagation();
   const requestType = getRequestTypeFromEvent(e);
-  if (!requestType || this.disabled) return;
-  const requestBtn = document.getElementById(`${requestType.replace(/_/g, "-")}-btn`);
+  if (!requestType) return;
+
+  const isActive = [MSG_STATUS.REQUESTED, MSG_STATUS.NEW, MSG_STATUS.STANDBY, MSG_STATUS.UNABLE]
+                      .includes(state.steps[REQUEST_TYPE.PUSHBACK].status);
+                      
+  if (requestType === REQUEST_TYPE.PUSHBACK && !isActive) {
+    document.getElementById('pushback-btn').disabled = true;
+    this.disabled = true;
+    updateDirection();
+    ["pushback-left", "pushback-right"].forEach(id => document.getElementById(id).disabled = false);
+    return 
+  }
 
   try {
-    const data = await postCancelRequest(requestType);
-    updateStep(requestType, MSG_STATUS.CANCELLED, data.message || MSG_STATUS.CANCELLED);
+    emitCancelRequest(requestType);
     this.disabled = true;
-
-    if (requestBtn) {
-      requestBtn.disabled = false;
-      requestBtn.classList.remove("active");
-    }
-
-    if (requestType === "pushback") {
-      document.getElementById("pushback-left")?.classList.remove("active");
-      document.getElementById("pushback-right")?.classList.remove("active");
-      updateDirection(null);
-    }
-
-    filterHistoryLogs();
-    hideSpinner(requestType);
-    enableAllRequestButtons();
   } catch (err) {
     console.error("Cancel error:", err);
     updateStep(requestType, MSG_STATUS.ERROR, "Network error during cancellation");
