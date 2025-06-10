@@ -1,58 +1,36 @@
-import ingescape as igs # type: ignore
-import sys
-import signal
+import ingescape as igs  # type: ignore
 from app.utils.constants import REQUEST_OUTPUTS, ACTION_OUTPUTS
+import sys
 
 class Echo:
     def __init__(self, pilot_id: str):
         self.pilot_id = pilot_id
         self._requests = {name: False for name in REQUEST_OUTPUTS}
         self._actions = {name: False for name in ACTION_OUTPUTS}
-        self._register_outputs()
         self._register_callbacks()
 
     ## PRIVATE ##
     def _prefixed(self, name: str) -> str:
         return f"{self.pilot_id}::{name}"
 
-    def _register_outputs(self):
-        for name in REQUEST_OUTPUTS:
-            igs.output_create(self._prefixed(name), igs.BOOL_T, None)
-        for name in ACTION_OUTPUTS:
-            igs.output_create(self._prefixed(name), igs.BOOL_T, None)
-
     def _register_callbacks(self):
-        igs.observe_agent_events(self.on_agent_event_callback, self)
-        igs.observe_freeze(self.on_freeze_callback, self)
-        igs.observe_input("reset", self.reset_callback, self)
-        # signal.signal(signal.SIGINT, self.signal_handler)
+        igs.observe_agent_events(self._on_agent_event_callback, self)
+        igs.observe_freeze(self._on_freeze_callback, self)
+        igs.observe_input("reset", self._reset_callback, self)
 
     ## CALLBACKS ##
-    def on_agent_event_callback(event, uuid, name, event_data, my_data):
-        print(event, uuid, name, event_data)
-        agent_object = my_data
-        assert isinstance(agent_object, Echo)
-        # add code here if needed
-        # log_event(self.pilot_id, "AGENT_EVENT", f"{event} from {name} ({uuid}) → {event_data}")
+    def _on_agent_event_callback(self, event, uuid, name, event_data, info, reserved, my_data):
+        assert isinstance(my_data, Echo)
+        print(f"[Agent Event] {event} from {name} ({uuid}) → {event_data} | {info}")
 
-    def on_freeze_callback(my_data):
-        agent_object = my_data
-        assert isinstance(agent_object, Echo)
-        # add code here if needed
-        # log_event(self.pilot_id, "FREEZE", "Ingescape freeze callback triggered")
+    def _on_freeze_callback(self, my_data):
+        assert isinstance(my_data, Echo)
+        print(f"[Freeze] Agent {my_data.pilot_id} frozen.")
 
-    def reset_callback(my_data):
-        igs.info(f"Output reset")
-        agent_object = my_data
-        assert isinstance(agent_object, Echo)
-        # log_event(self.pilot_id, "RESET", "System reset via Ingescape callback")    
-        agent_object.reset() # reset the agent state
-        # pilot_state.reset() # reset the pilot state
-
-    def signal_handler(signal_received, frame):
-        print("\n", signal.strsignal(signal_received), sep="")
-        print("\nExiting the app...")
-        sys.exit(0)
+    def _reset_callback(self, my_data):
+        assert isinstance(my_data, Echo)
+        print(f"[Reset] Reset triggered for {my_data.pilot_id}")
+        my_data.reset()
 
     def _set_output(self, pool, name, value):
         if name not in pool:
@@ -61,10 +39,10 @@ class Echo:
         igs.output_set_bool(self._prefixed(name), value)
 
     ## PUBLIC ##
-    def set_request(self, name, value: bool):
+    def set_request(self, name: str, value: bool):
         self._set_output(self._requests, name, value)
 
-    def set_action(self, name, value: bool):
+    def set_action(self, name: str, value: bool):
         self._set_output(self._actions, name, value)
 
     def reset(self):
@@ -72,3 +50,29 @@ class Echo:
             self.set_request(name, False)
         for name in self._actions:
             self.set_action(name, False)
+
+    def disconnect(self):
+        self.reset()
+        # igs.stop() #! Not here
+
+    #! static for now
+    @staticmethod
+    def define_inputs_outputs():
+        igs.input_create("reset", igs.IMPULSION_T, None)
+        for name in REQUEST_OUTPUTS:
+            igs.output_create(name, igs.BOOL_T, None)
+        for name in ACTION_OUTPUTS:
+            igs.output_create(name, igs.BOOL_T, None)
+
+    @staticmethod
+    def start_ingescape_agent(device: str = "wlp0s20f3", port: int = 5670):
+        igs.agent_set_name("CPDLC-GROUND")
+        igs.definition_set_version("1.0")
+        igs.log_set_console(True)
+        igs.log_set_file(True, None)
+        igs.log_set_stream(True)
+        igs.set_command_line(sys.executable + " " + " ".join(sys.argv))
+        igs.log_set_console_level(igs.LOG_INFO)
+        Echo.define_inputs_outputs()
+        igs.start_with_device(device, port)
+        print(f"[Ingescape] Agent started on {device}:{port}")
