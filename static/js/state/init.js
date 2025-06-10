@@ -1,6 +1,6 @@
 import { state } from "./state.js";
 import { getState } from "../api/api.js";
-import { filterHistoryLogs } from "../events/filter.js";
+import { displayHistoryLogs } from "../events/filter.js";
 import { showSnackbar } from "../ui/ui.js";
 
 export const initState = async () => {
@@ -14,7 +14,7 @@ export const initState = async () => {
     }
 
     Object.assign(state, data);
-    filterHistoryLogs();
+    displayHistoryLogs();
     showSnackbar("✅ State successfully loaded", false);
 
   } catch (error) {

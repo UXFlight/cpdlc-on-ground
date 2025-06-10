@@ -75,7 +75,6 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
 
 
 const toggleMessage = (e, historyContainer, toggle)=> { 
-    console.log('toggleMessage', e, historyContainer, toggle);
     e.stopPropagation();
     const isOpen = historyContainer.style.display ==='block';
     historyContainer.style.display = isOpen ? 'none' : 'block';

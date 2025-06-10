@@ -1,4 +1,4 @@
-import { filterHistoryLogs } from "../events/filter.js";
+import { displayHistoryLogs } from "../events/filter.js";
 import { updateStep } from "../state/state.js";
 import { updateDirection } from "../state/state.js";
 
@@ -14,5 +14,5 @@ export const handleCancelRequest = (data) => {
 
     }
     updateStep(requestType, status, message, timestamp);
-    filterHistoryLogs();
+    displayHistoryLogs();
 }

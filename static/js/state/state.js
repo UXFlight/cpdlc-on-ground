@@ -1,9 +1,8 @@
 import { updateMessageStatus, updateOverlayStatus } from "../ui/ui.js";
-import { updateSnackbar } from "../ui/ui.js";
 
 // Global state
 export const state = {
-  isFiltered: true,           // used to filter history logs
+  isFiltered: false,           // used to filter history logs
   history: [],                // history logs
   connection: {
     backend: "connecting",    // "connecting" | "connected" | "disconnected"

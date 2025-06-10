@@ -14,30 +14,6 @@ export async function loadEvent(e) {
   try {
     
     emitAction(action, requestType);
-    
-    // if (!ok) {
-    //   console.error("Load error:", error || `HTTP ${status}`);
-    //   updateStep(requestType, MSG_STATUS.ERROR, error || `Load failed (status ${status})`);
-    //   return;
-    // }
-
-    // if (message === null) {
-    //   updateStep(requestType, MSG_STATUS.LOADED, "Loaded, awaiting ATC clearance...");
-    //   return;
-    // }
-
-    // updateTaxiClearanceMsg(message);
-    // updateStep(requestType, MSG_STATUS.LOADED, message);
-
-    // if (e.target && e.target.disabled !== undefined) {
-    //   e.target.disabled = true;
-    // }
-
-    // if (requestType === "taxi_clearance") {
-    //   setExecuteButtonState();
-    // } else {
-    //   enableWilcoButtons(requestType);
-    // }
 
   } catch (err) {
     console.error("Network error:", err);

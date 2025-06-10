@@ -4,7 +4,7 @@ import { cancelRequestEvent } from './events/cancelRequest.js';
 import { toggleOverlay, touchStartEvent, handleGlobalClick, touchFeedbackButtons } from './events/overlay.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
 import { setupSocketListeners } from './socket/socket-listens.js';
-import { filterHistoryLogs } from './events/filter.js';
+import { filterEvent } from './events/filter.js';
 import { state } from './state/state.js';
 import { initState } from './state/init.js';
 
@@ -58,10 +58,7 @@ function listenToButtonEvents() {
   rightButton.addEventListener("click", (e) => selectPushbackDirection(e));
 
   // filter btn event
-  filterButton.addEventListener("click", () => {
-    state.isFiltered = !state.isFiltered;
-    filterHistoryLogs()
-  });
+  filterButton.addEventListener("click", () => filterEvent());
 }
 
 export function listenToHeaderEvents() {

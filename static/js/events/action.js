@@ -2,7 +2,7 @@ import { updateStep } from '../state/state.js';
 import { MSG_STATUS } from '../utils/consts/status.js';
 import { showSpinner, showTick } from '../ui/ui.js';
 import { disableCancelButtons } from '../ui/buttons-ui.js';
-import { filterHistoryLogs } from './filter.js';
+import { displayHistoryLogs } from './filter.js';
 import { closeCurrentOverlay, getActionInfoFromEvent } from '../utils/utils.js';
 import { emitAction } from '../socket/socket-emits.js';
 
@@ -23,12 +23,12 @@ export const actionEvent = async (e) => {
     //   console.warn(`Server error on '${action}':`, status, error);
     //   showTick(requestType, true);
     //   updateStep(requestType, MSG_STATUS.ERROR, error || `Server error`, requestType);
-    //   filterHistoryLogs();
+    //   displayHistoryLogs();
     //   return;
     // }
 
     // updateStep(requestType, status, message, requestType);
-    // filterHistoryLogs();
+    // displayHistoryLogs();
 
     // if (action !== MSG_STATUS.WILCO) {
     //   const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
