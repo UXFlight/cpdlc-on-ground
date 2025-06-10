@@ -26,6 +26,7 @@ class PilotState:
     ## PUBLIC
     def update_step(self, step_name, status, message=None, time_left=None):
         step = self.steps.get(step_name)
+        print(f"[UPDATE] {step} - {status} - {message} - {time_left}")
         if not step:
             return {"error": f"Unknown step: {step_name}"}
 
@@ -34,28 +35,16 @@ class PilotState:
         step.status = status
         step.message = message
         step.timestamp = get_current_timestamp()
-        step.time_left = time_left if status not in ("executed", "loaded", "timeout", "cancelled") else None
-
-
-    def cancel_request(self, step_name):
-        step = self.steps.get(step_name)
-        if not step:
-            return {"error": f"Unknown request: {step_name}"}
-        if step.status != "requested":
-            return {"error": f"Cannot cancel: current status is '{step.status}'"}
-
-        step.status = "cancelled"
-        step.message = "Request cancelled by pilot"
-        step.timestamp = get_current_timestamp()
-        step.cancelled = True
+        step.time_left = time_left if status not in ("closed", "timeout", "unable", "responded") else None #! Not sure..
+        step.cancelled = False if status != "cancelled" else True
 
         return {
-            "status": "cancelled",
             "requestType": step_name,
-            "message": step.message,
-            "timestamp": step.timestamp
+            "status": status,
+            "message": message,
+            "timestamp": step.timestamp,
+            "timeLeft": step.time_left
         }
-
 
     def get_state(self):
         return {

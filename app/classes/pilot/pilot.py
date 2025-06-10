@@ -18,9 +18,11 @@ class Pilot:
             return self._error("REQUEST", "Missing requestType in request")
 
         try:
-            self.state.update_step(request_type, "requested", "Request sent to ATC")
-            self.agent.set_request(request_type, True)
+            result = self.state.update_step(request_type, "requested", "Request sent to ATC")
+            if "error" in result:
+                return self._error("REQUEST", result["error"], request_type)
 
+            self.agent.set_request(request_type, True)
             self.logger.log_request(
                 pilot_id=self.sid,
                 request_type=request_type,
@@ -29,30 +31,22 @@ class Pilot:
             )
 
             return {
-                "responses": [
-                    {
-                        "event": "requestAcknowledged",
-                        "payload": {
-                            "requestType": request_type,
-                            "status": "requested",
-                            "message": "Request sent to ATC",
-                            "timestamp": get_current_timestamp()
-                        }
-                    }
-                ]
+                "event": "requestAcknowledged",
+                "payload": result
             }
 
         except Exception as e:
             return self._error("REQUEST", str(e), request_type)
+
 
     def cancel_request(self, data):
         request_type = data.get("requestType")
         if not request_type:
             return self._error("CANCEL", "Missing requestType in cancel request")
 
-        cancel_result = self.state.cancel_request(request_type)
-        if "error" in cancel_result:
-            return self._error("CANCEL", cancel_result["error"], request_type)
+        result = self.state.update_step(request_type, "cancelled", "Request cancelled by pilot")
+        if "error" in result:
+            return self._error("CANCEL", result["error"], request_type)
 
         try:
             self.agent.set_request(request_type, False)
@@ -66,16 +60,10 @@ class Pilot:
             return self._error("CANCEL", f"Failed to cancel in agent: {str(e)}", request_type)
 
         return {
-            "responses": [
-                {
-                    "event": "requestCancelled",
-                    "payload": {
-                        **cancel_result,
-                        "timestamp": get_current_timestamp()
-                    }
-                }
-            ]
+            "event": "requestCancelled",
+            "payload": result
         }
+
 
     def process_action(self, data):
         action = data.get("action")
@@ -96,31 +84,26 @@ class Pilot:
 
         try:
             self.agent.set_action(action, True)
-            self.state.update_step(final_type, config["status"], message)
+            result = self.state.update_step(final_type, config["status"], message)
+            if "error" in result:
+                return self._error("ACTION", result["error"], final_type)
+
             self.logger.log_action(
-                pilot_id=self.sid, 
-                action_type=action, 
-                status=config["status"], 
-                message=message)
+                pilot_id=self.sid,
+                action_type=action,
+                status=config["status"],
+                message=message
+            )
+
+            result["action"] = action  # ajoute l'action au payload
 
             return {
-                "responses": [
-                    {
-                        "event": "actionAcknowledged",
-                        "payload": {
-                            "requestType": final_type,
-                            "action": action,
-                            "status": config["status"],
-                            "message": message,
-                            "timestamp": get_current_timestamp()
-                        }
-                    }
-                ]
+                "event": "actionAcknowledged",
+                "payload": result
             }
 
         except Exception as e:
             return self._error("ACTION", str(e), final_type)
-
 
 
     # def start_timer(request_type: str, socket_manager):
@@ -164,15 +147,35 @@ class Pilot:
             error=message
             )
         return {
-            "responses": [
-                {
-                    "event": "error",
-                    "payload": {
-                        "requestType": request_type,
-                        "status": status,
-                        "message": message,
-                        "timestamp": get_current_timestamp()
-                    }
-                }
-            ]
+            "event": "error",
+            "payload": {
+                "requestType": request_type,
+                "status": status,
+                "message": message,
+                "timestamp": get_current_timestamp()
+            }
         }
+    
+    def cleanup(self):
+        try:
+            self.logger.log_event(
+                pilot_id=self.sid,
+                event_type="SYSTEM",
+                message="Cleaning up pilot session."
+            )
+
+            self.agent.disconnect()
+            self.state.reset()
+
+            self.logger.log_event(
+                pilot_id=self.sid,
+                event_type="SYSTEM",
+                message="Pilot cleanup complete."
+            )
+
+        except Exception as e:
+            self.logger.log_error(
+                pilot_id=self.sid,
+                context=f"CLEANUP:{self.sid}",
+                error=f"Cleanup failed: {e}"
+            )
