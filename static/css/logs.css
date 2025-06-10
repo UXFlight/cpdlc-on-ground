@@ -20,12 +20,12 @@
     opacity: 0.8;
     cursor: pointer;
     transition: opacity 0.2s ease;
-    fill: var(--text-primary);
-    stroke: var(--text-primary)
+    fill: var(--text-muted);
+    stroke: var(--text-muted)
 }
 
 #filter-icon:hover {
-    opacity: 1;
+    fill: var(--text-primary);
 }
 
 #filter-icon.filtered {
@@ -124,7 +124,7 @@
 
 /* ATC RESPONSE */
 .message-response {
-    padding: 16px 12px 6px;
+    padding: 16px 12px;
     font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -165,7 +165,6 @@
 
 /* HISTORY */
 .history-details {
-    background: var(--bg-secondary);
     border-top: 1px solid var(--border-accent);
     padding: 0;
     margin: 0;
@@ -176,13 +175,16 @@
 
 .history-details p {
     padding: 12px 16px;
-    background: rgba(125, 133, 144, 0.05);
     border: 1px solid var(--border-accent);
     border-radius: 8px;
     font-size: 0.85rem;
     color: var(--text-secondary);
     font-family: 'JetBrains Mono', monospace;
     line-height: 1.4;
+}
+
+.history-details p:first-child {
+    padding-top: 0;
 }
 
 /* FLASH ANIMATION */

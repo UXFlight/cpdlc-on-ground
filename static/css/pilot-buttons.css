@@ -4,7 +4,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 12px;
     font-size: 16px;
-    padding: 12px;
+    padding: 0 12px 12px;
 }
 
 /* BASE BUTTON STYLE */

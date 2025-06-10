@@ -41,7 +41,7 @@
 
 /* DEFAULT LABEL STATE */
 .overlay-title .label {
-    color: #f5f5f5;
+    color: var(--text-primary);
     transition: color 0.3s ease, font-weight 0.3s ease;
 }
 
