@@ -12,22 +12,26 @@
 │   │       └── step.py
 │   ├── managers
 │   │   ├── __init__.py
-│   │   ├── log_manager.py
-│   │   ├── pilot_manager.py
-│   │   └── socket_manager.py
+│   │   ├── log-manager
+│   │   │   └── log_manager.py
+│   │   ├── pilot-manager
+│   │   │   └── pilot_manager.py
+│   │   └── socket-manager
+│   │       └── socket_manager.py
 │   ├── routes
+│   │   ├── action_routes.py
 │   │   ├── general.py
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   └── request_routes.py
 │   └── utils
 │       ├── constants.py
 │       ├── __init__.py
 │       └── time_utils.py
 ├── logs
-│   ├── EJ5F3P1XAbbqi2JnAAAB-log
-│   ├── tSeZI9_kVrfrwI5aAAAF-log
-│   └── Z3LoJyW0ly3Qx4qsAAAD-log
 ├── main.py
 ├── project-structure.txt
+├── README.md
+├── requirements.txt
 ├── shared
 │   └── msg_status.json
 ├── static
@@ -36,6 +40,7 @@
 │   │   ├── logs.css
 │   │   ├── pilot-buttons.css
 │   │   ├── request.css
+│   │   ├── status.css
 │   │   ├── style.css
 │   │   └── taxi-clearance.css
 │   ├── favicon.ico
@@ -82,4 +87,4 @@
 └── templates
     └── index.html
 
-30 directories, 58 files
+28 directories, 60 files
