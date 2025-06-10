@@ -1,4 +1,4 @@
-import { SERVER_URL } from "../utils/consts.js";
+import { SERVER_URL } from "../utils/consts/serverUrl.js";
 
 const socket = io(SERVER_URL); //! single connection for each pilot
 

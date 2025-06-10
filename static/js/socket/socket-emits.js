@@ -1,9 +1,13 @@
 import { send } from "./socket.js";
-import { SOCKET_EMITS } from "../utils/consts.js";
+import { SOCKET_EMITS } from "../utils/consts/socketConsts.js";
 
-export function emitRequest(requestType) {
-  send(SOCKET_EMITS.SEND_REQUEST, { requestType });
+export function emitRequest(requestType, data = {}) {
+  send(SOCKET_EMITS.SEND_REQUEST, {
+    requestType,
+    ...data
+  });
 }
+
 
 export function emitCancelRequest(requestType) {
   send(SOCKET_EMITS.CANCEL_REQUEST, { requestType });
