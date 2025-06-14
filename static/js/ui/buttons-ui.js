@@ -1,29 +1,26 @@
-import { handlerMap } from "../state/handlerMap.js";
+import { actionEvent } from "../events/action.js";
 import { WORKFLOW_BUTTONS } from "../utils/consts/buttonsWorkflow.js";
 import { ALL_ACTIONS, LOADABLE_REQUEST_TYPES } from "../utils/consts/flightConsts.js";
 
-// enabling btns based on requestType
-export function enableButtons(requestType) {
-    switch (requestType) {
-        case "expected_taxi_clearance":
-        case "taxi_clearance":
-            enableLoadButton(requestType);
-            break;
-        default:
-            enableWilcoButtons(requestType);
-    }
-}
-
-// enabling btns based on action
+// enabling btns based on action and requestType
 export function enableButtonsByAction(action, requestType) {
     switch (action) {
         case "load":
             if (requestType === "taxi_clearance") return setExecuteButtonState() // enables exec & cancel exec btn
             enableWilcoButtons(requestType);
+            break;
         case "execute": 
+            enableLoadButton(requestType)
             enableWilcoButtons(requestType) // enables wilco, standby, unable 
-        case "cancel-execute":
-            // enables load btn
+            break;
+        case "cancel":
+            setExecuteButtonState(true);
+            enableRequestButton(requestType);
+            break;
+        case "standby":
+            enableRequestButton(requestType);
+        case "unable":
+            enableRequestButton(requestType);
         default:
             break;
     }
@@ -47,8 +44,8 @@ export const enableAllRequestButtons = () => {
     const requestButtons = document.querySelectorAll(".request-button");
     requestButtons.forEach(btn => {
     if (btn.id === "pushback-btn") return; //! skip pushback, direction buttons will handle it
-    btn.disabled = false;
-    btn.classList.add("active");
+        btn.disabled = false;
+        btn.classList.add("active");
     });
 };
 
@@ -65,9 +62,9 @@ export function createButton(requestType, status) {
             .filter(([action]) => ['WILCO', 'STANDBY', 'UNABLE'].includes(action)) 
     : Object.entries(ALL_ACTIONS)
     for (const [action, { id }] of actionsToShow) {
-    const disabled = !available.includes(action);
-    const btn = createActionButton(requestType, action, id, disabled);
-    btnContainer.appendChild(btn);
+        const disabled = !available.includes(action);
+        const btn = createActionButton(requestType, action, id, disabled);
+        btnContainer.appendChild(btn);
     }
 
     return btnContainer;
@@ -80,10 +77,7 @@ function createActionButton(requestType, action, id = null, disabled = false) {
     if (id) btn.id = id + `-${requestType}`;
     btn.dataset.actionType = action.toLowerCase();
     btn.disabled = disabled;
-
-    const status = action.toLowerCase();
-    const handlerFactory = handlerMap[status];
-    if (handlerFactory) btn.addEventListener('click', handlerFactory(btn, requestType));
+    btn.addEventListener('click', (e) => actionEvent(e));
     return btn;
 }
 
@@ -110,4 +104,10 @@ export function setExecuteButtonState(isDisabled = false) {
 
     if (executeButton) executeButton.disabled = isDisabled;
     if (cancelExecuteButton) cancelExecuteButton.disabled = isDisabled;
+}
+
+// enables request button
+export function enableRequestButton(requestType) {
+    const requestButton = document.getElementById(`${requestType}-btn`);
+    if (requestButton) requestButton.disabled = false;
 }

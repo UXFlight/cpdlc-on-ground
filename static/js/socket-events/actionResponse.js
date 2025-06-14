@@ -3,7 +3,8 @@ import { MSG_STATUS } from '../utils/consts/status.js';
 import { closeCurrentOverlay } from "../utils/utils.js";
 import { displayHistoryLogs } from "../events/filter.js";
 import { enableButtonsByAction } from "../ui/buttons-ui.js";
-import { updateTaxiClearanceMsg, updateTaxiClearanceStatus } from "../ui/ui.js";
+import { updateTaxiClearanceMsg } from "../ui/ui.js";
+import { REQUEST_TYPE } from "../utils/consts/flightConsts.js";
 
 export function handleActionResponse(data) {
     const { requestType, status, message, action, timestamp, timeLeft } = data;
@@ -11,18 +12,8 @@ export function handleActionResponse(data) {
     displayHistoryLogs();
     enableButtonsByAction(action, requestType);
 
-    if (action === MSG_STATUS.LOAD || action === MSG_STATUS.EXECUTE) {
-        updateTaxiClearanceMsg(message);
-        updateTaxiClearanceStatus(action, status);
+    if (action === MSG_STATUS.LOAD || action === MSG_STATUS.EXECUTE || action === MSG_STATUS.CANCEL) {
+        updateTaxiClearanceMsg(requestType === REQUEST_TYPE.EXPECTED_TAXI_CLEARANCE, action !== MSG_STATUS.CANCEL ? message : '');
     }
-
-    // if (action !== MSG_STATUS.WILCO) {
-    //   const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
-    //   if (clearanceMessageBox) clearanceMessageBox.classList.remove("active");
-    //   disableCancelButtons(requestType);
-    //   requestBtn.disabled = false;
-    // }
-
-    // showTick(requestType, status !== MSG_STATUS.CLOSED);
     closeCurrentOverlay();
 }
