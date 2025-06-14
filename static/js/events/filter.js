@@ -11,18 +11,14 @@ export const filterEvent = () => {
     )
   );
 
-  console.log("Filter History Logs:", hasClosableLogs);
-
   if (!hasClosableLogs) return;
   state.isFiltered = !state.isFiltered;
   displayHistoryLogs()
+  changeFilterIcon();
 }
 
 export const displayHistoryLogs = () => {
-  changeFilterIcon();
-
   clearMessageBox();
-
   const logs = state.history.map(group => {
     const latest = group.entries[group.entries.length - 1];
     return {
