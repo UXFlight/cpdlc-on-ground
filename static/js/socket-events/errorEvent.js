@@ -1,6 +1,7 @@
 import { updateStep } from "../state/state.js"
-import { showSnackbar, showTick } from "../ui/ui.js"
+import { showSnackbarFromPayload } from "../ui/ui.js"
 
-export const handleError = (data) => {
-    console.log(data)
-}
+export const handleError = (payload) => {
+    if (!payload) return;
+    showSnackbarFromPayload(payload);
+};
