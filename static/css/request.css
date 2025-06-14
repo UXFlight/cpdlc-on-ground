@@ -2,8 +2,8 @@
 .request-menu {
     display: flex;
     flex-direction: column;
-    border-radius: 6px;
     height: 100%;
+    gap: 20px;
 }
 
 .request-list {
@@ -12,8 +12,6 @@
     gap: 15px;
     height: 100%;
     overflow: hidden; 
-    border-radius: 10px;
-    padding: 12px;
 }
 
 /*! TEMP */
@@ -31,25 +29,37 @@ div.overlay:nth-child(5) {
 .icon-wrap {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 20px;
+    padding: 12px;
+    font-variant: all-petite-caps;
+}
+
+#request-wrap.icon-wrap {
+    border: 1px solid var(--text-secondary);
+    border-radius: 8px;
+}
+
+#filter-btn.icon-wrap {
+    border-bottom: 1px solid var(--text-secondary);
 }
 
 #request-voice-contact-icon {
-    width: 18px;
-    height: 18px;
-    stroke: var(--text-muted);
-    fill: var(--text-muted);
+    width: 28px;
+    height: 28px;
+    stroke: var(--text-primary);
+    fill: var(--text-primary);
     cursor: pointer;
 }
 
 #request-voice-contact-icon:hover {
-    fill: var(--text-primary);
+    fill: var(--text-muted);
+    stroke: var(--text-muted);
 }
 
 .more-link {
-    font-size: 0.7em;
-    color: var(--text-secondary);
+    font-size: 1rem;
+    color: var(--text-primary);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.2s ease;
@@ -65,7 +75,7 @@ div.overlay:nth-child(5) {
 }
 
 .more-link:hover {
-    color: var(--text-primary);
+    color: var(--text-muted);
 }
 
 .more-link:hover::after {
@@ -84,12 +94,12 @@ div.overlay:nth-child(5) {
     box-shadow: var(--shadow-md);
     cursor: pointer;
     overflow: hidden; 
+    border-color: var(--color-requested);
 }
 
 .overlay.open,
 .overlay:hover {
     box-shadow: 0 8px 20px var(--color-requested);
-    border-color: var(--color-requested);
 }
 
 .overlay.touched,
@@ -101,6 +111,7 @@ div.overlay:nth-child(5) {
 
 /* TITLE */
 .overlay-title {
+    z-index: -1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -173,7 +184,7 @@ div.overlay:nth-child(5) {
 }
 
 .tick-icon.success { color: var(--color-success); }
-.tick-icon.error { color: var(--color-error); }
+.tick-icon.error { color: var(--color-inactive); }
 
 /* OVERLAY ACTIONS */
 .overlay-actions {
@@ -241,8 +252,8 @@ button.cancel-button:nth-child(3) {
 
 .cancel-button.touched:not(:disabled),
 .cancel-button:hover:not(:disabled) {
-    border-color: var(--color-cancelled);
-    color: var(--color-cancelled);
+    border-color: var(--color-inactive);
+    color: var(--color-inactive);
 }
 
 /* PUSHBACK DIRECTION */
@@ -282,18 +293,11 @@ button.cancel-button:nth-child(3) {
 
 /* RESPONSIVE BREAKPOINTS */
 @media (max-width: 1080px) and (min-width: 769px) {
-    .request-list {
-        gap: 20px;
-        padding: 12px;
-        grid-template-rows: repeat(3, 1fr);
-    }
-    
     .overlay {
-        min-height: 75px;
         padding: 10px;
     }
 
-    .overlay.open:nth-child(3) .overlay-title {
+    .overlay.open .overlay-title {
         margin-top: 0;
     }
 
@@ -302,7 +306,8 @@ button.cancel-button:nth-child(3) {
     }
 
     .overlay.open .overlay-actions {
-        gap: 7px
+        column-gap: 7px;
+        row-gap: 0px;
     }
     
     .overlay-title {
@@ -322,7 +327,11 @@ button.cancel-button:nth-child(3) {
     
     .direction-button {
         font-size: 0.65rem;
-        height: 28px;
+        height: 24px;
+    }
+
+    .overlay.open[data-requesttype="pushback"] .overlay-title {
+        margin-top: 0;
     }
     
     .spinner {
@@ -337,31 +346,20 @@ button.cancel-button:nth-child(3) {
 
 /* Tablettes */
 @media (max-width: 768px) and (min-width: 481px) {
-    .request-menu {
-        padding: 14px;
-    }
-
-    .request-list {
-        gap: 10px;
-        padding: 10px;
-        grid-template-rows: repeat(3, 1fr);
-    }
-    
     .overlay {
-        min-height: 160px;
+        min-height: 150px;
         padding: 8px;
     }
     
     .overlay-title {
         font-size: 0.9rem;
         height: 40px;
-        margin: 6px 0 10px 0;
     }
     
     .request-button,
     .cancel-button {
         font-size: 0.8rem;
-        height: 32px;
+        height: 58px;
         padding: 5px 8px;
     }
     
@@ -378,15 +376,8 @@ button.cancel-button:nth-child(3) {
 }
 
 @media (max-width: 480px) {
-    .request-menu {
-        padding: 12px;
-    }
-
     .request-list {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(6, auto); 
         gap: 8px;
-        padding: 8px;
     }
     
     .overlay {

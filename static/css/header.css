@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
   backdrop-filter: blur(20px);
-  padding: 20px 28px;
+  padding: 20px 12px;
   box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.5),
       0 1px 0 rgba(255, 255, 255, 0.05) inset;
@@ -14,7 +14,7 @@
 /* TITLE */
 .header-title {
   font-size: 2rem;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
@@ -35,16 +35,18 @@
   gap: 12px;
   padding: 10px 16px;
   border-radius: 12px;
-  border: 1px solid #3a3a3a;
+  border: 1px solid var(--text-secondary);
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
   backdrop-filter: blur(6px);
   transition: all 0.3s ease;
+  user-select: none;
+  cursor: auto;
 }
 
 /* CONNECTION TEXT */
 #connection-text {
   min-width: 210px;
-  color: #e0e0e0;
+  color: var(--text-light);
   font-weight: 500;
   font-size: 1.15rem;
   white-space: nowrap;
@@ -79,15 +81,15 @@
 
 /* STATUS COLORS */
 .status-indicator.connected {
-  background-color: var(--color-wilco);
+  background-color: var(--color-success);
 }
 
 .status-indicator.disconnected {
-  background-color: var(--color-error);
+  background-color: var(--color-inactive);
 }
 
 .status-indicator.partial {
-  background-color: var(--color-standby);
+  background-color: var(--color-inactive);
 }
 
 /* TOOLTIP */
@@ -95,7 +97,7 @@
   position: absolute;
   top: 45px;
   left: 0;
-  background-color: #000;
+  background-color: var(--bg-primary);
   color: var(--text-light);
   padding: 16px 20px;
   border-radius: 8px;
@@ -155,11 +157,11 @@
 }
 
 .status-dot.failure {
-  background-color: var(--color-error);
+  background-color: var(--color-inactive);
 }
 
 .status-dot.pending {
-  background-color: var(--color-standby);
+  background-color: var(--color-inactive);
 }
 
 .status-dot.pulse {
@@ -202,7 +204,7 @@
 }
 
 /* SETTING ICON */
-.settings-icon {
+#settings-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,14 +212,15 @@
   border-radius: 10px;
 }
 
-.settings-icon svg {
+#settings-icon svg {
   width: 32px;
   height: 32px;
   cursor: pointer;
   transition: transform 0.3s ease;
-  fill: #e4e9f0;
+  fill: var(--text-primary);
 }
 
-.settings-icon svg:hover {
+#settings-icon svg:hover {
   transform: rotate(25deg);
+  fill: var(--text-muted);
 }

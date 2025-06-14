@@ -1,6 +1,7 @@
 /* OVERLAY STATUS VARIANTS */
 .overlay.status-requested {
     border-color: var(--color-requested);
+    background-color: var(--bg-requested);
     box-shadow: 0 0 10px var(--color-requested);
     font-weight: 600;
 }
@@ -9,13 +10,22 @@
 .overlay.status-loaded,
 .overlay.status-new {
     border-color: var(--color-new);
+    background-color: var(--bg-new);
     box-shadow: 0 0 10px var(--color-new);
     font-weight: 600;
 }
 
+.overlay.status-executed {
+    border-color: var(--color-active);
+    background-color: var(--bg-active);
+    box-shadow: 0 0 10px var(--color-active);
+    font-weight: 600;
+}
+
 .overlay.status-standby {
-    border-color: var(--color-standby);
-    box-shadow: 0 0 10px var(--color-standby);
+    border-color: var(--color-inactive);
+    background-color: var(--bg-inactive);
+    box-shadow: 0 0 10px var(--color-inactive);
     font-weight: 600;
 }
 
@@ -23,13 +33,14 @@
 .overlay.status-unable,
 .overlay.status-cancelled,
 .overlay.status-timeout {
-    border-color: var(--color-error);
-    box-shadow: var(--color-error-glow);
+    border-color: var(--color-inactive);
+    background-color: var(--bg-inactive);
     font-weight: 600;
 }
 
 .overlay.status-closed {
     border-color: var(--color-closed);
+    background-color: var(--bg-closed);
     box-shadow: none;
     cursor: default;
     pointer-events: none;
@@ -37,7 +48,6 @@
     filter: grayscale(0.6) brightness(0.6);
     transition: opacity 0.4s ease, filter 0.4s ease;
 }
-
 
 /* DEFAULT LABEL STATE */
 .overlay-title .label {
@@ -51,7 +61,7 @@
 }
 
 .overlay.status-executed .overlay-title .label {
-    color: var(--color-executed);
+    color: var(--color-active);
 }
 
 .overlay.status-new .overlay-title .label,
@@ -60,45 +70,20 @@
 }
 
 .overlay.status-standby .overlay-title .label {
-    color: var(--color-standby);
+    color: var(--color-inactive);
 }
 
 .overlay.status-error .overlay-title .label,
 .overlay.status-unable .overlay-title .label,
 .overlay.status-cancelled .overlay-title .label,
 .overlay.status-timeout .overlay-title .label {
-    color: var(--color-error);
+    color: var(--color-inactive);
 }
 
 .overlay.status-closed .overlay-title .label {
-    color: var(--color-closed);
+    color: var(--color-muted);
     font-weight: 500;
     opacity: 0.6;
-}
-
-/* DIRECTION BUTTONS */
-.overlay.status-executed .direction-button.active {
-    background-color: var(--color-executed);
-}
-
-.overlay.status-new .direction-button.active,
-.overlay.status-loaded .direction-button.active {
-    background-color: var(--color-new);
-}
-
-.overlay.status-standby .direction-button.active {
-    background-color: var(--color-standby);
-}
-
-.overlay.status-error .direction-button.active,
-.overlay.status-unable .direction-button.active,
-.overlay.status-cancelled .direction-button.active,
-.overlay.status-timeout .direction-button.active {
-    background-color: var(--color-error);
-}
-
-.overlay.status-closed .direction-button.active {
-    background-color: var(--color-closed);
 }
 
 /* MOBILE */
@@ -118,14 +103,14 @@
 }
 
 .overlay.status-standby.touched {
-    box-shadow: 0 0 16px var(--color-standby);
+    box-shadow: 0 0 16px var(--color-inactive);
 }
 
 .overlay.status-error.touched,
 .overlay.status-unable.touched,
 .overlay.status-cancelled.touched,
 .overlay.status-timeout.touched {
-    box-shadow: var(--color-error-glow);
+    box-shadow: var(--color-inactive-glow);
 }
 
 .overlay.status-closed.touched {
@@ -136,63 +121,117 @@
 
 /* STATUS ICONS */
 .tick-icon.success { color: var(--color-success); }
-.tick-icon.error   { color: var(--color-error); }
+.tick-icon.error   { color: var(--color-inactive); }
 
-/* TIMESTAMP & BORDER LEFT BASED ON STATUS */
-.new-message[data-status="new"]       { border-color: var(--color-new);       }
-.new-message[data-status="closed"]    { border-color: var(--color-closed);    }
-.new-message[data-status="cancelled"] { border-color: var(--color-cancelled); }
-.new-message[data-status="requested"] { border-color: var(--color-requested); }
-.new-message[data-status="loaded"]    { border-color: var(--color-loaded);    }
-.new-message[data-status="wilco"]     { border-color: var(--color-wilco);     }
-.new-message[data-status="standby"]   { border-color: var(--color-standby);   }
-.new-message[data-status="unable"]    { border-color: var(--color-unable);    }
-.new-message[data-status="executed"]  { border-color: var(--color-executed);  }
-.new-message[data-status="error"]     { border-color: var(--color-error);     }
+/* TIMESTAMP & BORDER BASED ON STATUS */
+/* NEW MESSAGE: STATUS BACKGROUNDS + BORDER COLORS */
+.new-message[data-status="new"] {
+    border-color: var(--color-new);
+    background-color: var(--bg-new);
+}
+.new-message[data-status="closed"] {
+    border-color: var(--color-closed);
+    background-color: var(--bg-closed);
+}
+.new-message[data-status="cancelled"] {
+    border-color: var(--color-inactive);
+    background-color: var(--bg-inactive);
+}
+.new-message[data-status="requested"] {
+    border-color: var(--color-requested);
+    background-color: var(--bg-requested);
+}
+.new-message[data-status="loaded"] {
+    border-color: var(--color-active);
+    background-color: var(--bg-active);
+}
+.new-message[data-status="standby"] {
+    border-color: var(--color-inactive);
+    background-color: var(--bg-inactive);
+}
+.new-message[data-status="unable"] {
+    border-color: var(--color-inactive);
+    background-color: var(--bg-inactive);
+}
+.new-message[data-status="executed"] {
+    border-color: var(--color-active);
+    background-color: var(--bg-active);
+}
+.new-message[data-status="error"] {
+    border-color: var(--color-inactive);
+    background-color: var(--bg-inactive);
+}
 
-.new-message[data-status="new"]       .timestamp { color: var(--color-new);       }
-.new-message[data-status="closed"]    .timestamp { color: var(--color-closed);    }
-.new-message[data-status="cancelled"] .timestamp { color: var(--color-cancelled); }
-.new-message[data-status="requested"] .timestamp { color: var(--color-requested); }
-.new-message[data-status="loaded"]    .timestamp { color: var(--color-loaded);    }
-.new-message[data-status="wilco"]     .timestamp { color: var(--color-wilco);     }
-.new-message[data-status="standby"]   .timestamp { color: var(--color-standby);   }
-.new-message[data-status="unable"]    .timestamp { color: var(--color-unable);    }
-.new-message[data-status="executed"]  .timestamp { color: var(--color-executed);  }
-.new-message[data-status="error"]     .timestamp { color: var(--color-error);     }
+/* Border color for first paragraph child */
+.new-message[data-status="new"] > p:first-child {
+    border-color: var(--color-new);
+}
+.new-message[data-status="closed"] > p:first-child {
+    border-color: var(--color-closed);
+}
 
-.new-message[data-status="new"] > p:first-child { border-color: var(--color-new);       }
-.new-message[data-status="closed"] > p:first-child    { border-color: var(--color-closed);    }
-.new-message[data-status="cancelled"] > p:first-child { border-color: var(--color-cancelled); }
-.new-message[data-status="requested"] > p:first-child { border-color: var(--color-requested); }
-.new-message[data-status="loaded"] > p:first-child    { border-color: var(--color-loaded);    }
-.new-message[data-status="wilco"] > p:first-child     { border-color: var(--color-wilco);     }
-.new-message[data-status="standby"] > p:first-child   { border-color: var(--color-standby);   }
-.new-message[data-status="unable"] > p:first-child    { border-color: var(--color-unable);    }
-.new-message[data-status="executed"] > p:first-child  { border-color: var(--color-executed);  }
-.new-message[data-status="error"] > p:first-child     { border-color: var(--color-error);     }
+.new-message[data-status="closed"] > p:first-child:hover {
+    background: none;
+}
+
+.new-message[data-status="closed"] .message-response {
+    color: var(--text-muted);
+}
+.new-message[data-status="cancelled"] > p:first-child {
+    border-color: var(--color-inactive);
+}
+.new-message[data-status="requested"] > p:first-child {
+    border-color: var(--color-requested);
+}
+.new-message[data-status="loaded"] > p:first-child {
+    border-color: var(--color-active);
+}
+.new-message[data-status="standby"] > p:first-child {
+    border-color: var(--color-inactive);
+}
+.new-message[data-status="unable"] > p:first-child {
+    border-color: var(--color-inactive);
+}
+.new-message[data-status="executed"] > p:first-child {
+    border-color: var(--color-active);
+}
+.new-message[data-status="error"] > p:first-child {
+    border-color: var(--color-inactive);
+}
+
+.new-message[data-status="new"]       .message-title { color: var(--color-new);       }
+.new-message[data-status="closed"]    .message-title,
+.new-message[data-status="closed"]    .timestamp     { color: var(--color-closed);    }
+.new-message[data-status="cancelled"] .message-title { color: var(--color-inactive); }
+.new-message[data-status="requested"] .message-title { color: var(--color-requested); }
+.new-message[data-status="loaded"]    .message-title { color: var(--color-active);    }
+.new-message[data-status="standby"]   .message-title { color: var(--color-inactive);   }
+.new-message[data-status="unable"]    .message-title { color: var(--color-inactive);    }
+.new-message[data-status="executed"]  .message-title { color: var(--color-active);  }
+.new-message[data-status="error"]     .message-title { color: var(--color-inactive);     }
 
 
 /* STATUS COLORS */
 .status.requested { background-color: var(--color-requested); }
 .status.new { background-color: var(--color-new); }
-.status.loaded { background-color: var(--color-loaded); }
-.status.executed { background-color: var(--color-executed); }
-.status.cancelled { background-color: var(--color-cancelled); }
-.status.error { background-color: var(--color-error); }
+.status.loaded { background-color: var(--color-active); }
+.status.executed { background-color: var(--color-active); }
+.status.cancelled { background-color: var(--color-inactive); }
+.status.error { background-color: var(--color-inactive); }
 .status.timeout { background-color: var(--color-timeout); }
 .status.closed { background-color: var(--color-closed); }
-.status.unable { background-color: var(--color-unable); }
+.status.unable { background-color: var(--color-inactive); }
 
 /* STATUS LABEL BACKGROUNDS */
 .status.new       { background-color: var(--color-new); }
 .status.closed    { background-color: var(--color-closed); color: var(--color-fg-dark); }
-.status.cancelled { background-color: var(--color-cancelled); color: var(--white); }
+.status.cancelled { background-color: var(--color-inactive); color: var(--white); }
 .status.requested { background-color: var(--color-requested); color: var(--white); }
-.status.loaded    { background-color: var(--color-loaded); }
-.status.wilco     { background-color: var(--color-wilco); color: var(--color-fg-dark); }
-.status.standby   { background-color: var(--color-standby); }
-.status.unable    { background-color: var(--color-unable); }
-.status.executed  { background-color: var(--color-executed); color: var(--white); }
-.status.error     { background-color: var(--color-error); color: var(--white); }
+.status.loaded    { background-color: var(--color-active); }
+.status.standby   { background-color: var(--color-inactive); }
+.status.unable    { background-color: var(--color-inactive); }
+.status.executed  { background-color: var(--color-active); color: var(--white); }
+.status.error     { background-color: var(--color-inactive); color: var(--white); }
+.status.cancel { background-color: var(--color-inactive); color: var(--white); }
+
 

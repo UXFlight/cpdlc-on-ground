@@ -23,7 +23,7 @@
     width: 100%;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 0.05em;
     display: flex;
     align-items: center;
@@ -61,24 +61,24 @@
 
 /* STANDBY */
 .action-button[data-action-type="standby"]:hover:not(:disabled) {
-    border-color: var(--color-standby);
+    border-color: var(--color-inactive);
     box-shadow: 0 4px 10px rgba(255, 193, 7, 0.35);
 }
 
 /* UNABLE */
 .action-button[data-action-type="unable"]:hover:not(:disabled) {
-    border-color: var(--color-error);
+    border-color: var(--color-inactive);
     box-shadow: 0 4px 10px rgba(229, 57, 53, 0.4);
 }
 
 /* WILCO */
 .action-button[data-action-type="wilco"]:hover:not(:disabled) {
-    border-color: var(--color-wilco);
+    border-color: var(--color-new);
     box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
 }
 
 /* LOAD  */
 .action-button[data-action-type="load"]:hover:not(:disabled) {
-    border-color: var(--color-loaded);
+    border-color: var(--color-active);
     box-shadow: 0 4px 10px rgba(0, 188, 212, 0.4);
 }
