@@ -3,6 +3,7 @@
 │   ├── classes
 │   │   ├── ingsvc
 │   │   │   └── agent.py
+│   │   ├── __init__.py
 │   │   ├── pilot
 │   │   │   └── pilot.py
 │   │   ├── socket
@@ -12,12 +13,15 @@
 │   │       └── step.py
 │   ├── managers
 │   │   ├── __init__.py
-│   │   ├── log-manager
+│   │   ├── log_manager
+│   │   │   ├── log_manager_instance.py
 │   │   │   └── log_manager.py
-│   │   ├── pilot-manager
+│   │   ├── pilot_manager
 │   │   │   └── pilot_manager.py
-│   │   └── socket-manager
-│   │       └── socket_manager.py
+│   │   ├── socket_manager
+│   │   │   └── socket_manager.py
+│   │   └── timer_manager
+│   │       └── timer_manager.py
 │   ├── routes
 │   │   ├── action_routes.py
 │   │   ├── general.py
@@ -26,20 +30,26 @@
 │   └── utils
 │       ├── constants.py
 │       ├── __init__.py
-│       └── time_utils.py
+│       ├── time_utils.py
+│       └── types.py
+├── clean.sh
 ├── logs
 ├── main.py
 ├── project-structure.txt
 ├── README.md
 ├── requirements.txt
+├── run.sh
 ├── shared
 │   └── msg_status.json
 ├── static
+│   ├── assets
+│   │   └── pilot.png
 │   ├── css
 │   │   ├── header.css
 │   │   ├── logs.css
 │   │   ├── pilot-buttons.css
 │   │   ├── request.css
+│   │   ├── settings.css
 │   │   ├── status.css
 │   │   ├── style.css
 │   │   └── taxi-clearance.css
@@ -50,12 +60,11 @@
 │   │   ├── events
 │   │   │   ├── action.js
 │   │   │   ├── cancelRequest.js
-│   │   │   ├── execute.js
 │   │   │   ├── filter.js
-│   │   │   ├── load.js
 │   │   │   ├── overlay.js
 │   │   │   ├── pushbackDirection.js
-│   │   │   └── sendRequest.js
+│   │   │   ├── sendRequest.js
+│   │   │   └── settings.js
 │   │   ├── main.js
 │   │   ├── messages
 │   │   │   └── historyLogs.js
@@ -66,25 +75,27 @@
 │   │   ├── socket-events
 │   │   │   ├── actionResponse.js
 │   │   │   ├── atcResponse.js
+│   │   │   ├── cancelRequestResponse.js
 │   │   │   ├── connectionEvents.js
 │   │   │   ├── errorEvent.js
 │   │   │   ├── requestResponse.js
 │   │   │   └── timeoutEvent.js
 │   │   ├── state
-│   │   │   ├── handlerMap.js
+│   │   │   ├── configState.js
 │   │   │   ├── init.js
-│   │   │   ├── state.js
-│   │   │   └── status.js
+│   │   │   ├── settingsState.js
+│   │   │   └── state.js
 │   │   ├── ui
 │   │   │   ├── buttons-ui.js
 │   │   │   ├── timer-ui.js
 │   │   │   └── ui.js
 │   │   └── utils
-│   │       ├── consts.js
+│   │       ├── consts
+│   │       ├── request-payload.js
 │   │       └── utils.js
 │   └── mp3
 │       └── notif.mp3
 └── templates
     └── index.html
 
-28 directories, 60 files
+31 directories, 68 files
