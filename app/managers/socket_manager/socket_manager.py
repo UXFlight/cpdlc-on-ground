@@ -2,20 +2,23 @@ from flask import request # type: ignore
 import threading    
 import random
 import uuid
-from app.managers import PilotManager, LogManager, log_manager
+from app.managers import PilotManager, LogManager
+from app.managers.log_manager.log_manager_instance import logger
+from app.utils.time_utils import get_current_timestamp_in_ms
 from typing import TYPE_CHECKING
+from app.utils.constants import DEFAULT_ATC_RESPONSES
 
 if TYPE_CHECKING:
     from app.classes.pilot.pilot import Pilot
     from app.managers.pilot_manager.pilot_manager import PilotManager
     from app.classes.socket.socket import SocketService
 class SocketManager:
-    def __init__(self, socket_service : SocketService, pilot_manager : PilotManager):
-        self.socket : SocketService = socket_service
-        self.pilots : PilotManager = pilot_manager
-        self.logger : LogManager = log_manager
+    def __init__(self, socket_service: "SocketService", pilot_manager: "PilotManager"):
+        self.socket: "SocketService" = socket_service
+        self.pilots: "PilotManager" = pilot_manager
+        self.logger : LogManager = logger
 
-    def _emit_all(self, sid : str, result):
+    def _emit_event(self, sid : str, result):
         if not result or not isinstance(result, dict):
             self.logger.log_error(pilot_id=sid, context="SOCKET", error="Invalid result payload")
             return
@@ -36,10 +39,15 @@ class SocketManager:
             event_type="SOCKET", 
             message=f"✅ Pilot connected: {sid}"
         )
-        self.pilots.get_or_create(sid)
+        pilot : Pilot = self.pilots.get_or_create(sid)
         #! SIMULTES ATC CONNECTION
         delay = random.uniform(1.0, 3.0)
-        threading.Timer(delay, lambda: self.socket.send('connectedToATC', 'KLAX')).start()
+        payload = {
+            'facility': 'KLAX',
+            'sid': pilot.sid,
+            'connectedSince': get_current_timestamp_in_ms()
+        }
+        threading.Timer(delay, lambda: self.socket.send('connectedToATC', payload)).start()
 
     ### === Disconnect Event === ###
     def on_disconnect(self):
@@ -49,16 +57,19 @@ class SocketManager:
             event_type="SOCKET", 
             message=f"⚠️ Pilot disconnected: {sid}"
         )
+        pilot = self.pilots.get_or_create(sid)
+        if pilot:
+            pilot.timerManager.stop_all()
         self.pilots.remove(sid)
 
     ### === SendRequest Event === ###
     def on_send_request(self, data):
         sid = request.sid
-        pilot : Pilot = self.pilots.get_or_create(sid)
+        pilot : "Pilot" = self.pilots.get_or_create(sid)
 
         try:
             result = pilot.process_request(data)
-            self._emit_all(sid, result)
+            self._emit_event(sid, result)
 
             request_type = data.get("requestType")
             if request_type:
@@ -77,14 +88,14 @@ class SocketManager:
                 message=str(e),
                 request_type=data.get("requestType")
             )
-            self._emit_all(sid, error_payload)
+            self._emit_event(sid, error_payload)
 
     ### === CancelRequest Event === ###
     def on_cancel_request(self, data):
         sid = request.sid
         pilot = self.pilots.get_or_create(sid)
         result = pilot.cancel_request(data)
-        self._emit_all(sid, result)
+        self._emit_event(sid, result)
 
     ### === Action Event === ###
     def on_action_event(self, data):
@@ -100,7 +111,7 @@ class SocketManager:
                 message="Missing 'action' field from client",
                 request_type=request_type
             )
-            self._emit_all(sid, error_payload)
+            self._emit_event(sid, error_payload)
             return
 
         try:
@@ -108,7 +119,7 @@ class SocketManager:
                 "action": action,
                 "requestType": request_type
             })
-            self._emit_all(sid, result)
+            self._emit_event(sid, result)
 
         except Exception as e:
             error_payload = pilot._error(
@@ -116,10 +127,10 @@ class SocketManager:
                 message=str(e),
                 request_type=request_type
             )
-            self._emit_all(sid, error_payload)
+            self._emit_event(sid, error_payload)
 
     ### Simulates ATC response and emits event
-    def _simulate_and_emit_response(self, pilot, sid, request_type, request_id):
+    def _simulate_and_emit_response(self, pilot : "Pilot", sid : str, request_type : str, request_id : str):
         step = pilot.state.steps.get(request_type)
         if not step:
             return
@@ -128,14 +139,16 @@ class SocketManager:
             self.logger.log_event( pilot.sid, "SKIP", f"Ignored outdated thread for {request_type}" )
             return
 
-        pilot.state.update_step(request_type, "new", "ATC has responded.", 90)
+        message = DEFAULT_ATC_RESPONSES.get(request_type, f"ROGER, {request_type.upper()}")
+
+        pilot.state.update_step(request_type, "new", message, 90)
         pilot.agent.set_request(request_type, False)
 
         self.logger.log_request(
             pilot_id=pilot.sid,
             request_type=request_type,
             status="new",
-            message="Simulated ATC response"
+            message=message
         )
 
         self.socket.send("atcResponse", {
@@ -145,3 +158,5 @@ class SocketManager:
             "timestamp": step.timestamp,
             "timeLeft": step.time_left,
         }, room=sid)
+
+        pilot.start_timer_for_step(request_type, self.socket)

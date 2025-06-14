@@ -1,16 +1,19 @@
-
 from app.classes.state.state import PilotState
 from app.classes.ingsvc.agent import Echo
-from app.managers import LogManager, log_manager
+from app.managers.log_manager.log_manager import LogManager
+from app.managers.log_manager.log_manager_instance import logger
 from app.utils.constants import ACTION_DEFINITIONS
 from app.utils.time_utils import get_current_timestamp
+from app.managers import TimerManager
+from app.classes.socket.socket import SocketService
 
 class Pilot:
-    def __init__(self, sid : str):
+    def __init__(self, sid: str):
         self.sid = sid
-        self.state : PilotState = PilotState()
-        self.agent : Echo = Echo(sid)
-        self.logger : LogManager = log_manager
+        self.state = PilotState()
+        self.agent = Echo(sid)
+        self.logger = logger
+        self.timerManager = TimerManager(self.sid)
 
     def get_step(self, request_type : str):
         step = self.state.steps.get(request_type)
@@ -47,6 +50,10 @@ class Pilot:
         request_type = data.get("requestType")
         if not request_type:
             return self._error("CANCEL", "Missing requestType in cancel request")
+        
+        step = self.get_step(request_type)
+        if not step or step.status != "requested":
+            return self._error("CANCEL", f"Unauthorized cancel: {request_type}", request_type)
 
         result = self.state.update_step(request_type, "cancelled", "Request cancelled by pilot")
         if "error" in result:
@@ -67,7 +74,6 @@ class Pilot:
             "event": "requestCancelled",
             "payload": result
         }
-
 
     def process_action(self, data):
         action = data.get("action")
@@ -109,46 +115,11 @@ class Pilot:
         except Exception as e:
             return self._error("ACTION", str(e), final_type)
 
-
-    # def start_timer(request_type: str, socket_manager):
-    #     duration = TIMER_DURATION
-    #     pilot_state.steps[request_type]["timeLeft"] = duration
-
-    #     stop_event = threading.Event()
-    #     socket_manager._timers[request_type] = stop_event
-
-    #     def tick_loop():
-    #         for remaining in range(duration, 0, -1):
-    #             if stop_event.is_set():
-    #                 print(f"[TIMER] ⏹ Timer for '{request_type}' stopped early.")
-    #                 return
-
-    #             pilot_state.steps[request_type]["timeLeft"] = remaining
-    #             socket_manager.send("tick", {
-    #                 "requestType": request_type,
-    #                 "timeLeft": remaining
-    #             })
-
-    #             time.sleep(1)
-
-    #         pilot_state.update_step(request_type, "timeout", "No pilot response within time window")
-
-    #         socket_manager.send("timeout", {
-    #             "requestType": request_type,
-    #             "status": "timeout",
-    #             "message": "No pilot response within 90s"
-    #         })
-
-    #         del socket_manager._timers[request_type]
-
-    #     threading.Thread(target=tick_loop, daemon=True).start()
-
-
     def _error(self, context, message, request_type=None, status="error"):
         self.logger.log_error(
-            pilot_id=self.sid,
-            context=f"{context}:{self.sid}", 
-            error=message
+                pilot_id=self.sid,
+                context=f"{context}:{self.sid}", 
+                error=message
             )
         return {
             "event": "error",
@@ -159,6 +130,16 @@ class Pilot:
                 "timestamp": get_current_timestamp()
             }
         }
+    
+    def start_timer_for_step(self, request_type: str, socket: SocketService):
+        step = self.get_step(request_type)
+        step.time_left = 90
+        self.timerManager.start_timer(
+            step=step,
+            socket=socket,
+            sid=self.sid,
+            on_timeout=lambda: self.logger.log_event(self.sid, "TIMEOUT", f"{request_type} expired.")
+        )
     
     def cleanup(self):
         try:
