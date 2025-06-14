@@ -14,20 +14,24 @@ class Echo:
         return f"{self.pilot_id}::{name}"
 
     def _register_callbacks(self):
-        igs.observe_agent_events(self._on_agent_event_callback, self)
-        igs.observe_freeze(self._on_freeze_callback, self)
-        igs.observe_input("reset", self._reset_callback, self)
+        igs.observe_agent_events(Echo.on_agent_event_callback, self)
+        igs.observe_freeze(Echo._on_freeze_callback, self)
+        igs.observe_input("reset", Echo._reset_callback, self)
 
     ## CALLBACKS ##
-    def _on_agent_event_callback(self, event, uuid, name, event_data, info, reserved, my_data):
-        assert isinstance(my_data, Echo)
-        print(f"[Agent Event] {event} from {name} ({uuid}) → {event_data} | {info}")
+    @staticmethod
+    def on_agent_event_callback(event, uuid, name, event_data, my_data):
+        agent_object = my_data
+        assert isinstance(agent_object, Echo)
+        print(f"[Agent Event] {event} from {name} ({uuid}) → {event_data}")
 
-    def _on_freeze_callback(self, my_data):
+    @staticmethod
+    def _on_freeze_callback(my_data):
         assert isinstance(my_data, Echo)
         print(f"[Freeze] Agent {my_data.pilot_id} frozen.")
 
-    def _reset_callback(self, my_data):
+    @staticmethod
+    def _reset_callback(my_data):
         assert isinstance(my_data, Echo)
         print(f"[Reset] Reset triggered for {my_data.pilot_id}")
         my_data.reset()
