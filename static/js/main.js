@@ -1,15 +1,19 @@
 // all events imported
 import { sendRequestEvent } from './events/sendRequest.js';
 import { cancelRequestEvent } from './events/cancelRequest.js';
-import { toggleOverlay, touchStartEvent, handleGlobalClick, touchFeedbackButtons } from './events/overlay.js';
+import { toggleOverlay, touchStartEvent, handleGlobalClick, touchFeedbackButtons, closeSettings } from './events/overlay.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
 import { setupSocketListeners } from './socket/socket-listens.js';
 import { filterEvent } from './events/filter.js';
-import { state } from './state/state.js';
 import { initState } from './state/init.js';
+import { settingEvent } from './events/settings.js';
+import { updateDashboardPanel } from './state/settingsState.js';
+import { toggleSwitchEvent } from './state/configState.js';
+import { closeSettingsButton } from './events/settings.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   // initState(); // Initialize the state object
+  updateDashboardPanel()
   setupSocketListeners() // ok
   listenToButtonEvents(); // ok
   listenToGlobalClickEvents(); // ok
@@ -28,7 +32,9 @@ function listenToGlobalClickEvents() {
     touchStartEvent(e);         // overlays
     touchFeedbackButtons(e);    // req/cancel btns
   });
-  }
+
+  document.addEventListener("keydown", (event) => closeSettings(event));
+}
 
 function listenToButtonEvents() {
   const requestButtons = document.querySelectorAll(".request-button");
@@ -37,7 +43,15 @@ function listenToButtonEvents() {
   const leftButton = document.getElementById("pushback-left");
   const rightButton = document.getElementById("pushback-right");
 
-  const filterButton = document.getElementById("filter-btn");
+  const filterIcon = document.getElementById("filter-icon");
+
+  const settingsIcon = document.getElementById("settings-icon");
+
+  const downloadBtn = document.getElementById("download-btn");
+
+  const toggleButtons = document.querySelectorAll(".toggle-switch");
+
+  const closeSettings = document.getElementById('close-button');
 
   // request buttons
   requestButtons.forEach(btn => {
@@ -58,7 +72,20 @@ function listenToButtonEvents() {
   rightButton.addEventListener("click", (e) => selectPushbackDirection(e));
 
   // filter btn event
-  filterButton.addEventListener("click", () => filterEvent());
+  filterIcon.addEventListener("click", () => filterEvent());
+
+  // settings icon event
+  settingsIcon.addEventListener("click", (e) => settingEvent(e));
+
+  // download btn event
+  downloadBtn.addEventListener("click", (e) => {})
+
+  // toggle switch event
+  toggleButtons.forEach(btn => {
+    btn.addEventListener("click", (e) => toggleSwitchEvent(e));
+  });
+  
+  closeSettings.addEventListener('click', () => closeSettingsButton());
 }
 
 export function listenToHeaderEvents() {

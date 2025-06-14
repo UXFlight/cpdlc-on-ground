@@ -9,6 +9,7 @@ import { handleRequestAck } from "../socket-events/requestResponse.js";
 import { handleError } from "../socket-events/errorEvent.js";
 import { handleCancelRequest } from "../socket-events/cancelRequestResponse.js";
 import { SOCKET_LISTENS } from "../utils/consts/socketConsts.js";
+import { setConnectionInfos } from "../state/settingsState.js";
 
 export function setupSocketListeners() {
   listen(SOCKET_LISTENS.CONNECT, () => {
@@ -24,11 +25,12 @@ export function setupSocketListeners() {
     disableAllRequestButtons();
   });
 
-  listen(SOCKET_LISTENS.CONNECTED_TO_ATC, (facility) => {
+  listen(SOCKET_LISTENS.CONNECTED_TO_ATC, (data) => {
     state.connection.atc.status = "connected";
-    state.connection.atc.facility = facility;
+    state.connection.atc.facility = data.facility;
     renderConnectionState(state.connection);
     enableAllRequestButtons();
+    setConnectionInfos(data.sid, data.connectedSince);
   });
 
   listen(SOCKET_LISTENS.DISCONNECTED_FROM_ATC, () => {

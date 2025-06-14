@@ -1,10 +1,12 @@
 import { updateMessageStatus, updateOverlayStatus } from "../ui/ui.js";
+import { markDashboardReady } from "./settingsState.js";
 
 // Global state
 export const state = {
   isFiltered: false,           // used to filter history logs
   history: [],                // history logs
   connection: {
+    connectedSince: null, // timestamp when the connection was established
     backend: "connecting",    // "connecting" | "connected" | "disconnected"
     atc: {
       status : "pending",     // "pending" | "connected" | "disconnected"
@@ -61,6 +63,7 @@ export function updateStep(requestType, newStatus, newMessage = null, timestamp 
 
   updateMessageStatus(key, newStatus);
   updateOverlayStatus(key, newStatus);
+  markDashboardReady();
 }
 
 export function updateDirection(direction = null) {
