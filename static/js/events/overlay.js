@@ -1,6 +1,7 @@
+import { dashboardNeedsRefresh, updateDashboardPanel, manageConnectionTimer } from '../state/settingsState.js';
 import { state } from '../state/state.js';
 import { MSG_STATUS } from '../utils/consts/status.js';
-import { checkNewRequest, closeCurrentOverlay } from '../utils/utils.js';
+import { closeCurrentOverlay } from '../utils/utils.js';
 
 // overlay event
 export const toggleOverlay = (overlay) => {
@@ -14,12 +15,31 @@ export const toggleOverlay = (overlay) => {
   overlay.classList.add("open");
 };
 
+export const closeOverlay = (requestType) => {
+  const requestOverlay = document.querySelector(`.overlay[data-requestType="${requestType}"]`)
+  if (requestOverlay) requestOverlay.classList.remove('open');
+}
 
 export const handleGlobalClick = (event) => {
+  const settingPanel = document.getElementById("settings-panel");
+  const settingsIcon = document.getElementById("settings-icon");
+
   const isInsideOverlay = event.target.closest(".overlay");
   const isInsideConnection = event.target.closest("#connection-status");
-  if (!isInsideConnection) document.getElementById("connection-status")?.classList.remove("show-tooltip");
+  if (!isInsideConnection) {
+    document.getElementById("connection-status")?.classList.remove("show-tooltip");
+  }
   if (!isInsideOverlay) closeCurrentOverlay();
+
+  const clickedOutsideSettings =
+    settingPanel.classList.contains("active") &&
+    !settingPanel.contains(event.target) &&
+    !settingsIcon.contains(event.target);
+
+  if (clickedOutsideSettings) {
+    settingPanel.classList.remove("active");
+    manageConnectionTimer(false);
+  }
 };
 
 // FOR MOBILE DEVICES
@@ -40,3 +60,22 @@ export const touchFeedbackButtons = (e) => {
     btn.classList.remove('touched');
   }, 120);
 };
+
+// KEYDOWN
+export const closeSettings = (event) => {
+  const settingPanel = document.getElementById("settings-panel");
+  if (!settingPanel) return;
+  const isVisible = settingPanel.classList.contains("active");
+
+  if ((event.key === "Escape" || event.key === "Tab") && isVisible) {
+    event.preventDefault();
+    settingPanel.classList.remove("active");
+    manageConnectionTimer(false);
+  } else if (event.key === "Tab" && !isVisible) {
+    event.preventDefault();
+    settingPanel.classList.add("active");
+    if (dashboardNeedsRefresh()) updateDashboardPanel();
+    manageConnectionTimer(true);
+  }
+};
+
