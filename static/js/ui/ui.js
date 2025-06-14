@@ -5,7 +5,6 @@ import { MSG_STATUS } from '../utils/consts/status.js';
 export function showSpinner(requestType) {
   const spinner = document.getElementById(`${requestType}_spinner`);
   if (spinner) spinner.style.display = "inline-block";
-
   hideTick(requestType);
 }
 
@@ -14,7 +13,6 @@ export function showTick(requestType, isError = false) {
   const wrapper = document.querySelector(`.overlay[data-requestType="${requestType}"]`);
 
   hideSpinner(requestType);
-
   if (wrapper) wrapper.setAttribute('data-status', isError ? 'error' : 'fulfilled');
   if (!tick) return;
 
@@ -69,35 +67,38 @@ export function flashElement(div) {
     setTimeout(() => div.classList.remove('flash'), 1000);
 }
 
-// TAXI CLEARANCE
-export function updateTaxiClearanceMsg(message = null, currentIndex = null) {
-  const clearanceBox = document.getElementById('taxi-clearance-message');
-  const clearanceMessageBox = document.querySelector(".taxi-clearance-box");
+
+export function updateTaxiClearanceMsg(expected = false, message = null) {
+  const box = document.querySelector(".taxi-clearance-box");
+  const messageBox = document.getElementById("taxi-clearance-message");
+
+  const oldTag = document.getElementById('expected-tag');
+  if (oldTag) oldTag.remove();
 
   if (!message) {
-    clearanceBox.innerHTML = `<p id="clearance-placeholder">No clearance received</p>`;
-    clearanceMessageBox.classList.remove("active");
+    messageBox.innerHTML = `<p class="empty-box-message">No clearance received</p>`;
+    box.classList.remove("active");
     return;
   }
 
-  const tokens = message.split(" ");
-  const rendered = tokens.map((word, i) => {
-    let cls = 'taxi-token';
-    if (currentIndex !== null) {
-      if (i < currentIndex) cls += ' done';
-      else if (i === currentIndex) cls += ' next';
-    }
-    return `<span class="${cls}">${word}</span>`;
+  const tokens = message.split(" ").map((word) => {
+    return `<span class="taxi-token">${word}</span>`;
   }).join(" ");
 
-  clearanceBox.innerHTML = `<div class="clearance-grid">${rendered}</div>`;
-  clearanceMessageBox.classList.add("active");
+  messageBox.innerHTML = `<div class="clearance-grid">${tokens}</div>`;
+  box.classList.add("active");
 
-  clearanceMessageBox.classList.remove("pulse");
-  void clearanceMessageBox.offsetWidth; // trigger reflow
-  clearanceMessageBox.classList.add("pulse");
+  box.classList.remove("pulse");
+  void box.offsetWidth;
+  box.classList.add("pulse");
+
+  const tag = document.createElement("span");
+  tag.id = "expected-tag";
+  tag.className = expected ? "tag-expected" : "tag-default";
+  tag.textContent = expected ? "(EXPECTED)" : "(TAXI CLEARANCE)";
+
+  box.prepend(tag);
 }
-
 
 // display snackbar messages
 export function updateSnackbar(requestType, status, customMessage = null, isError = true) {
@@ -118,27 +119,70 @@ export function updateSnackbar(requestType, status, customMessage = null, isErro
       message = customMessage || formatLabel(status);
   }
 
-  showSnackbar(message, isError);
+  // showSnackbar(message, isError);
 }
 
-export function showSnackbar(message, isError = true) {
+// SNACKBAR
+export function showSnackbarFromPayload(payload) {
+  const {
+    requestType = null,
+    status = "info",
+    message = "An event occurred.",
+    timestamp = null
+  } = payload;
+
+  const isError = status === "error" || status === "failed";
+
   const container = document.getElementById("snackbar-container");
   if (!container) return;
 
-  container.innerHTML = '';
   const snackbar = document.createElement("div");
   snackbar.className = `snackbar ${isError ? "snackbar-error" : "snackbar-success"}`;
-  snackbar.textContent = message;
 
+  const header = document.createElement("div");
+  header.className = "snack-header";
+
+  if (requestType) {
+    const typeSpan = document.createElement("span");
+    typeSpan.className = "type";
+    typeSpan.textContent = requestType.replaceAll("_", " ");
+    header.appendChild(typeSpan);
+  }
+
+  const statusSpan = document.createElement("span");
+  statusSpan.className = "status";
+  statusSpan.textContent = status.toUpperCase();
+  header.appendChild(statusSpan);
+
+  const body = document.createElement("div");
+  body.className = "snack-body";
+
+  const msg = document.createElement("div");
+  msg.className = "message";
+  msg.textContent = message;
+  body.appendChild(msg);
+
+  if (timestamp) {
+    const time = document.createElement("div");
+    time.className = "timestamp";
+    time.textContent = timestamp;
+    body.appendChild(time);
+  }
+
+  snackbar.appendChild(header);
+  snackbar.appendChild(body);
   container.appendChild(snackbar);
 
-  setTimeout(() => {
-    snackbar.classList.add("fade-out");
-  }, 1500);
+  void snackbar.offsetWidth;
+
+  snackbar.classList.add("visible");
 
   setTimeout(() => {
-    snackbar.remove();
-  }, 2000);
+    snackbar.classList.remove("visible");
+    snackbar.classList.add("fade-out");
+  }, 4000);
+
+  setTimeout(() => snackbar.remove(), 4600);
 }
 
 function formatLabel(text) {
@@ -151,7 +195,7 @@ export function formatRequestType(requestType) {
   if (!requestType) return null;
   return requestType
     .toLowerCase()
-    .replace(/\s+/g, "_");
+    .replace(/[-\s]+/g, "_"); 
 }
 
 // STATUS UPDATER //
@@ -195,14 +239,4 @@ export function updateOverlayStatus(requestType, newStatus) {
   } else if (['wilco', 'executed', 'closed'].includes(status)) {
       tick.style.display = 'block';
   }
-}
-
-export function updateTaxiClearanceStatus(action, status) {
-  const tcStatus = document.getElementById('taxi-clearance-status');
-  if (!tcStatus) return;
-
-  tcStatus.textContent = status.toUpperCase();
-  tcStatus.classList.add('active');
-
-  if (action === MSG_STATUS.EXECUTE) { tcStatus.classList.add('executed') }
 }
