@@ -27,6 +27,7 @@ export function getLatestEntry(stepKey) {
 
 export function getRequestTypeFromEvent(e) {
   const target = e.target;
+  console.log(target.dataset.requesttype)
   if (target.dataset && target.dataset.requesttype) return target.dataset.requesttype;
   const parentWithAction = target.closest("[data-action]");
   if (parentWithAction) return parentWithAction.dataset.action;
@@ -46,4 +47,3 @@ export function getActionInfoFromEvent(e) {
 export function isConnected() {
   return state.connection.backend === "connected" && state.connection.atc.status === "connected";
 }
-

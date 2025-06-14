@@ -26,7 +26,6 @@ class PilotState:
     ## PUBLIC
     def update_step(self, step_name, status, message=None, time_left=None):
         step = self.steps.get(step_name)
-        print(f"[UPDATE] {step} - {status} - {message} - {time_left}")
         if not step:
             return {"error": f"Unknown step: {step_name}"}
 

@@ -6,15 +6,15 @@ export const SOCKET_EMITS = {
 };
 
 export const SOCKET_LISTENS = {
-CONNECT: "connect",
-DISCONNECT: "disconnect",
-CONNECTED_TO_ATC: "connectedToATC",
-DISCONNECTED_FROM_ATC: "disconnectedFromATC",
-TICK: "tick",
-TIMEOUT: "timeout",
-ATC_RESPONSE: "atcResponse",
-ACTION_ACK: "actionAcknowledged",
-REQUEST_ACK: "requestAcknowledged",
-CANCEL_ACK: "requestCancelled",
-ERROR: "error",
+    CONNECT: "connect",
+    DISCONNECT: "disconnect",
+    CONNECTED_TO_ATC: "connectedToATC",
+    DISCONNECTED_FROM_ATC: "disconnectedFromATC",
+    TICK: "tick",
+    TIMEOUT: "timeout",
+    ATC_RESPONSE: "atcResponse",
+    ACTION_ACK: "actionAcknowledged",
+    REQUEST_ACK: "requestAcknowledged",
+    CANCEL_ACK: "requestCancelled",
+    ERROR: "error",
 }

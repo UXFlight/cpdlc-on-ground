@@ -1,12 +1,11 @@
 export const ALL_ACTIONS = {
     LOAD:    { id: 'load' },
     EXECUTE: { id: 'execute' },
-    CANCEL:  { id: 'cancel-execute' },
+    CANCEL:  { id: 'cancel' },
     WILCO:   { id: 'wilco' },
     STANDBY: { id: 'standby' },
     UNABLE:  { id: 'unable' }
 };
-
 
 export const REQUEST_TYPE = {
     EXPECTED_TAXI_CLEARANCE: "expected_taxi_clearance",

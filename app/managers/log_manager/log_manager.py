@@ -29,7 +29,6 @@ class LogManager:
         timestamp = get_current_timestamp()
         log_data = {
             "timestamp": timestamp,
-            "pilot": pilot_id,
             "type": request_type,
             "status": status,
             "message": message
@@ -42,7 +41,6 @@ class LogManager:
         timestamp = get_current_timestamp()
         log_data = {
             "timestamp": timestamp,
-            "pilot": pilot_id,
             "action": action_type,
             "status": status,
             "message": message
@@ -57,7 +55,6 @@ class LogManager:
         log_dir = self._get_log_dir(pilot_id)
         line = f"[{timestamp}] [ERROR     ] [{context}] {error_msg}\n"
         self._write_line(log_dir / "cpdlc_errors.log", line)
-        print(f"❌ ERROR [{context}] [{pilot_id}]: {error_msg}")
 
     def get_logs(self, log_type=None):
         if log_type is None:

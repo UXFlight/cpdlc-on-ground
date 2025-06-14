@@ -1,16 +1,20 @@
 
 from app.classes.state.state import PilotState
 from app.classes.ingsvc.agent import Echo
-from app.managers import log_manager
+from app.managers import LogManager, log_manager
 from app.utils.constants import ACTION_DEFINITIONS
 from app.utils.time_utils import get_current_timestamp
 
 class Pilot:
-    def __init__(self, sid):
+    def __init__(self, sid : str):
         self.sid = sid
-        self.state = PilotState()
-        self.agent = Echo(sid)
-        self.logger = log_manager
+        self.state : PilotState = PilotState()
+        self.agent : Echo = Echo(sid)
+        self.logger : LogManager = log_manager
+
+    def get_step(self, request_type : str):
+        step = self.state.steps.get(request_type)
+        return step if step else None
 
     def process_request(self, data):
         request_type = data.get("requestType")
@@ -95,7 +99,7 @@ class Pilot:
                 message=message
             )
 
-            result["action"] = action  # ajoute l'action au payload
+            result["action"] = action 
 
             return {
                 "event": "actionAcknowledged",
