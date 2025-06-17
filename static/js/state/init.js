@@ -1,7 +1,7 @@
 import { state } from "./state.js";
 import { getState } from "../api/api.js";
-import { filterHistoryLogs } from "../events/filter.js";
-import { showSnackbar } from "../ui/ui.js";
+import { displayHistoryLogs } from "../events/filter.js";
+import { showSnackbarFromPayload } from "../ui/ui.js";
 
 export const initState = async () => {
   try {
@@ -9,16 +9,16 @@ export const initState = async () => {
 
     if (!data.ok) {
       console.warn("State load failed:", data.error || data.status);
-      showSnackbar(`❌ Failed to load saved state: ${data.error || data.status}`);
+      showSnackbarFromPayload(`❌ Failed to load saved state: ${data.error || data.status}`);
       return;
     }
 
     Object.assign(state, data);
-    filterHistoryLogs();
-    showSnackbar("✅ State successfully loaded", false);
+    displayHistoryLogs();
+    showSnackbarFromPayload("✅ State successfully loaded", false);
 
   } catch (error) {
     console.error("Error initializing state:", error);
-    showSnackbar("❌ Could not connect to server. Offline?");
+    showSnackbarFromPayload("❌ Could not connect to server. Offline?");
   }
 };

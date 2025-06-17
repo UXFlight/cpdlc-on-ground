@@ -1,19 +1,49 @@
-from flask import Flask  # type: ignore
-from app.ingsvc import initialize_agent
-from app.routes import all_blueprints
-from app.socket.sockets import socket_manager
+import threading
+import signal
+import sys
+from flask import Flask
+from flask_cors import CORS
+from flask_socketio import SocketIO
+from app.classes.ingsvc.agent import Echo
+from app.classes.socket.socket import SocketService
+from app.managers import PilotManager, SocketManager, PilotStats
+from app.routes import general
 
-app = Flask(__name__)
+exit_event = threading.Event()
 
-for bp in all_blueprints:
-    app.register_blueprint(bp)
+def create_app():
+    app = Flask(__name__)
+    CORS(app)
+    socketio = SocketIO(app, cors_allowed_origins="*")
+    return app, socketio
 
-socket_manager.init_app(app)
+def start_ingscape():
+    Echo.start_ingescape_agent()
+
+def signal_handler(sig, frame):
+    print("\n[System] Ctrl+C detected, exiting...")
+    exit_event.set()
+    sys.exit(0)
 
 if __name__ == '__main__':
-    port = 5670
-    agent_name = "Pilot_CPDLC_APP"
-    device = "wlp0s20f3"
+    signal.signal(signal.SIGINT, signal_handler)
 
-    agent = initialize_agent(agent_name, device, port)
-    socket_manager.run(app, host='0.0.0.0', port=5321)
+    app, socketio = create_app()
+
+    ingescape_thread = threading.Thread(target=start_ingscape)
+    ingescape_thread.start()
+
+    socket_service = SocketService(socketio)
+    pilot_manager = PilotManager()
+    pilot_stats = PilotStats(pilot_manager)
+
+    general.pilot_stats = pilot_stats
+    app.register_blueprint(general.general_bp)
+
+    socket_manager = SocketManager(socket_service, pilot_manager)
+    socket_manager.init_events()
+
+    try:
+        socketio.run(app, host="0.0.0.0", port=5321, use_reloader=False, allow_unsafe_werkzeug=True)
+    except KeyboardInterrupt:
+        pass

@@ -1,37 +1,26 @@
-import { updateMessageStatus } from "../messages/historyLogs.js";
-import { updateSnackbar } from "../ui/ui.js";
-import { MSG_STATUS } from "./status.js";
+import { updateMessageStatus, updateOverlayStatus } from "../ui/ui.js";
+import { markDashboardReady } from "./settingsState.js";
 
 // Global state
 export const state = {
-  isFiltered: true, // used to filter history logs
-  history: [], // history logs
+  isFiltered: false,           // used to filter history logs
+  history: [],                // history logs
   connection: {
-    backend: "connecting",   // "connecting" | "connected" | "disconnected"
+    connectedSince: null, // timestamp when the connection was established
+    backend: "connecting",    // "connecting" | "connected" | "disconnected"
     atc: {
-      status : "pending", // "pending" | "connected" | "disconnected"
+      status : "pending",     // "pending" | "connected" | "disconnected"
       facility: null, 
     },
   },
   steps: {
-    able_intersection_departure: createStep("Able Intersection Departure"),
     expected_taxi_clearance: createStep("Expected Taxi Clearance"),
-    taxi_clearance: createStep("Taxi Clearance"),
-    ready_for_clearance: createStep("Ready for Clearance"),
-    departure_clearance: createStep("Departure Clearance"),
     engine_startup: createStep("Engine Startup"),
     pushback: createStep("Pushback", { direction: null }),
+    taxi_clearance: createStep("Taxi Clearance"),
     startup_cancellation: createStep("Startup Cancellation"),
-    request_voice_contact: createStep("Request Voice Contact"), 
-    affirm: createStep("Affirm"),
-    negative: createStep("Negative"),
-    roger: createStep("Roger"),
-    we_can_accept: createStep("We Can Accept"),
-    we_cannot_accept: createStep("We Cannot Accept"),
     de_icing: createStep("De-Icing"),
-    de_icing_complete: createStep("De-Icing Complete"),
-    for_de_icing: createStep("For De-Icing"),
-    no_de_icing_required: createStep("No De-Icing Required")
+    request_voice_contact: createStep("Request Voice Contact"), 
   },
 };
 
@@ -51,15 +40,18 @@ export function updateStep(requestType, newStatus, newMessage = null, timestamp 
   const step = state.steps[key];
   if (!step) return;
 
+  // Utilise le timestamp reçu, ou un ISO local, puis extrait HH:MM:SS
+  const formattedTimestamp = formatToTime(timestamp || new Date().toISOString());
+
   const entry = {
     status: newStatus,
     message: newMessage,
-    timestamp: timestamp || new Date().toISOString().replace('T', ' ').split('.')[0]
+    timestamp: formattedTimestamp
   };
 
   step.status = newStatus;
   step.message = newMessage;
-  step.timestamp = entry.timestamp;
+  step.timestamp = formattedTimestamp;
 
   if (timeLeft !== null) {
     step.timeLeft = timeLeft;
@@ -73,8 +65,21 @@ export function updateStep(requestType, newStatus, newMessage = null, timestamp 
   group.entries.push(entry);
 
   updateMessageStatus(key, newStatus);
+  updateOverlayStatus(key, newStatus);
+  markDashboardReady();
 }
 
-export function updateDirection(direction) {
+function formatToTime(isoString) {
+  try {
+    const date = new Date(isoString);
+    return date.toISOString().substr(11, 8); 
+  } catch {
+    return isoString;
+  }
+}
+
+export function updateDirection(direction = null) {
   state.steps["pushback"].direction = direction;
+  document.getElementById("pushback-left").classList.toggle("active", direction === "left");
+  document.getElementById("pushback-right").classList.toggle("active", direction === "right");
 }

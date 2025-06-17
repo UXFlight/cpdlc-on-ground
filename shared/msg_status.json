@@ -1,7 +1,7 @@
 {
   "CLOSED": "closed",
   "REQUESTED": "requested",
-  "RESPONDED": "responded",
+  "NEW": "new",
   "CANCELLED": "cancelled",
   "CANCEL": "cancel",
   "ERROR": "error",

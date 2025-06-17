@@ -8,11 +8,6 @@ request_bp = Blueprint("request", __name__)
 
 @request_bp.route("/request/<request_type>", methods=["GET"])
 def request_action(request_type):
-    """
-    Requête envoyée par le pilote (ex: 'engine_startup').
-    Le backend retourne immédiatement une réponse de confirmation,
-    et émet plus tard une réponse ATC simulée par WebSocket.
-    """
     response = process_request(request_type)
     delay = random.uniform(2.0, 6.0) # ATC délay between 2 and 6 seconds
     threading.Timer(delay, simulate_atc_response, args=[request_type, socket_manager]).start()

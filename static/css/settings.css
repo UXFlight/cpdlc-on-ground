@@ -1,0 +1,449 @@
+/* MAIN PANEL CONTAINER */
+.settings-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 40%;
+  height: 100%;
+  background: var(--bg-black);
+  border-left: 1px solid var(--border-primary);
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 12px;
+  gap: 24px;
+}
+
+.settings-panel.active {
+  transform: translateX(0);
+}
+
+/* HEADER SECTION */
+.panel-header {
+  border-bottom: 1px solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pilot-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-primary);
+}
+
+.pilot-details h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.callsign {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+#close-button {
+  cursor: pointer;
+  font-size: 1.75rem;
+  padding: 0 16px;
+  margin: 10px 0 auto auto;
+  color: var(--text-light);
+}
+
+/* STATS SECTION */
+.stats-section {
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-top: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-card {
+  background: var(--bg-black);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.success-rate {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg-black);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+}
+
+.success-rate .stat-value {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.success-rate .stat-label {
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+/* CONFIGURATION SECTION */
+.config-section {
+  flex: 1;
+}
+
+.config-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex-wrap: wrap;
+  height: 100%;
+  padding-bottom: 16px;
+}
+
+.config-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--bg-black);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  height: 100%; 
+  box-sizing: border-box;
+}
+
+/* Info block */
+.config-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Title */
+.config-title {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Description */
+.config-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+/* Toggle aligned at bottom */
+.config-item .toggle-switch {
+  align-self: flex-end;
+  margin-top: auto;
+}
+
+/* TOGGLE SWITCH STYLES */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: var(--border-primary);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: var(--color-requested);
+}
+
+.toggle-switch::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--text-primary);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch.active::before {
+  transform: translateX(20px);
+}
+
+
+/* ACTION SECTION */
+.action-btn {
+    width: 100%;
+    padding: 12px;
+    border-top: 1px solid var(--border-primary);
+    background: var(--bg-black);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.action-btn:hover {
+  background: var(--hover-token-bg);
+  border-color: var(--color-requested);
+}
+
+/* Demo button */
+.demo-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 0.75rem 1rem;
+  background: var(--color-requested);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  z-index: 1001;
+}
+
+/* CIRCLE GAUGE */
+.performance-ring {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-radius: 8px;
+  padding: 8px 8px 8px 0;
+}
+
+.ring-container {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-requested) 0deg,
+    var(--color-requested) calc(var(--performance, 0) * 3.6deg),
+    var(--border-primary) calc(var(--performance, 0) * 3.6deg)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ring::after {
+  content: '';
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  background: var(--bg-black);
+  border-radius: 50%;
+}
+
+.ring-value {
+  position: relative;
+  z-index: 1;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.ring-info h3 {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0rem;
+}
+
+.ring-info p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.ring {
+  transition: background 0.8s ease-in-out;
+}
+
+.performance-ring.low .ring {
+  background: conic-gradient(var(--color-low) 0deg, var(--color-low) calc(var(--performance, 0) * 3.6deg), var(--border-primary) calc(var(--performance, 0) * 3.6deg));
+}
+
+.performance-ring.mid .ring {
+  background: conic-gradient(var(--color-mid) 0deg, var(--color-mid) calc(var(--performance, 0) * 3.6deg), var(--border-primary) calc(var(--performance, 0) * 3.6deg));
+}
+
+.performance-ring.high .ring {
+  background: conic-gradient(var(--color-high) 0deg, var(--color-high) calc(var(--performance, 0) * 3.6deg), var(--border-primary) calc(var(--performance, 0) * 3.6deg));
+}
+
+.performance-ring.excel .ring {
+  background: conic-gradient(var(--color-requested) 0deg, var(--color-requested) calc(var(--performance, 0) * 3.6deg), var(--border-primary) calc(var(--performance, 0) * 3.6deg));
+}
+
+
+@media only screen and (max-width: 1100px){
+  .settings-panel {
+    width: 50%;
+    padding: 16px 10px 12px;
+  }
+}
+
+@media only screen and (max-height: 820px) {
+  .settings-panel {
+    gap: 10px;
+    padding: 12px 12px 8px;
+  }
+
+  .pilot-info {
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .pilot-details h2 {
+    font-size: 0.9rem;
+  }
+
+  .callsign {
+    font-size: 0.65rem;
+  }
+
+  .section-title {
+    font-size: 0.68rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stats-grid {
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 8px;
+  }
+
+  .stat-value {
+    font-size: 0.85rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+  }
+
+  .success-rate {
+    margin-top: 8px;
+    padding: 10px;
+  }
+
+  .success-rate .stat-value {
+    font-size: 1rem;
+  }
+
+  .success-rate .stat-label {
+    font-size: 0.7rem;
+  }
+
+  .config-title {
+    font-size: 0.9rem;
+  }
+
+  .toggle-switch {
+    width: 40px;
+    height: 22px;
+  }
+
+  .toggle-switch::before {
+    width: 18px;
+    height: 18px;
+  }
+
+  .toggle-switch.active::before {
+    transform: translateX(18px);
+  }
+
+  .action-btn {
+    padding: 10px;
+    font-size: 0.75rem;
+    margin-bottom: 5px;
+  }
+
+  .ring-container,
+  .ring {
+    width: 56px;
+    height: 56px;
+  }
+
+  .ring::after {
+    width: 42px;
+    height: 42px;
+  }
+
+  .ring-value {
+    font-size: 0.65rem;
+  }
+
+  .ring-info h3 {
+    font-size: 0.9rem;
+  }
+
+  .ring-info p {
+    font-size: 0.75rem;
+  }
+}

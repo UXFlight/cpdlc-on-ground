@@ -1,4 +1,29 @@
-import { handlerMap } from "../state/handlerMap.js";
+import { actionEvent } from "../events/action.js";
+import { WORKFLOW_BUTTONS } from "../utils/consts/buttonsWorkflow.js";
+import { ALL_ACTIONS, LOADABLE_REQUEST_TYPES, REQUEST_TYPE } from "../utils/consts/flightConsts.js";
+import { MSG_STATUS } from "../utils/consts/status.js";
+
+// enabling btns based on action and requestType
+export function enableButtonsByAction(action, requestType) {
+    switch (action) {
+        case MSG_STATUS.LOAD:
+            if (requestType === "taxi_clearance") return setExecuteButtonState() // enables exec & cancel exec btn
+            enableWilcoButtons(requestType);
+            break;
+        case MSG_STATUS.EXECUTE: 
+            enableLoadButton(requestType)
+            enableWilcoButtons(requestType) // enables wilco, standby, unable 
+            break;
+        case MSG_STATUS.CANCEL:
+            setExecuteButtonState(true);
+            enableRequestButton(requestType);
+            break;
+        case MSG_STATUS.UNABLE:
+            enableRequestButton(requestType);
+        default:
+            break;
+    }
+}
 
 // buttons functions
 export function disableCancelButtons(requestType) {
@@ -17,35 +42,29 @@ export const disableAllRequestButtons = () => {
 export const enableAllRequestButtons = () => {
     const requestButtons = document.querySelectorAll(".request-button");
     requestButtons.forEach(btn => {
+    if (btn.id === "pushback-btn") return; //! skip pushback, direction buttons will handle it
         btn.disabled = false;
         btn.classList.add("active");
     });
-}
+};
 
-export function createButton(requestType) {
+export function createButton(requestType, status) {
     const btnContainer = document.createElement('div');
     btnContainer.classList.add('action-buttons-grp');
 
-    let buttons = [];
+    const available = WORKFLOW_BUTTONS[requestType]?.[status]
+                    || WORKFLOW_BUTTONS.default.NEW;
 
-    const isTaxi = ["expected_taxi_clearance", "taxi_clearance"].includes(requestType);
+    const actionsToShow = !LOADABLE_REQUEST_TYPES.includes(requestType)
 
-    if (isTaxi) buttons.push(
-        { action: 'LOAD', id: 'load', disabled: !isTaxi },
-        { action: 'EXECUTE', id: 'execute', disabled: true },
-        { action: 'CANCEL', id: 'cancel-execute', disabled: true }
-    )
-
-    buttons.push(
-        { action: 'WILCO', id: 'wilco', disabled: isTaxi },
-        { action: 'STANDBY', id: 'standby', disabled: isTaxi },
-        { action: 'UNABLE', id: 'unable', disabled: isTaxi },
-    );
-
-
-    buttons.forEach(({ action, id, disabled }) => {
-        btnContainer.appendChild(createActionButton(requestType, action, id, disabled));
-    });
+    ? Object.entries(ALL_ACTIONS) 
+            .filter(([action]) => ['WILCO', 'STANDBY', 'UNABLE'].includes(action)) 
+    : Object.entries(ALL_ACTIONS)
+    for (const [action, { id }] of actionsToShow) {
+        const disabled = !available.includes(action);
+        const btn = createActionButton(requestType, action, id, disabled);
+        btnContainer.appendChild(btn);
+    }
 
     return btnContainer;
 }
@@ -57,10 +76,7 @@ function createActionButton(requestType, action, id = null, disabled = false) {
     if (id) btn.id = id + `-${requestType}`;
     btn.dataset.actionType = action.toLowerCase();
     btn.disabled = disabled;
-
-    const status = action.toLowerCase();
-    const handlerFactory = handlerMap[status];
-    if (handlerFactory) btn.addEventListener('click', handlerFactory(btn, requestType));
+    btn.addEventListener('click', (e) => actionEvent(e));
     return btn;
 }
 
@@ -87,4 +103,18 @@ export function setExecuteButtonState(isDisabled = false) {
 
     if (executeButton) executeButton.disabled = isDisabled;
     if (cancelExecuteButton) cancelExecuteButton.disabled = isDisabled;
+}
+
+// enables request button
+export function enableRequestButton(requestType) {
+    const requestButton = document.getElementById(`${requestType}-btn`);
+
+    if (!requestButton) return;
+    if (requestType !== REQUEST_TYPE.PUSHBACK) return requestButton.disabled = false;
+
+    const directionButtons = document.querySelectorAll(`.direction-button`);
+    directionButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.disabled = false
+    });
 }

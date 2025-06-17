@@ -1,46 +1,56 @@
 .
 ├── app
-│   ├── config.py
-│   ├── constants.py
-│   ├── ingsvc
-│   │   ├── agent.py
-│   │   ├── callbacks.py
-│   │   ├── init_agent.py
-│   │   └── __init__.py
-│   ├── __init__.py
-│   ├── logs
+│   ├── classes
+│   │   ├── ingsvc
+│   │   │   └── agent.py
+│   │   ├── __init__.py
+│   │   ├── pilot
+│   │   │   └── pilot.py
+│   │   ├── socket
+│   │   │   └── socket.py
+│   │   └── state
+│   │       ├── state.py
+│   │       └── step.py
+│   ├── managers
+│   │   ├── __init__.py
+│   │   ├── log_manager
+│   │   │   ├── log_manager_instance.py
+│   │   │   └── log_manager.py
+│   │   ├── pilot_manager
+│   │   │   └── pilot_manager.py
+│   │   ├── socket_manager
+│   │   │   └── socket_manager.py
+│   │   └── timer_manager
+│   │       └── timer_manager.py
 │   ├── routes
 │   │   ├── action_routes.py
 │   │   ├── general.py
 │   │   ├── __init__.py
 │   │   └── request_routes.py
-│   ├── services
-│   │   ├── action_service.py
-│   │   ├── __init__.py
-│   │   ├── log_manager.py
-│   │   ├── request_service.py
-│   │   └── socket_event_service.py
-│   ├── socket
-│   │   ├── __init__.py
-│   │   └── sockets.py
-│   ├── state
-│   │   ├── __init__.py
-│   │   └── state.py
 │   └── utils
-│       ├── helpers.py
-│       └── __init__.py
+│       ├── constants.py
+│       ├── __init__.py
+│       ├── time_utils.py
+│       └── types.py
+├── clean.sh
+├── logs
 ├── main.py
 ├── project-structure.txt
 ├── README.md
 ├── requirements.txt
+├── run.sh
 ├── shared
 │   └── msg_status.json
 ├── static
+│   ├── assets
+│   │   └── pilot.png
 │   ├── css
 │   │   ├── header.css
 │   │   ├── logs.css
 │   │   ├── pilot-buttons.css
 │   │   ├── request.css
+│   │   ├── settings.css
+│   │   ├── status.css
 │   │   ├── style.css
 │   │   └── taxi-clearance.css
 │   ├── favicon.ico
@@ -50,35 +60,42 @@
 │   │   ├── events
 │   │   │   ├── action.js
 │   │   │   ├── cancelRequest.js
-│   │   │   ├── execute.js
 │   │   │   ├── filter.js
-│   │   │   ├── load.js
 │   │   │   ├── overlay.js
 │   │   │   ├── pushbackDirection.js
-│   │   │   └── sendRequest.js
+│   │   │   ├── sendRequest.js
+│   │   │   └── settings.js
 │   │   ├── main.js
 │   │   ├── messages
 │   │   │   └── historyLogs.js
 │   │   ├── socket
-│   │   │   └── socket.js
+│   │   │   ├── socket-emits.js
+│   │   │   ├── socket.js
+│   │   │   └── socket-listens.js
 │   │   ├── socket-events
+│   │   │   ├── actionResponse.js
 │   │   │   ├── atcResponse.js
+│   │   │   ├── cancelRequestResponse.js
 │   │   │   ├── connectionEvents.js
+│   │   │   ├── errorEvent.js
+│   │   │   ├── requestResponse.js
 │   │   │   └── timeoutEvent.js
 │   │   ├── state
-│   │   │   ├── handlerMap.js
+│   │   │   ├── configState.js
 │   │   │   ├── init.js
-│   │   │   ├── state.js
-│   │   │   └── status.js
+│   │   │   ├── settingsState.js
+│   │   │   └── state.js
 │   │   ├── ui
 │   │   │   ├── buttons-ui.js
 │   │   │   ├── timer-ui.js
 │   │   │   └── ui.js
 │   │   └── utils
+│   │       ├── consts
+│   │       ├── request-payload.js
 │   │       └── utils.js
 │   └── mp3
 │       └── notif.mp3
 └── templates
     └── index.html
 
-23 directories, 59 files
+31 directories, 68 files

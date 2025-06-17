@@ -1,13 +1,10 @@
 import { state } from '../state/state.js';
-import { MSG_STATUS } from '../state/status.js';
+import { MSG_STATUS } from '../utils/consts/status.js';
+import { REQUEST_TYPE } from './consts/flightConsts.js';
 
 // small utils functions
 export function invalidRequest(action) {
-  return (!action /*|| checkNewRequest()*/ || blockSecondRequest(action) || action === "pushback" && !state.steps[action].direction)
-}
-
-export function checkNewRequest() {
-  return Object.values(state.steps).some(step => step.status === MSG_STATUS.NEW || step.status === MSG_STATUS.LOADED); // for now, blocking all other requests
+  return (!action || blockSecondRequest(action) || action === REQUEST_TYPE.PUSHBACK && !state.steps[action].direction)
 }
 
 function blockSecondRequest(action) {
@@ -44,5 +41,5 @@ export function getActionInfoFromEvent(e) {
 }
 
 export function isConnected() {
-    return state.connection.backend === "connected" && state.connection.atc.status === "connected";
+  return state.connection.backend === "connected" && state.connection.atc.status === "connected";
 }

@@ -1,92 +1,159 @@
+/* CONTAINER */
 .request-menu {
     display: flex;
     flex-direction: column;
-    border-radius: 6px;
-    flex: 1;
     height: 100%;
-    overflow-y: auto;
-,}
+    gap: 20px;
+}
 
 .request-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr); 
     gap: 15px;
     height: 100%;
-    overflow-y: auto;
-    padding-right: 10px;
+    overflow: hidden; 
 }
 
-/* overlay */
-.overlay {
-    display: grid;
-    position: relative;
-    box-shadow: 0 0 8px rgba(108, 194, 74, 0.3);
-    border: 1px solid #6cc24a;
-    box-shadow: 0 0 12px 3px rgba(108, 194, 74, 0.45);
-    background-color: #222;
-    border-radius: 6px;
-    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease;
+/*! TEMP */
+div.overlay:nth-child(5) {
+    grid-column: 1 / -1;
+}
+
+.request-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* REQUEST ICONS */
+.icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 12px;
+    font-variant: all-petite-caps;
+}
+
+#request-wrap.icon-wrap {
+    border: 1px solid var(--text-secondary);
+    border-radius: 8px;
+}
+
+#filter-btn.icon-wrap {
+    border-bottom: 1px solid var(--text-secondary);
+}
+
+#request-voice-contact-icon {
+    width: 28px;
+    height: 28px;
+    stroke: var(--text-primary);
+    fill: var(--text-primary);
     cursor: pointer;
 }
 
-.overlay:hover {
-    box-shadow: 0 0 8px rgba(108, 194, 74, 0.3);
+#request-voice-contact-icon:hover {
+    fill: var(--text-muted);
+    stroke: var(--text-muted);
 }
 
-.overlay[data-status="fulfilled"] {
-    border-color: #ccc;
-    background-color: #1a1a1a;
-    box-shadow: none;
-    opacity: 0.85;
+.more-link {
+    font-size: 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
 }
 
-.overlay[data-status="error"] {
-    border-color: #ff4c4c;
-    box-shadow: 0 0 14px 4px rgba(255, 76, 76, 0.55);
+.more-link::after {
+    content: '→';
+    display: inline-block;
+    margin-left: 4px;
+    transition: transform 0.2s ease;
+}
+
+.more-link:hover {
+    color: var(--text-muted);
+}
+
+.more-link:hover::after {
+    transform: translateX(2px);
 }
   
-.overlay-button {
+/* OVERLAY */
+.overlay {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    border-radius: 10px;
+    border: 1px solid var(--border-primary);
+    padding: 12px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    overflow: hidden; 
+    border-color: var(--color-requested);
+}
+
+.overlay.open,
+.overlay:hover {
+    box-shadow: 0 8px 20px var(--color-requested);
+}
+
+.overlay.touched,
+.overlay:active {
+    box-shadow: 0 8px 20px var(--color-requested);
+    border-color: var(--color-requested);
+    transition: none; 
+}
+
+/* TITLE */
+.overlay-title {
+    z-index: -1;
+    display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
-    font-size: 18px;
+    justify-content: center;
+    align-self: flex-start;
+    gap: 8px;
     text-transform: uppercase;
-    color: #f5f5f5;
-    background-color: transparent;
-    border: none;
+    color: var(--text-primary);
     width: 100%;
+    position: relative;
+    font-weight: 600;
+    text-align: center;
+    transition: transform 0.3s ease, font-size 0.3s ease, color 0.3s ease, margin 0.3s ease;
+    transform: translateY(0%);
+    margin-top: 45px;
+}
+
+.overlay.open .overlay-title {
+    transform: translateY(-5%);
+    font-size: 0.95rem;
+    color: var(--color-requested);
+    margin-top: 10px;
+}
+
+.overlay.open[data-requesttype="pushback"] .overlay-title {
+    margin-top: 5px
+}
+
+.overlay:hover .overlay-title .label,
+.overlay.open .overlay-title .label {
+    color: var(--color-requested);
 }
 
 .label {
     flex: 1;
     text-align: center;
-    transition: transform 0.2s ease, font-size 0.3s ease, opacity 0.3s ease;
-    transform: translateY(0%) scale(1);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     width: 100%;
+    font-size: 0.9rem;
 }
 
-.overlay.open .overlay-button .label {
-    transform: translateY(-200%) scale(0.95); 
-    opacity: 0.9;
-    color: #6cc24a;
-    font-weight: 800;
-}
-
-.overlay.open .overlay-button .status-icons {
-    transform: translateY(-275%) scale(0.95); 
-}
-
-.overlay[data-status="error"] .overlay-button .label {
-    color: #ff4c4c;
-}
-
-/* STATUS */
 .status-icons {
+    position: absolute;
+    right: 0;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -96,129 +163,303 @@
 .spinner {
     display: none;
     border: 2px solid transparent;
-    border-top: 3px solid #fff;
-    border-right: 3px solid #fff;
+    border-top: 3px solid var(--color-requested);
+    border-right: 3px solid var(--color-requested);
     border-radius: 50%;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
     from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
 
-
+/* TICK */
 .tick-icon {
-    font-size: 1rem;
+    font-size: 20px;
     display: none;
     transition: opacity 0.3s ease-in-out;
 }
 
-.tick-icon.success { color: #6cc24a; }
-.tick-icon.error   { color: #ff4c4c; }
+.tick-icon.success { color: var(--color-success); }
+.tick-icon.error { color: var(--color-inactive); }
 
-/* OVERLAY */
+/* OVERLAY ACTIONS */
 .overlay-actions {
-    position: absolute;
-    bottom: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 8px;
-    z-index: 10;
-    border-radius: 6px;
+    display: flex;
+    row-gap: 5px;
+    column-gap: 10px;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    align-self: flex-end;
     width: 100%;
-    height: 70%;
-    transform: translateY(10px);
-    transition: opacity 0.5s ease, transform 0.25s ease;
 }
 
 .overlay.open .overlay-actions {
-    display: flex;
     opacity: 1;
     transform: translateY(0);
-    pointer-events: all;
+    pointer-events: auto;
+    visibility: visible;
+    margin-bottom: 5px;
+}
+
+.overlay-actions.pushback-overlay {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 2fr;
+    justify-content: center;
+    align-items: center;
 }
 
 /* REQUEST, CANCEL BUTTONS */
 .request-button,
 .cancel-button {
-    flex: 1;
-    height: 75%;
-    width: 100%;
-    padding: 6px 10px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    font-size: 0.8rem;
+    grid-row: 2;
+    padding: 8px 12px;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-    text-transform: uppercase;
-    text-align: center;
+    border-radius: 6px;
+    border: 1px solid var(--text-muted);
+    background: linear-gradient(to bottom, var(--btn-gradient-dark-bottom), var(--bg-tertiary));
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    width: 100%;
+    height: 58px; 
     display: flex;
     align-items: center;
     justify-content: center;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
-.request-button {
-    background-color: #2b2b2b;
-    color: #e0e0e0;
-    border-color: #727272;
+#pushback-btn,
+button.cancel-button:nth-child(3) {
+    height: 58px;
 }
 
+.request-button.touched:not(:disabled),
 .request-button:hover:not(:disabled) {
-    background-color: #3c3c3c;
-    border-color: #bbbbbb;
-    transform: translateY(-1px);
+    background: linear-gradient(to bottom, var(--btn-gradient-dark-top), var(--btn-gradient-dark-bottom));
+    border-color: var(--color-requested);
+    color: var(--color-requested);
 }
 
-.cancel-button {
-    background-color: #2b2b2b;
-    color: #e0e0e0;
-    border-color: #727272;
-}
-
+.cancel-button.touched:not(:disabled),
 .cancel-button:hover:not(:disabled) {
-    background-color: #4e2a2a;
-    border-color: #ff4c4c;
-    color: #ff4c4c;
-    transform: translateY(-1px);
+    border-color: var(--color-inactive);
+    color: var(--color-inactive);
 }
 
-/* PUSHBACK */
+/* PUSHBACK DIRECTION */
 .pushback-direction {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     gap: 5px;
+    width: 85%;
 }
 
 .direction-button {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #1a1a1a;
-    color: #e0e0e0;
-    border: 1px solid #444;
-    font-size: 14px;
+    flex: 1;
+    padding: 3px 0;
+    font-size: 1rem;
     font-weight: bold;
-    cursor: pointer;
+    border-radius: 6px;
+    background-color: var(--btn-bg);
+    color: var(--text-light);
+    border: 1px solid var(--border-accent);
+    text-transform: uppercase;
     text-align: center;
     transition: all 0.25s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    height: 28px;
 }
 
 .direction-button:hover {
-    background-color: #2f2f2f;
-    color: #6cc24a;
-    border-color: #6cc24a;
+    border: 1px solid var(--color-requested);
+    color: var(--color-requested);
 }
 
 .direction-button.active {
-    background-color: #6cc24a;
-    color: #000;
-    border-color: #6cc24a;
-    box-shadow: 0 0 8px rgba(108, 194, 74, 0.4);
+    background-color: var(--color-requested);
+    color: var(--white);
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1080px) and (min-width: 769px) {
+    .overlay {
+        padding: 10px;
+    }
+
+    .overlay.open .overlay-title {
+        margin-top: 0;
+    }
+
+    .overlay.open .overlay-title .label {
+        font-size: 0.75rem;
+    }
+
+    .overlay.open .overlay-actions {
+        column-gap: 7px;
+        row-gap: 0px;
+    }
+    
+    .overlay-title {
+        font-size: 0.9rem;
+        height: 45px;
+        margin-top: 25px;
+    }
+    #pushback-btn, button.cancel-button:nth-child(3) {
+        height: 35px;
+    }
+    .request-button,
+    .cancel-button {
+        font-size: 0.85rem;
+        height:46px;
+        padding: 6px 10px;
+    }
+    
+    .direction-button {
+        font-size: 0.65rem;
+        height: 24px;
+    }
+
+    .overlay.open[data-requesttype="pushback"] .overlay-title {
+        margin-top: 0;
+    }
+    
+    .spinner {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .tick-icon {
+        font-size: 18px;
+    }
+}
+
+/* Tablettes */
+@media (max-width: 768px) and (min-width: 481px) {
+    .overlay {
+        min-height: 150px;
+        padding: 8px;
+    }
+    
+    .overlay-title {
+        font-size: 0.9rem;
+        height: 40px;
+    }
+    
+    .request-button,
+    .cancel-button {
+        font-size: 0.8rem;
+        height: 58px;
+        padding: 5px 8px;
+    }
+    
+    .direction-button {
+        font-size: 0.6rem;
+        height: 25px;
+        padding: 4px 0;
+    }
+    
+    .pushback-direction {
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .request-list {
+        gap: 8px;
+    }
+    
+    .overlay {
+        min-height: 140px;
+        padding: 8px;
+    }
+    
+    .overlay-title {
+        font-size: 0.85rem;
+        height: 35px;
+        margin: 5px 0 8px 0;
+    }
+    
+    .request-button,
+    .cancel-button {
+        font-size: 0.75rem;
+        height: 30px;
+        padding: 4px 6px;
+    }
+    
+    .direction-button {
+        font-size: 0.55rem;
+        height: 22px;
+    }
+    
+    .pushback-direction {
+        gap: 4px;
+        margin-bottom: 4px;
+    }
+    
+    .spinner {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .tick-icon {
+        font-size: 16px;
+    }
+}
+
+/* Très petits écrans */
+@media (max-width: 360px) {
+    .overlay {
+        min-height: 120px;
+    }
+    
+    .overlay-title {
+        font-size: 0.8rem;
+        height: 32px;
+    }
+    
+    .request-button,
+    .cancel-button {
+        font-size: 0.75rem;
+        height: 28px;
+    }
+    
+    .direction-button {
+        font-size: 0.5rem;
+        height: 20px;
+    }
+}
+
+/* Optimisations spéciales pour le mode paysage */
+@media (max-height: 600px) and (orientation: landscape) {
+    .overlay {
+        min-height: 140px;
+    }
+    
+    .overlay-title {
+        height: 35px;
+        margin: 4px 0 6px 0;
+        font-size: 0.85rem;
+    }
+    
+    .request-button,
+    .cancel-button {
+        height: 28px;
+        font-size: 0.75rem;
+    }
+    
+    .direction-button {
+        height: 22px;
+    }
 }
