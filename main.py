@@ -1,6 +1,7 @@
 import threading
 import signal
 import sys
+import mimetypes
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO
@@ -12,7 +13,8 @@ from app.routes import general
 exit_event = threading.Event()
 
 def create_app():
-    app = Flask(__name__)
+    mimetypes.add_type('application/javascript', '.js')
+    app = Flask(__name__, static_url_path="/static", static_folder="static")
     CORS(app)
     socketio = SocketIO(app, cors_allowed_origins="*")
     return app, socketio
