@@ -1,10 +1,8 @@
 import { displayHistoryLogs } from "../events/filter.js";
 
 const config = {
-    audioNotis : true,
-    utcDisplay: false,
-    tempReadings : false,
-    verboseLogs : true,
+    audioNotis : false,
+    verboseLogs : false,
     autoAck : false,
     autoRetry : false,
 }
@@ -16,6 +14,16 @@ export const CONFIG_KEYS = {
     LOGS: "verboseLogs",
     ACK: "autoAck",
     RETRY: "autoRetry"
+}
+
+export const setConfig = () => {
+    const toggleSwitch = document.querySelectorAll(".toggle-switch");
+
+    toggleSwitch.forEach((toggle) => {
+        const key = toggle.dataset.setting;
+        toggle.classList.toggle("active", config[key]);
+    })
+    return;
 }
 
 export const toggleSwitchEvent = (e) => {

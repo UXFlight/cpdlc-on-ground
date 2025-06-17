@@ -30,12 +30,12 @@ class PilotState:
             return {"error": f"Unknown step: {step_name}"}
 
         self._log_state(step_name)
-
-        step.status = status
-        step.message = message
-        step.timestamp = get_current_timestamp()
-        step.time_left = time_left if status not in ("closed", "timeout", "unable", "responded") else None #! Not sure..
-        step.cancelled = False if status != "cancelled" else True
+        with step.lock: 
+            step.status = status
+            step.message = message
+            step.timestamp = get_current_timestamp()
+            step.time_left = time_left if status not in ("closed", "timeout", "unable", "responded") else None #! Not sure..
+            step.cancelled = False if status != "cancelled" else True
 
         return {
             "requestType": step_name,

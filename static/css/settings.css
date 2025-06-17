@@ -137,39 +137,54 @@
 }
 
 .config-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex-wrap: wrap;
+  height: 100%;
+  padding-bottom: 16px;
 }
 
 .config-item {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
-  padding: 10px;
+  padding: 12px;
   background: var(--bg-black);
   border: 1px solid var(--border-primary);
-  border-radius: 8px;
+  border-radius: 10px;
+  height: 100%; 
+  box-sizing: border-box;
 }
 
-.config-title {
-  font-size: 0.8rem;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
+/* Info block */
 .config-info {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
+/* Title */
+.config-title {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Description */
 .config-desc {
-  font-size: 0.65rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  margin-top: 4px;
+  line-height: 1.2;
 }
 
-/* TOGGLE SWITCH */
+/* Toggle aligned at bottom */
+.config-item .toggle-switch {
+  align-self: flex-end;
+  margin-top: auto;
+}
+
+/* TOGGLE SWITCH STYLES */
 .toggle-switch {
   position: relative;
   width: 44px;
@@ -199,6 +214,7 @@
 .toggle-switch.active::before {
   transform: translateX(20px);
 }
+
 
 /* ACTION SECTION */
 .action-btn {
@@ -322,6 +338,7 @@
 @media only screen and (max-width: 1100px){
   .settings-panel {
     width: 50%;
+    padding: 16px 10px 12px;
   }
 }
 
@@ -384,7 +401,7 @@
   }
 
   .config-title {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
 
   .toggle-switch {

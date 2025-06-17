@@ -29,23 +29,24 @@ export const displayHistoryLogs = () => {
     };
   });
 
+
   const visibleLogs = state.isFiltered
     ? logs.filter(log =>
-        ![MSG_STATUS.CLOSED, MSG_STATUS.UNABLE].includes(log.latest.status)
+        ![MSG_STATUS.CLOSED, MSG_STATUS.UNABLE, MSG_STATUS.CANCEL, MSG_STATUS.CANCELLED, MSG_STATUS.ERROR, MSG_STATUS.TIMEOUT].includes(log.latest.status)
       )
     : logs;
 
   visibleLogs.sort((a, b) => {
-    const dateA = new Date(a.latest.timestamp);
-    const dateB = new Date(b.latest.timestamp);
-
-    if (dateA.getTime() !== dateB.getTime()) return dateA - dateB;
-
     const pA = STATUS_PRIORITY[a.latest.status] ?? -99;
     const pB = STATUS_PRIORITY[b.latest.status] ?? -99;
 
-    return pB - pA;
+    if (pA !== pB) return pA - pB;
+    const tA = a.latest.timestamp ?? -1;
+    const tB = b.latest.timestamp ?? -1;
+  
+    return tB - tA;
   });
+    
 
   visibleLogs.forEach(createGroupedLog);
 };

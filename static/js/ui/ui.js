@@ -64,7 +64,7 @@ export function playNotificationSound() {
 
 export function flashElement(div) {
     div.classList.add('flash');
-    setTimeout(() => div.classList.remove('flash'), 1000);
+    setTimeout(() => div.classList.remove('flash'), 1500);
 }
 
 
@@ -177,12 +177,12 @@ export function showSnackbarFromPayload(payload) {
 
   snackbar.classList.add("visible");
 
-  setTimeout(() => {
-    snackbar.classList.remove("visible");
-    snackbar.classList.add("fade-out");
-  }, 4000);
+  // setTimeout(() => {
+  //   snackbar.classList.remove("visible");
+  //   snackbar.classList.add("fade-out");
+  // }, 4000);
 
-  setTimeout(() => snackbar.remove(), 4600);
+  // setTimeout(() => snackbar.remove(), 4600);
 }
 
 function formatLabel(text) {

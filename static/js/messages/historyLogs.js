@@ -37,7 +37,7 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
         div.appendChild(historyContainer);
     }
 
-    const hasButtons = [MSG_STATUS.NEW, MSG_STATUS.LOADED, MSG_STATUS.EXECUTED].includes(latest.status);
+    const hasButtons = [MSG_STATUS.NEW, MSG_STATUS.LOADED, MSG_STATUS.EXECUTED, MSG_STATUS.STANDBY].includes(latest.status);
 
     if (hasButtons) {
         div.appendChild(createButton(stepKey, latest.status));
@@ -46,7 +46,6 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
 
     historyLogBox.prepend(div);
 }
-
 
 // SUBCOMPONENTS //
 function createHeader({ timestamp, title, status, historyContainer, showToggle }) {
@@ -64,12 +63,12 @@ function createHeader({ timestamp, title, status, historyContainer, showToggle }
     statusEl.className = `status ${status}`;
     statusEl.textContent = status.toUpperCase();
 
-    p.append(ts, titleEl, document.createTextNode(' '), statusEl);
+    p.append(statusEl, titleEl, ts);
 
     const requestType = formatRequestType(title);
     const step = state.steps[requestType];
 
-    const statusIsDone = [MSG_STATUS.EXECUTED, MSG_STATUS.TIMEOUT, MSG_STATUS.CANCELLED, MSG_STATUS.ERROR, MSG_STATUS.CLOSED, MSG_STATUS.UNABLE]
+    const statusIsDone = [MSG_STATUS.EXECUTED, MSG_STATUS.TIMEOUT, MSG_STATUS.CANCELLED, MSG_STATUS.ERROR, MSG_STATUS.CLOSED, MSG_STATUS.UNABLE, MSG_STATUS.CANCEL]
         .includes(status.toLowerCase());
 
     const showTimer = step?.timeLeft && !statusIsDone;
@@ -95,7 +94,6 @@ function createHeader({ timestamp, title, status, historyContainer, showToggle }
 
     return p;
 }
-
 
 function createResponseParagraph(message) {
     const p = document.createElement('p');

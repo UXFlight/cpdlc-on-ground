@@ -141,7 +141,7 @@ class SocketManager:
 
         message = DEFAULT_ATC_RESPONSES.get(request_type, f"ROGER, {request_type.upper()}")
 
-        pilot.state.update_step(request_type, "new", message, 90)
+        pilot.state.update_step(request_type, "new", message, 90) #! TEMP 5 SECONDS TICK
         pilot.agent.set_request(request_type, False)
 
         self.logger.log_request(

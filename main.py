@@ -1,33 +1,49 @@
-import multiprocessing
-from flask import Flask  # type: ignore
-from flask_socketio import SocketIO  # type: ignore
-from app.routes.general import general_bp
-from app.classes.socket.socket import SocketService
-from app.managers import PilotManager, SocketManager
+import threading
+import signal
+import sys
+from flask import Flask
+from flask_cors import CORS
+from flask_socketio import SocketIO
 from app.classes.ingsvc.agent import Echo
+from app.classes.socket.socket import SocketService
+from app.managers import PilotManager, SocketManager, PilotStats
+from app.routes import general
+
+exit_event = threading.Event()
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(general_bp)
+    CORS(app)
     socketio = SocketIO(app, cors_allowed_origins="*")
     return app, socketio
 
 def start_ingscape():
     Echo.start_ingescape_agent()
 
+def signal_handler(sig, frame):
+    print("\n[System] Ctrl+C detected, exiting...")
+    exit_event.set()
+    sys.exit(0)
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal_handler)
+
     app, socketio = create_app()
 
-    ingescape_process = multiprocessing.Process(target=start_ingscape) #! will see hope it turns out
-    ingescape_process.start()
+    ingescape_thread = threading.Thread(target=start_ingscape)
+    ingescape_thread.start()
 
-    socket_service: SocketService = SocketService(socketio)
-    pilot_manager: PilotManager = PilotManager()
-    socket_manager: SocketManager = SocketManager(socket_service, pilot_manager)
+    socket_service = SocketService(socketio)
+    pilot_manager = PilotManager()
+    pilot_stats = PilotStats(pilot_manager)
+
+    general.pilot_stats = pilot_stats
+    app.register_blueprint(general.general_bp)
+
+    socket_manager = SocketManager(socket_service, pilot_manager)
     socket_manager.init_events()
 
     try:
         socketio.run(app, host="0.0.0.0", port=5321, use_reloader=False, allow_unsafe_werkzeug=True)
-    finally:
-        ingescape_process.terminate()
-        ingescape_process.join()
+    except KeyboardInterrupt:
+        pass

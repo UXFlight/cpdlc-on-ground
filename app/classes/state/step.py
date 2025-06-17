@@ -1,3 +1,4 @@
+import threading
 class Step:
     def __init__(self, label, extra=None):
         self.label = label
@@ -7,6 +8,7 @@ class Step:
         self.time_left = None
         self.request_id = None
         self.cancelled = False  #! will see its use later
+        self.lock = threading.Lock()
 
         if extra:
             for k, v in extra.items():

@@ -8,11 +8,13 @@ import { filterEvent } from './events/filter.js';
 import { initState } from './state/init.js';
 import { settingEvent } from './events/settings.js';
 import { updateDashboardPanel } from './state/settingsState.js';
-import { toggleSwitchEvent } from './state/configState.js';
+import { toggleSwitchEvent, setConfig } from './state/configState.js';
 import { closeSettingsButton } from './events/settings.js';
+import { downloadReport } from './events/downloadStats.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   // initState(); // Initialize the state object
+  setConfig();
   updateDashboardPanel()
   setupSocketListeners() // ok
   listenToButtonEvents(); // ok
@@ -78,7 +80,7 @@ function listenToButtonEvents() {
   settingsIcon.addEventListener("click", (e) => settingEvent(e));
 
   // download btn event
-  downloadBtn.addEventListener("click", (e) => {})
+  downloadBtn.addEventListener("click", (e) => downloadReport())
 
   // toggle switch event
   toggleButtons.forEach(btn => {

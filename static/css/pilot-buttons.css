@@ -10,10 +10,9 @@
 /* BASE BUTTON STYLE */
 .action-button {
     padding: 12px 16px;
-    background: linear-gradient(
-        to bottom,
-        var(--btn-gradient-dark-top),
-        var(--btn-gradient-dark-bottom)
+    background: linear-gradient( to bottom, 
+    #93939369, 
+    var(--btn-gradient-dark-bottom) 
     );
     color: var(--text-light);
     cursor: pointer;

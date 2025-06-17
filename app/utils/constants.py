@@ -4,6 +4,11 @@ from pathlib import Path
 with open(Path(__file__).resolve().parent.parent.parent / "shared" / "msg_status.json") as f:
     MSG_STATUS = json.load(f)
 
+INGESCAPE_OUTPUTS = {
+    "load",
+    "execute", 
+    "cancel",
+}
 
 REQUEST_OUTPUTS = [
     "expected_taxi_clearance",
@@ -24,7 +29,7 @@ REQUEST_OUTPUTS = [
 
 ACTION_OUTPUTS = [
     "load", 
-    "wilco", 
+    "wilco",    
     "execute", 
     "cancel", 
     "standby", 
@@ -32,15 +37,6 @@ ACTION_OUTPUTS = [
 ]
 
 ALL_OUTPUTS = REQUEST_OUTPUTS + ACTION_OUTPUTS
-
-DEFAULT_ATC_RESPONSES = {
-    "expected_taxi_clearance": "TAXI VIA C, C1, B, B1. HOLDSHORT RWY 24R",
-    "engine_startup": "ENGINE STARTUP APPROVED",
-    "pushback": "PUSHBACK APPROVED",
-    "taxi_clearance": "TAXI CLEARANCE GRANTED",
-    "de_icing": "DE-ICING NOT REQUIRED",
-    "request_voice_contact": "CONTACT GROUND 121.75"
-}
 
 TAXI_CLEARANCE_MESSAGE = "TAXI VIA C, C1, B, B1, RWY 25R"
 INVALID_DATA_ERROR = "Invalid data"
@@ -66,31 +62,34 @@ ACTION_DEFINITIONS = {
     },
     "wilco": {
         "status": "closed",
-        "message": lambda _: "WILCO Acknowledged",
+        "message": lambda req_type: TAXI_CLEARANCE_MESSAGE if req_type in ["taxi_clearance", "expected_taxi_clearance"] else "WILCO Acknowledged",
         "requiredType": True,
         "allowedTypes": REQUEST_OUTPUTS
     },
     "standby": {
         "status": "standby",
-        "message": lambda _: "STANDBY - Awaiting ATC",
+        "message": lambda req_type: TAXI_CLEARANCE_MESSAGE if req_type in ["taxi_clearance", "expected_taxi_clearance"] else "STANDBY - Awaiting ATC",
         "requiredType": True,
         "allowedTypes": REQUEST_OUTPUTS
     },
     "unable": {
         "status": "unable",
-        "message": lambda _: "UNABLE to Comply",
+        "message": lambda req_type: TAXI_CLEARANCE_MESSAGE if req_type in ["taxi_clearance", "expected_taxi_clearance"] else "UNABLE to Comply",
         "requiredType": True,
         "allowedTypes": REQUEST_OUTPUTS
     }
 }
 
-TIMER_DURATION = 90  # en secondes
+TIMER_DURATION = 90
 
 DEFAULT_ATC_RESPONSES = {
     "expected_taxi_clearance": "TAXI VIA C, C1, B, B1. HOLD SHORT OF RWY 24R.",
     "engine_startup": "STARTUP APPROVED. ADVISE WHEN READY FOR PUSHBACK.",
-    "pushback": "PUSHBACK APPROVED. EXPECT TAXI VIA C1.",
+    "pushback": "PUSHBACK APPROVED.",
     "taxi_clearance": "TAXI VIA C, C1, B, B1 TO HOLD SHORT RWY 25R.",
     "de_icing": "DE-ICING NOT REQUIRED. CONTACT GROUND WHEN READY.",
     "request_voice_contact": "CONTACT GROUND ON 121.8 FOR FURTHER INSTRUCTIONS."
+}
+
+DEFAULT_WILCO_RESPONSES = {
 }

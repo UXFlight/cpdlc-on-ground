@@ -40,15 +40,18 @@ export function updateStep(requestType, newStatus, newMessage = null, timestamp 
   const step = state.steps[key];
   if (!step) return;
 
+  // Utilise le timestamp reçu, ou un ISO local, puis extrait HH:MM:SS
+  const formattedTimestamp = formatToTime(timestamp || new Date().toISOString());
+
   const entry = {
     status: newStatus,
     message: newMessage,
-    timestamp: timestamp || new Date().toISOString().replace('T', ' ').split('.')[0]
+    timestamp: formattedTimestamp
   };
 
   step.status = newStatus;
   step.message = newMessage;
-  step.timestamp = entry.timestamp;
+  step.timestamp = formattedTimestamp;
 
   if (timeLeft !== null) {
     step.timeLeft = timeLeft;
@@ -64,6 +67,15 @@ export function updateStep(requestType, newStatus, newMessage = null, timestamp 
   updateMessageStatus(key, newStatus);
   updateOverlayStatus(key, newStatus);
   markDashboardReady();
+}
+
+function formatToTime(isoString) {
+  try {
+    const date = new Date(isoString);
+    return date.toISOString().substr(11, 8); 
+  } catch {
+    return isoString;
+  }
 }
 
 export function updateDirection(direction = null) {

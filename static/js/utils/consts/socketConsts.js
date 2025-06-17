@@ -11,7 +11,7 @@ export const SOCKET_LISTENS = {
     CONNECTED_TO_ATC: "connectedToATC",
     DISCONNECTED_FROM_ATC: "disconnectedFromATC",
     TICK: "tick",
-    TIMEOUT: "timeout",
+    TIMEOUT: "atcTimeout",
     ATC_RESPONSE: "atcResponse",
     ACTION_ACK: "actionAcknowledged",
     REQUEST_ACK: "requestAcknowledged",

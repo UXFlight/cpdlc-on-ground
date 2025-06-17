@@ -1,25 +1,24 @@
 import { actionEvent } from "../events/action.js";
 import { WORKFLOW_BUTTONS } from "../utils/consts/buttonsWorkflow.js";
-import { ALL_ACTIONS, LOADABLE_REQUEST_TYPES } from "../utils/consts/flightConsts.js";
+import { ALL_ACTIONS, LOADABLE_REQUEST_TYPES, REQUEST_TYPE } from "../utils/consts/flightConsts.js";
+import { MSG_STATUS } from "../utils/consts/status.js";
 
 // enabling btns based on action and requestType
 export function enableButtonsByAction(action, requestType) {
     switch (action) {
-        case "load":
+        case MSG_STATUS.LOAD:
             if (requestType === "taxi_clearance") return setExecuteButtonState() // enables exec & cancel exec btn
             enableWilcoButtons(requestType);
             break;
-        case "execute": 
+        case MSG_STATUS.EXECUTE: 
             enableLoadButton(requestType)
             enableWilcoButtons(requestType) // enables wilco, standby, unable 
             break;
-        case "cancel":
+        case MSG_STATUS.CANCEL:
             setExecuteButtonState(true);
             enableRequestButton(requestType);
             break;
-        case "standby":
-            enableRequestButton(requestType);
-        case "unable":
+        case MSG_STATUS.UNABLE:
             enableRequestButton(requestType);
         default:
             break;
@@ -109,5 +108,13 @@ export function setExecuteButtonState(isDisabled = false) {
 // enables request button
 export function enableRequestButton(requestType) {
     const requestButton = document.getElementById(`${requestType}-btn`);
-    if (requestButton) requestButton.disabled = false;
+
+    if (!requestButton) return;
+    if (requestType !== REQUEST_TYPE.PUSHBACK) return requestButton.disabled = false;
+
+    const directionButtons = document.querySelectorAll(`.direction-button`);
+    directionButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.disabled = false
+    });
 }

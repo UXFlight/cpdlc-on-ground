@@ -10,7 +10,7 @@ class Echo:
         self._register_callbacks()
 
     ## PRIVATE ##
-    def _prefixed(self, name: str) -> str:
+    def _prefixed(self, name: str) -> str: #! temp
         return f"{self.pilot_id}::{name}"
 
     def _register_callbacks(self):
@@ -40,13 +40,14 @@ class Echo:
         if name not in pool:
             raise AttributeError(f"Unknown output '{name}'")
         pool[name] = value
-        igs.output_set_bool(self._prefixed(name), value)
+        igs.output_set_bool(name, value)
 
     ## PUBLIC ##
     def set_request(self, name: str, value: bool):
         self._set_output(self._requests, name, value)
 
     def set_action(self, name: str, value: bool):
+        print(f"[Action] {self.pilot_id} setting action '{name}' to {value}")
         self._set_output(self._actions, name, value)
 
     def reset(self):

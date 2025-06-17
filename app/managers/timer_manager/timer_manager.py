@@ -11,37 +11,31 @@ class TimerManager:
         self.log_manager = logger
         self.sid = sid
 
-    def start_timer(self, step: Step, socket: SocketService, sid: str, on_timeout=None):
-        request_type = step.label.lower().replace(' ', '_')
+    def start_timer(self, step: Step, request_type: str, on_tick, on_timeout=None):
         self.stop_timer(request_type)
-
         stop_event = threading.Event()
         self.stop_flags[request_type] = stop_event
 
         def run():
             while not stop_event.is_set():
-                if step.time_left is None or step.time_left <= 0:
-                    break
+                with step.lock:
+                    if step.time_left is None or step.time_left <= 0:
+                        break
+                    step.time_left -= 1
+
+                if on_tick:
+                    on_tick(request_type, step)
 
                 time.sleep(1)
-                step.time_left -= 1
 
-                logger.log_event(self.sid, 'TICK', f"{request_type} — {step.time_left}s left")
-                socket.send("tick", {
-                    "requestType": request_type,
-                    "timeLeft": step.time_left
-                }, room=sid)
-
-            if not stop_event.is_set():
-                step.status = "timeout"
-                step.time_left = 0
-                socket.send("atcTimeout", { "requestType": request_type }, room=sid)
-                if on_timeout:
-                    on_timeout()
+            if not stop_event.is_set() and on_timeout:
+                print(f"Timer for {request_type} has timed out.")
+                on_timeout(request_type, step)
 
         thread = threading.Thread(target=run, daemon=True)
         self.timers[request_type] = thread
         thread.start()
+
 
     def stop_timer(self, request_type: str):
         if request_type in self.stop_flags:
