@@ -3,7 +3,7 @@ import { markDashboardReady } from "./settingsState.js";
 
 // Global state
 export const state = {
-  isFiltered: false,           // used to filter history logs
+  isFiltered: true,           // used to filter history logs
   history: [],                // history logs
   connection: {
     connectedSince: null, // timestamp when the connection was established

@@ -7,7 +7,7 @@ class Step:
         self.timestamp = None
         self.time_left = None
         self.request_id = None
-        self.cancelled = False  #! will see its use later
+        self.cancelled = False
         self.lock = threading.Lock()
 
         if extra:

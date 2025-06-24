@@ -17,7 +17,7 @@ class Pilot:
         self.logger = logger
         self.timer_manager = TimerManager(self.sid)
 
-    def get_step(self, request_type : str):
+    def get_step(self, request_type : str) -> Step | None:
         step = self.state.steps.get(request_type)
         return step if step else None
 
@@ -27,7 +27,7 @@ class Pilot:
         if not request_type:
             return self._error("REQUEST", "Missing requestType in request")
 
-        step : Step = self.get_step(request_type)
+        step : Step | None = self.get_step(request_type)
         if not step:
             return self._error("REQUEST", f"Unknown step: {request_type}", request_type)
 

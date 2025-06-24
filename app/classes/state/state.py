@@ -16,20 +16,19 @@ class PilotState:
             steps[name] = Step(label=name.replace("_", " ").title(), extra=extra)
         return steps
 
-    def _log_state(self, step_name):
-        step = self.steps[step_name]
+    def _log_state(self, step_name : str, step : Step) -> None:
         self.history.append({
             "stepKey": step_name,
             "snapshot": step.to_dict()
         })
 
     ## PUBLIC
-    def update_step(self, step_name, status, message=None, time_left=None):
+    def update_step(self, step_name : str, status : str, message : str | None = None, time_left=None):
         step = self.steps.get(step_name)
         if not step:
             return {"error": f"Unknown step: {step_name}"}
 
-        self._log_state(step_name)
+        self._log_state(step_name, step)
         with step.lock: 
             step.status = status
             step.message = message
@@ -53,7 +52,7 @@ class PilotState:
 
     def reset(self):
         for name, step in self.steps.items():
-            self._log_state(name)
+            self._log_state(name, step)
             step.status = None
             step.message = None
             step.timestamp = None

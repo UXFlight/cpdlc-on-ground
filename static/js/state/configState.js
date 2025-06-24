@@ -1,7 +1,7 @@
 import { displayHistoryLogs } from "../events/filter.js";
 
 const config = {
-    audioNotis : false,
+    audioNotis : true,
     verboseLogs : false,
     autoAck : false,
     autoRetry : false,

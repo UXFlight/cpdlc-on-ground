@@ -59,7 +59,7 @@ class SocketManager:
         )
         pilot = self.pilots.get_or_create(sid)
         if pilot:
-            pilot.timerManager.stop_all()
+            pilot.timer_manager.stop_all()
         self.pilots.remove(sid)
 
     ### === SendRequest Event === ###

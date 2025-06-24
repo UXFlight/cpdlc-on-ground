@@ -9,6 +9,7 @@ from app.classes.ingsvc.agent import Echo
 from app.classes.socket.socket import SocketService
 from app.managers import PilotManager, SocketManager, PilotStats
 from app.routes import general
+from app.classes.gss.gss_client import gss_client
 
 exit_event = threading.Event()
 
@@ -32,8 +33,10 @@ if __name__ == '__main__':
 
     app, socketio = create_app()
 
-    ingescape_thread = threading.Thread(target=start_ingscape)
-    ingescape_thread.start()
+    # ingescape_thread = threading.Thread(target=start_ingscape)
+    # ingescape_thread.start()
+
+    gss_client.connect()
 
     socket_service = SocketService(socketio)
     pilot_manager = PilotManager()
