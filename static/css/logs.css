@@ -1,32 +1,3 @@
-/* AVIATION LOG SYSTEM */
-.message-log {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    font-family: 'Inter', sans-serif;
-    overflow-y: auto;
-}
-
-/* HEADER */
-#filter-icon {
-    width: 28px;
-    height: 28px;
-    opacity: 0.8;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-    fill: var(--text-primary);
-    stroke: var(--text-primary)
-}
-
-#filter-icon:hover {
-    fill: var(--text-muted);
-    stroke: var(--text-muted);
-}
-
-#filter-icon.filtered {
-    fill: var(--bg-black);
-}
-
 /* LOG BOX */
 .log-box {
     display: flex;
@@ -37,6 +8,11 @@
     padding: 16px;
     scrollbar-width: thin;
     scrollbar-color: var(--border-primary) transparent;
+    font-family: 'Inter', sans-serif;
+    overflow-y: auto;
+    height: 100%;
+    border: 1px solid var(--text-secondary);
+    border-radius: 8px;
 }
 
 .log-box::-webkit-scrollbar {
@@ -62,7 +38,6 @@
     flex-direction: column;
     box-shadow: var(--shadow-md);
     transition: all 0.2s ease;
-    overflow: hidden;
 }
 
 .new-message:hover {

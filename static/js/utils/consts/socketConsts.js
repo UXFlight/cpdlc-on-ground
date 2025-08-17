@@ -8,7 +8,7 @@ export const SOCKET_EMITS = {
 export const SOCKET_LISTENS = {
     CONNECT: "connect",
     DISCONNECT: "disconnect",
-    CONNECTED_TO_ATC: "connectedToATC",
+    CONNECTED_TO_ATC: "connectedToAtc",
     DISCONNECTED_FROM_ATC: "disconnectedFromATC",
     TICK: "tick",
     TIMEOUT: "atcTimeout",

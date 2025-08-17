@@ -4,13 +4,12 @@ import { cancelRequestEvent } from './events/cancelRequest.js';
 import { toggleOverlay, touchStartEvent, handleGlobalClick, touchFeedbackButtons, closeSettings } from './events/overlay.js';
 import { selectPushbackDirection } from './events/pushbackDirection.js';
 import { setupSocketListeners } from './socket/socket-listens.js';
-import { filterEvent } from './events/filter.js';
-import { initState } from './state/init.js';
 import { settingEvent } from './events/settings.js';
 import { updateDashboardPanel } from './state/settingsState.js';
 import { toggleSwitchEvent, setConfig } from './state/configState.js';
 import { closeSettingsButton } from './events/settings.js';
 import { downloadReport } from './events/downloadStats.js';
+import { initVoice } from './text-to-speech.js/speech.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   // initState(); // Initialize the state object
@@ -20,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   listenToButtonEvents(); // ok
   listenToGlobalClickEvents(); // ok
   listenToHeaderEvents();
+  initVoice();
 });
 
 function listenToGlobalClickEvents() {
@@ -44,8 +44,6 @@ function listenToButtonEvents() {
 
   const leftButton = document.getElementById("pushback-left");
   const rightButton = document.getElementById("pushback-right");
-
-  const filterIcon = document.getElementById("filter-icon");
 
   const settingsIcon = document.getElementById("settings-icon");
 
@@ -72,9 +70,6 @@ function listenToButtonEvents() {
   // left/ right pushback event
   leftButton.addEventListener("click", (e) => selectPushbackDirection(e));
   rightButton.addEventListener("click", (e) => selectPushbackDirection(e));
-
-  // filter btn event
-  filterIcon.addEventListener("click", () => filterEvent());
 
   // settings icon event
   settingsIcon.addEventListener("click", (e) => settingEvent(e));

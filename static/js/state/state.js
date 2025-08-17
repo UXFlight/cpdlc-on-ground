@@ -1,9 +1,9 @@
 import { updateMessageStatus, updateOverlayStatus } from "../ui/ui.js";
+import { REQUEST_TYPE } from "../utils/consts/flightConsts.js";
 import { markDashboardReady } from "./settingsState.js";
 
 // Global state
 export const state = {
-  isFiltered: true,           // used to filter history logs
   history: [],                // history logs
   connection: {
     connectedSince: null, // timestamp when the connection was established
@@ -14,13 +14,12 @@ export const state = {
     },
   },
   steps: {
-    expected_taxi_clearance: createStep("Expected Taxi Clearance"),
-    engine_startup: createStep("Engine Startup"),
-    pushback: createStep("Pushback", { direction: null }),
-    taxi_clearance: createStep("Taxi Clearance"),
-    startup_cancellation: createStep("Startup Cancellation"),
-    de_icing: createStep("De-Icing"),
-    request_voice_contact: createStep("Request Voice Contact"), 
+    DM_136: createStep("Expected Taxi Clearance"),
+    DM_134: createStep("Engine Startup"),
+    DM_131: createStep("Pushback", { direction: null }),
+    DM_135: createStep("Taxi Clearance"),
+    DM_127: createStep("De-Icing"),
+    DM_20: createStep("Request Voice Contact"), 
   },
 };
 
@@ -35,12 +34,11 @@ function createStep(label, extra = {}) {
   };
 }
 
-export function updateStep(requestType, newStatus, newMessage = null, timestamp = null, timeLeft = null) {
+export function updateStep(requestType, newStatus, newMessage = null, timestamp = null, timeLeft = null, label = null) {
   const key = requestType;
   const step = state.steps[key];
   if (!step) return;
 
-  // Utilise le timestamp reçu, ou un ISO local, puis extrait HH:MM:SS
   const formattedTimestamp = formatToTime(timestamp || new Date().toISOString());
 
   const entry = {
@@ -50,12 +48,11 @@ export function updateStep(requestType, newStatus, newMessage = null, timestamp 
   };
 
   step.status = newStatus;
+  step.label = label || step.label; // only to update label for pushback + DIRECTION
   step.message = newMessage;
   step.timestamp = formattedTimestamp;
 
-  if (timeLeft !== null) {
-    step.timeLeft = timeLeft;
-  }
+  step.timeLeft = timeLeft;
 
   let group = state.history.find(h => h.stepKey === key);
   if (!group) {
@@ -79,7 +76,7 @@ function formatToTime(isoString) {
 }
 
 export function updateDirection(direction = null) {
-  state.steps["pushback"].direction = direction;
+  state.steps[REQUEST_TYPE.PUSHBACK].direction = direction;
   document.getElementById("pushback-left").classList.toggle("active", direction === "left");
   document.getElementById("pushback-right").classList.toggle("active", direction === "right");
 }

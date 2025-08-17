@@ -114,14 +114,9 @@ h1 {
     gap: 20px;
 }
 
-.message-log,
+.log-box,
 .request-menu {
     flex: 1;
-}
-
-.message-log {
-    border: 1px solid var(--text-secondary);
-    border-radius: 8px;
 }
 
 /* BUTTON */
@@ -132,7 +127,7 @@ button:disabled {
 }
 
 /* GRID LAYOUT */
-.message-log {
+.log-box {
     grid-row: 1;
 }
 

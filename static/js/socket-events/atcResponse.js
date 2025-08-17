@@ -6,26 +6,38 @@ import { MSG_STATUS } from "../utils/consts/status.js";
 import { REQUEST_TYPE } from "../utils/consts/flightConsts.js";
 import { autoLoadAction } from "../events/action.js";
 import { closeOverlay } from "../events/overlay.js";
+import { speak } from "../text-to-speech.js/speech.js";
 
 export const handleAtcResponse = (data) => {
-    const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${data.requestType}"]`);
+    const {
+        step_code,
+        status,
+        message,
+        timestamp,
+        time_left,
+    } = data
+    const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${step_code}"]`);
     if (cancelBtn) cancelBtn.disabled = true;
 
-    closeOverlay(data.requestType);
+    closeOverlay(step_code);
 
-    updateStep(data.requestType, data.status, data.message,data.timestamp, data.timeLeft);
+    updateStep(step_code, status, message, timestamp, time_left);
 
-    if (checkAutoLoad(data)) setTimeout(() => autoLoadAction(data.requestType), 600);
-    if (getBool(CONFIG_KEYS.AUDIO)) playNotificationSound();
-
+    if (checkAutoLoad(step_code, status)) setTimeout(() => autoLoadAction(step_code), 200);
+    if (getBool(CONFIG_KEYS.AUDIO)) {
+        speak(step_code);
+        speak(message);
+    } else {
+        playNotificationSound();
+    }
     displayHistoryLogs();
-    if (data.requestType === "pushback") {
-        const direction = data.direction;
+    if (step_code === REQUEST_TYPE.PUSHBACK) {
+        const direction = direction;
         // document.getElementById(`pushback-${direction}`).disabled = true;
     }
 }
 
-function checkAutoLoad(data) {
-    const isLoadable = [REQUEST_TYPE.EXPECTED_TAXI_CLEARANCE, REQUEST_TYPE.TAXI_CLEARANCE].includes(data.requestType);
-    return data.status === MSG_STATUS.NEW && isLoadable && getBool(CONFIG_KEYS.ACK);
+function checkAutoLoad(step_code, status) {
+    const isLoadable = [REQUEST_TYPE.EXPECTED_TAXI_CLEARANCE, REQUEST_TYPE.TAXI_CLEARANCE].includes(step_code);
+    return status === MSG_STATUS.NEW && isLoadable && getBool(CONFIG_KEYS.ACK);
 }

@@ -1,25 +1,20 @@
 import { state, updateDirection } from '../state/state.js';
 import { MSG_STATUS } from '../utils/consts/status.js';
 import { isConnected } from '../utils/utils.js';
+import { REQUEST_TYPE } from '../utils/consts/flightConsts.js';
+import { togglePushbackState } from '../ui/buttons-ui.js';
 
 // pushback direction
 export const selectPushbackDirection = (e) => {
   const direction = e.target.textContent;
-  const prevDirection = state.steps["pushback"].direction;
-  const pushbackStatus = state.steps["pushback"].status;
+  const prevDirection = state.steps[REQUEST_TYPE.PUSHBACK].direction;
+  const pushbackStatus = state.steps[REQUEST_TYPE.PUSHBACK].status;
   const isActive = [MSG_STATUS.NEW , MSG_STATUS.LOADED, MSG_STATUS.EXECUTED, MSG_STATUS.CLOSED].includes(pushbackStatus);
   if (isActive) document.getElementById(`pushback-${direction}`).disabled = true;
   if (!direction || direction === prevDirection || isActive) return;
 
-  const pushbackBtn = document.getElementById("pushback-btn");
-  const cancelPushbackBtn = document.querySelector(".cancel-button[data-requesttype='pushback']");
-
+  togglePushbackState(false, direction)
   updateDirection(direction);
-
-  ["pushback-left", "pushback-right"].forEach(id => document.getElementById(id).disabled = true);
-
-  if (pushbackBtn && isConnected()) pushbackBtn.disabled = false;
-  if (cancelPushbackBtn) cancelPushbackBtn.disabled = false;
 };
 
 export const enablePushbackRequest = () => {

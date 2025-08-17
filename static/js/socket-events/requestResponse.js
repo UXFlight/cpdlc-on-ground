@@ -3,10 +3,11 @@ import { MSG_STATUS } from '../utils/consts/status.js';
 import { displayHistoryLogs } from "../events/filter.js";
 
 export const handleRequestAck = (data) => {
-    const { requestType, status, message, timestamp } = data;
-    const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${requestType}"]`);
-    updateStep(requestType, status, message, timestamp);
+    const { step_code, status, message, timestamp, label } = data;
+    console.log("REQUEST ACK", data);
+    const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${step_code}"]`);
+    updateStep(step_code, status, message, timestamp, null, label);
     if (cancelBtn) cancelBtn.disabled = false;
-    if (state.steps[requestType].status === MSG_STATUS.CANCELLED) return;
+    if (state.steps[step_code].status === MSG_STATUS.CANCELLED) return;
     displayHistoryLogs();
 }

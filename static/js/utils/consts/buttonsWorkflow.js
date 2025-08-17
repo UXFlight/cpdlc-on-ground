@@ -1,9 +1,9 @@
 export const WORKFLOW_BUTTONS = {
-    expected_taxi_clearance: {
+    DM_136: {
         new: ['LOAD'],
         loaded: ['WILCO', 'STANDBY', 'UNABLE'],
     },
-    taxi_clearance: {
+    DM_135: {
         new: ['LOAD'],
         loaded: ['EXECUTE', 'CANCEL'],
         executed: ['WILCO', 'STANDBY', 'UNABLE'],

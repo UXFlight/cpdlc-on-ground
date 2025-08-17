@@ -1,6 +1,6 @@
 import { MSG_STATUS } from '../utils/consts/status.js';
 import { state } from '../state/state.js';
-import { flashElement, formatRequestType } from '../ui/ui.js';
+import { flashElement } from '../ui/ui.js';
 import { createButton } from '../ui/buttons-ui.js';
 import { createTimer } from '../ui/timer-ui.js';
 import { getBool, CONFIG_KEYS } from '../state/configState.js';
@@ -19,13 +19,16 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
     const showLogs = getBool(CONFIG_KEYS.LOGS);
     const historyContainer = showLogs ? createHistoryDetails(history.slice(0, -1)) : null;
 
+    console.log("CREATE GROUPED LOG", label);
     const header = createHeader({
         timestamp: latest.timestamp,
         title: label,
         status: latest.status,
         historyContainer,
-        showToggle: showLogs
+        showToggle: showLogs,
+        stepKey: stepKey
     });
+
 
     div.appendChild(header);
 
@@ -48,7 +51,7 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
 }
 
 // SUBCOMPONENTS //
-function createHeader({ timestamp, title, status, historyContainer, showToggle }) {
+function createHeader({ timestamp, title, status, historyContainer, showToggle, stepKey }) {
     const p = document.createElement('p');
 
     const ts = document.createElement('span');
@@ -64,9 +67,7 @@ function createHeader({ timestamp, title, status, historyContainer, showToggle }
     statusEl.textContent = status.toUpperCase();
 
     p.append(statusEl, titleEl, ts);
-
-    const requestType = formatRequestType(title);
-    const step = state.steps[requestType];
+    const step = state.steps[stepKey];
 
     const statusIsDone = [MSG_STATUS.EXECUTED, MSG_STATUS.TIMEOUT, MSG_STATUS.CANCELLED, MSG_STATUS.ERROR, MSG_STATUS.CLOSED, MSG_STATUS.UNABLE, MSG_STATUS.CANCEL]
         .includes(status.toLowerCase());
@@ -74,7 +75,7 @@ function createHeader({ timestamp, title, status, historyContainer, showToggle }
     const showTimer = step?.timeLeft && !statusIsDone;
 
     if (showTimer) {
-        p.appendChild(createTimer(requestType, step.timeLeft));
+        p.appendChild(createTimer(stepKey, step.timeLeft));
     }
 
     if (showToggle && historyContainer) {

@@ -7,28 +7,33 @@ import { enableRequestButton } from "../ui/buttons-ui.js";
 import { MSG_STATUS } from "../utils/consts/status.js";
 
 
-export const tickUpdate = ({ timeLeft, requestType }) => {
-    const step = state.steps[requestType];
+export const tickUpdate = (data) => {
+    const { 
+        step_code,
+        timeLeft 
+    } = data
+    
+    const step = state.steps[step_code];
     if (!step) return;
 
     const total = step.status === MSG_STATUS.STANDBY ? 300 : 90;
     step.timeLeft = timeLeft;
 
-    updateTimerVisual(requestType, timeLeft, total); 
+    updateTimerVisual(step_code, timeLeft, total); 
 };
 
 export const timeoutEvent = (data) => {
     const { 
-            message,
-            requestType,
+            step_code,
             status,
-            timeLeft,
-            timestamp
+            message,
+            timestamp,
+            timeLeft
         } = data;
 
-    updateStep(requestType, status, message, timestamp, timeLeft);
+    updateStep(step_code, status, message, timestamp, timeLeft);
     displayHistoryLogs();
-    enableRequestButton(requestType)
+    enableRequestButton(step_code)
 
-    if (getBool(CONFIG_KEYS.RETRY)) autoSendRequest(requestType);
+    if (getBool(CONFIG_KEYS.RETRY)) autoSendRequest(step_code);
 }

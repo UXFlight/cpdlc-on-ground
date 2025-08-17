@@ -8,12 +8,12 @@ export const ALL_ACTIONS = {
 };
 
 export const REQUEST_TYPE = {
-    EXPECTED_TAXI_CLEARANCE: "expected_taxi_clearance",
-    ENGINE_STARTUP: "engine_startup",
-    PUSHBACK: 'pushback',
-    TAXI_CLEARANCE: "taxi_clearance",
-    DE_ICING: 'de_icing',
-    VOICE_CONTACT: 'request_voice_contact',
+    EXPECTED_TAXI_CLEARANCE: "DM_136",
+    ENGINE_STARTUP: "DM_134",
+    PUSHBACK: 'DM_131',
+    TAXI_CLEARANCE: "DM_135",
+    DE_ICING: 'DM_127',
+    VOICE_CONTACT: 'DM_20',
 }
 
-export const LOADABLE_REQUEST_TYPES = ["expected_taxi_clearance", "taxi_clearance"];
+export const LOADABLE_REQUEST_TYPES = ["DM_136", "DM_135"];

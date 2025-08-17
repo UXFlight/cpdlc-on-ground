@@ -1,8 +1,10 @@
-import { state } from "../state/state.js";
+import { state, updateDirection } from "../state/state.js";
 import { createGroupedLog } from "../messages/historyLogs.js";
-import { changeFilterIcon, clearMessageBox } from "../ui/ui.js";
+import { clearMessageBox } from "../ui/ui.js";
 import { MSG_STATUS } from '../utils/consts/status.js';
 import { STATUS_PRIORITY } from "../utils/consts/priorityConsts.js";
+import { CONFIG_KEYS, getBool, toggleFilter } from "../state/configState.js";
+import { REQUEST_TYPE } from "../utils/consts/flightConsts.js";
 
 export const filterEvent = () => {
   const hasClosableLogs = state.history.some(
@@ -12,25 +14,26 @@ export const filterEvent = () => {
   );
 
   if (!hasClosableLogs) return;
-  state.isFiltered = !state.isFiltered;
   displayHistoryLogs()
-  changeFilterIcon();
 }
 
 export const displayHistoryLogs = () => {
   clearMessageBox();
   const logs = state.history.map(group => {
     const latest = group.entries[group.entries.length - 1];
+
+    const stepLabel = state.steps?.[group.stepKey]?.label;
+    const label = (latest && latest.label) ?? stepLabel ?? group.label;
+
     return {
       stepKey: group.stepKey,
-      label: group.label,
+      label: label,
       latest,
       history: group.entries,
     };
   });
 
-
-  const visibleLogs = state.isFiltered
+  const visibleLogs = getBool(CONFIG_KEYS.FILTER)
     ? logs.filter(log =>
         ![MSG_STATUS.CLOSED, MSG_STATUS.UNABLE, MSG_STATUS.CANCEL, MSG_STATUS.CANCELLED, MSG_STATUS.ERROR, MSG_STATUS.TIMEOUT].includes(log.latest.status)
       )
@@ -48,5 +51,6 @@ export const displayHistoryLogs = () => {
   });
     
 
+  console.log("DISPLAY HISTORY LOGS", visibleLogs);
   visibleLogs.forEach(createGroupedLog);
 };

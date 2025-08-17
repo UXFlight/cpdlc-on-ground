@@ -1,8 +1,10 @@
 import { displayHistoryLogs } from "../events/filter.js";
+import { filterEvent } from "../events/filter.js";
 
 const config = {
-    audioNotis : true,
+    audioNotis : false,
     verboseLogs : false,
+    autoBox: false,
     autoAck : false,
     autoRetry : false,
 }
@@ -12,6 +14,7 @@ export const CONFIG_KEYS = {
     UTC: "utcDisplay",
     TEMPERATURE: "tempReadings",
     LOGS: "verboseLogs",
+    FILTER: "autoBox",
     ACK: "autoAck",
     RETRY: "autoRetry"
 }
@@ -32,8 +35,15 @@ export const toggleSwitchEvent = (e) => {
     if (target) target.classList.toggle("active");
     if (key) config[key] = !config[key];
     if (key === CONFIG_KEYS.LOGS) displayHistoryLogs()
+    if (key === CONFIG_KEYS.FILTER) {
+        filterEvent()
+    };
 }
 
 export const getBool = (key) =>{
     return config[key];
+}
+
+export const toggleFilter = () => {
+    config[CONFIG_KEYS.FILTER] = !config[CONFIG_KEYS.FILTER];
 }

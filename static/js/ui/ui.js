@@ -35,11 +35,6 @@ export function hideTick(requestType) {
   }
 }
 
-export function changeFilterIcon() {
-  const svg = document.getElementById("filter-icon");
-  if(svg) svg.classList.toggle("filtered");
-}
-
 export function ensureMessageBoxNotEmpty(divId='history-log-box') {
   const historyLogBox = document.getElementById(divId);
   const noMessages = document.getElementById('empty-history-message');
@@ -189,13 +184,6 @@ function formatLabel(text) {
   return text
     .replace(/_/g, " ")
     .replace(/\b\w/g, char => char.toUpperCase());
-}
-
-export function formatRequestType(requestType) {
-  if (!requestType) return null;
-  return requestType
-    .toLowerCase()
-    .replace(/[-\s]+/g, "_"); 
 }
 
 // STATUS UPDATER //

@@ -1,4 +1,4 @@
-import { dashboardNeedsRefresh, updateDashboardPanel, manageConnectionTimer } from '../state/settingsState.js';
+import { dashboardNeedsRefresh, updateDashboardPanel } from '../state/settingsState.js';
 import { state } from '../state/state.js';
 import { MSG_STATUS } from '../utils/consts/status.js';
 import { closeCurrentOverlay } from '../utils/utils.js';
@@ -38,7 +38,6 @@ export const handleGlobalClick = (event) => {
 
   if (clickedOutsideSettings) {
     settingPanel.classList.remove("active");
-    manageConnectionTimer(false);
   }
 };
 
@@ -70,12 +69,10 @@ export const closeSettings = (event) => {
   if ((event.key === "Escape" || event.key === "Tab") && isVisible) {
     event.preventDefault();
     settingPanel.classList.remove("active");
-    manageConnectionTimer(false);
   } else if (event.key === "Tab" && !isVisible) {
     event.preventDefault();
     settingPanel.classList.add("active");
     if (dashboardNeedsRefresh()) updateDashboardPanel();
-    manageConnectionTimer(true);
   }
 };
 

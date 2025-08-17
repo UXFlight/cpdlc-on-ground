@@ -40,10 +40,6 @@ div.overlay:nth-child(5) {
     border-radius: 8px;
 }
 
-#filter-btn.icon-wrap {
-    border-bottom: 1px solid var(--text-secondary);
-}
-
 #request-voice-contact-icon {
     width: 28px;
     height: 28px;
@@ -208,14 +204,6 @@ div.overlay:nth-child(5) {
     margin-bottom: 5px;
 }
 
-.overlay-actions.pushback-overlay {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 2fr;
-    justify-content: center;
-    align-items: center;
-}
-
 /* REQUEST, CANCEL BUTTONS */
 .request-button,
 .cancel-button {
@@ -257,11 +245,15 @@ button.cancel-button:nth-child(3) {
 }
 
 /* PUSHBACK DIRECTION */
+.overlay-actions.pushback-overlay  .request-button,
+.overlay-actions.pushback-overlay .cancel-button {
+    display: none;
+}
 .pushback-direction {
     display: flex;
     justify-content: space-between;
     gap: 5px;
-    width: 85%;
+    width: 100%;
 }
 
 .direction-button {
@@ -278,7 +270,7 @@ button.cancel-button:nth-child(3) {
     transition: all 0.25s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     cursor: pointer;
-    height: 28px;
+    height: 58px;
 }
 
 .direction-button:hover {

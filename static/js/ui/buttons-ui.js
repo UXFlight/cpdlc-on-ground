@@ -1,16 +1,17 @@
 import { actionEvent } from "../events/action.js";
+import { updateDirection } from "../state/state.js";
 import { WORKFLOW_BUTTONS } from "../utils/consts/buttonsWorkflow.js";
 import { ALL_ACTIONS, LOADABLE_REQUEST_TYPES, REQUEST_TYPE } from "../utils/consts/flightConsts.js";
 import { MSG_STATUS } from "../utils/consts/status.js";
 
 // enabling btns based on action and requestType
-export function enableButtonsByAction(action, requestType) {
-    switch (action) {
-        case MSG_STATUS.LOAD:
-            if (requestType === "taxi_clearance") return setExecuteButtonState() // enables exec & cancel exec btn
+export function enableButtonsByStatus(status, requestType) {
+    switch (status) {
+        case MSG_STATUS.LOADED:
+            if (requestType === "DM_135") return setExecuteButtonState() // enables exec & cancel exec btn
             enableWilcoButtons(requestType);
             break;
-        case MSG_STATUS.EXECUTE: 
+        case MSG_STATUS.EXECUTED: 
             enableLoadButton(requestType)
             enableWilcoButtons(requestType) // enables wilco, standby, unable 
             break;
@@ -117,4 +118,31 @@ export function enableRequestButton(requestType) {
         btn.classList.remove('active');
         btn.disabled = false
     });
+}
+
+//toggle pushback state
+export function togglePushbackState(isCancelled = false, direction = "") {
+    const pushBackRequest = document.querySelector(".overlay-actions.pushback-overlay  .request-button")
+    const pushBackCancel = document.querySelector(".overlay-actions.pushback-overlay .cancel-button");
+    const pushBackDir = document.querySelector(".pushback-direction");
+    const label = document.querySelector(".overlay.open .overlay-title .label");
+
+    updateDirection(direction);
+
+    if (isCancelled) {
+        pushBackDir.style.display = "flex";
+        pushBackRequest.disabled = false;
+        [pushBackCancel, pushBackRequest].forEach(btn => btn.style.display = "none");
+        ["pushback-left", "pushback-right"].forEach(id => {
+            const button = document.getElementById(id);
+            if (button) button.disabled = false;
+        });
+        label.textContent = "Pushback";
+        return;
+    }
+
+    pushBackDir.style.display = "none";
+    [pushBackCancel, pushBackRequest].forEach(btn => btn.style.display = "block");
+    ["pushback-left", "pushback-right"].forEach(id => document.getElementById(id).disabled = true);
+    label.textContent = `Pushback ${direction.toUpperCase()}`;
 }
