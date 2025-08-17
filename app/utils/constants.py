@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from app.utils.types import StepStatus
 
 with open(Path(__file__).resolve().parent.parent.parent / "shared" / "msg_status.json") as f:
     MSG_STATUS = json.load(f)
@@ -11,20 +12,19 @@ INGESCAPE_OUTPUTS = {
 }
 
 REQUEST_OUTPUTS = [
-    "expected_taxi_clearance",
-    "engine_startup",
-    "taxi_clearance",
-    "pushback",
-    "de_icing",
+    "DM_136",
+    "DM_134",
+    "DM_131",
+    "DM_135",
+    "DM_127",
+    "DM_20",
     "able_intersection_departure",
     "ready_for_clearance",
     "departure_clearance",
     "startup_cancellation",
-    "request_voice_contact",
     "affirm", "negative", "roger",
     "we_can_accept", "we_cannot_accept",
-    "de_icing_complete",
-    "for_de_icing", "no_de_icing_required"
+    "de_icing_complete", "no_de_icing_required"
 ]
 
 ACTION_OUTPUTS = [
@@ -38,43 +38,36 @@ ACTION_OUTPUTS = [
 
 ALL_OUTPUTS = REQUEST_OUTPUTS + ACTION_OUTPUTS
 
-TAXI_CLEARANCE_MESSAGE = "TAXI VIA C, C1, B, B1, RWY 25R"
-INVALID_DATA_ERROR = "Invalid data"
 
 ACTION_DEFINITIONS = {
     "execute": {
-        "status": "executed",
-        "message": lambda _: TAXI_CLEARANCE_MESSAGE,
+        "status": StepStatus.EXECUTED.value,
         "requiredType": True,
-        "allowedTypes": ["taxi_clearance"]
+        "allowedTypes": ["DM_135"]
     },
     "load": {
-        "status": "loaded",
-        "message": lambda _: TAXI_CLEARANCE_MESSAGE,
+        "status": StepStatus.LOADED.value,
         "requiredType": True,
-        "allowedTypes": ["taxi_clearance", "expected_taxi_clearance"]
+        "allowedTypes": ["DM_135", "DM_136"]
     },
     "cancel": {
-        "status": "cancel",
+        "status": StepStatus.CANCEL.value,
         "message": lambda _: 'Clearance Cancelled',
         "requiredType": False,
-        "fixedType": "taxi_clearance"
+        "fixedType": "DM_135"
     },
     "wilco": {
-        "status": "closed",
-        "message": lambda req_type: TAXI_CLEARANCE_MESSAGE if req_type in ["taxi_clearance", "expected_taxi_clearance"] else "WILCO Acknowledged",
+        "status": StepStatus.CLOSED.value,
         "requiredType": True,
         "allowedTypes": REQUEST_OUTPUTS
     },
     "standby": {
-        "status": "standby",
-        "message": lambda req_type: TAXI_CLEARANCE_MESSAGE if req_type in ["taxi_clearance", "expected_taxi_clearance"] else "STANDBY - Awaiting ATC",
+        "status": StepStatus.STANDBY.value,
         "requiredType": True,
         "allowedTypes": REQUEST_OUTPUTS
     },
     "unable": {
-        "status": "unable",
-        "message": lambda req_type: TAXI_CLEARANCE_MESSAGE if req_type in ["taxi_clearance", "expected_taxi_clearance"] else "UNABLE to Comply",
+        "status": StepStatus.UNABLE.value,
         "requiredType": True,
         "allowedTypes": REQUEST_OUTPUTS
     }
@@ -83,11 +76,18 @@ ACTION_DEFINITIONS = {
 TIMER_DURATION = 90
 
 DEFAULT_ATC_RESPONSES = {
-    "expected_taxi_clearance": "TAXI VIA C, C1, B, B1. HOLD SHORT OF RWY 24R.",
-    "engine_startup": "STARTUP APPROVED. ADVISE WHEN READY FOR PUSHBACK.",
-    "pushback": "PUSHBACK APPROVED.",
-    "taxi_clearance": "TAXI VIA C, C1, B, B1 TO HOLD SHORT RWY 25R.",
-    "de_icing": "DE-ICING NOT REQUIRED. CONTACT GROUND WHEN READY.",
-    "request_voice_contact": "CONTACT GROUND ON 121.8 FOR FURTHER INSTRUCTIONS."
+    "DM_136": "",
+    "DM_134": "STARTUP APPROVED.",
+    "DM_131": "PUSHBACK APPROVED.",
+    "DM_135": "",
+    "DM_127": "DE-ICING NOT REQUIRED.",
+    "DM_20": "CONTACT GROUND ON 121.8 FOR FURTHER INSTRUCTIONS."
 }
 
+DEFAULT_STEPS = [
+    {"label": "Expected Taxi Clearance", "requestType": "DM_136"},
+    {"label": "Engine Startup", "requestType": "DM_134"},
+    {"label": "Pushback", "requestType": "DM_131"},
+    {"label": "Taxi Clearance", "requestType": "DM_135"},
+    {"label": "De-Icing", "requestType": "DM_127"},
+]
