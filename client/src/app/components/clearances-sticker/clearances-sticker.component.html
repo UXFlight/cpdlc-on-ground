@@ -1,0 +1,49 @@
+<!-- Draggable container -->
+<div 
+    class="clearance-sticker-container map-controls" 
+    cdkDragRootElement=".clearance-sticker-container"
+    cdkDrag 
+    [title]="'Press [Tab] to open or close this panel'"
+>
+    <div class="sticker-header" cdkDragHandle>
+        <svg class="drag-icon" x="0" y="0" viewBox="0 0 24 24">
+            <g>
+                <path d="M10 19a2 2 0 1 1-2-2 2 2 0 0 1 2 2zm-2-9a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm0-7a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm8 14a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm0-7a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm0-7a2 2 0 1 0 2 2 2 2 0 0 0-2-2z" fill="#94a3b8" opacity="1"></path>
+            </g>
+        </svg>
+    <span>Clearances</span>
+    </div>
+
+    @for (pilot of pilots; track pilot.sid) {
+        <div 
+            class="clearance-sticker"
+            [title]="getPilotLatestClearance(pilot)"
+        >
+            <img
+                class="pilot-avatar"
+                src="../../../assets/pl.png"
+                alt="Pilot Avatar"
+            />
+            <div class="pilot-sid">{{ pilot.sid.substring(0,4).toUpperCase() }}</div>
+            <div class="pilot-clearance">{{ getPilotLatestClearance(pilot) }}</div>
+
+            <label
+            class="toggle-label"
+            [title]="'Toggle clearance visibility for ' + pilot.sid.substring(0,4).toUpperCase()"
+            >
+            <input
+                type="checkbox"
+                class="toggle-checkbox"
+                [checked]="pilot.renderClearance"
+                (change)="toggleClearance(pilot)"
+            />
+            <span class="toggle-slider"></span>
+            </label>
+        </div>
+    } @empty {
+        <div class="no-clearances">
+            <span class="no-clearances-text">No active clearance</span>
+            <span class="no-clearances-icon">Press [Tab] to open or close this panel</span>
+        </div>
+    }
+</div>

@@ -1,0 +1,115 @@
+#map-container {
+  background: var(--bg-container);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+}
+
+#map-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, #68869a 2px, transparent 1px),
+    linear-gradient(to bottom, #68869a 2px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 1;
+}
+
+canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+}
+
+.map-controls-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  top: 1rem;
+  right: 1rem;
+  position: absolute;
+  z-index: 10;
+  min-height: 60px;
+}
+
+.map-controls {
+  height: inherit;
+  background-color: var(--bg-container);
+  color: var(--text-primary);
+  border: 2px solid var(--text-muted);
+  border-radius: 8px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.2s ease;
+  opacity: 0.9;
+  min-height: inherit;
+  padding: 0 1.5rem;
+
+  &:hover {
+    background: var(--bg-body);
+  }
+
+}
+.toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background-color: var(--bg-container);
+  color: var(--text-primary);
+  border: 2px solid var(--text-muted);
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 1;
+  height: auto;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: var(--bg-body);
+  }
+
+  .toggle-checkbox {
+    display: none;
+  }
+
+  .toggle-slider {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background-color: var(--text-muted);
+    border-radius: 999px;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: var(--text-primary);
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .toggle-checkbox:checked + .toggle-slider {
+    background-color: var(--color-active);
+
+    &::before {
+      transform: translateX(16px);
+    }
+  }
+}

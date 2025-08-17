@@ -1,0 +1,271 @@
+.step-card {
+  padding: 1rem;
+  border: 2px solid var(--text-muted);
+  border-radius: 8px;
+  background-color: var(--bg-inactive);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+
+  &.expanded {
+    background-color: var(--bg-secondary);
+    border-color: var(--color-active);
+  }
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .step-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .step-label {
+    font-weight: 600;
+    flex: 1;
+    color: var(--text-primary);
+    font-variant: all-small-caps;
+    font-size: 1.2rem;
+  }
+
+  .step-status {
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.6rem;
+  }
+
+  .step-time {
+    font-style: italic;
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .step-message {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  .step-expanded {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    animation: fadeSlideDown 0.2s ease-in-out;
+    gap: 0.5rem;
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      font-size: .8rem;
+      color: var(--text-secondary);
+    }
+
+    .smart-responses,
+    .quick-responses {
+      display: grid;
+      gap: .4rem;
+    }
+
+    .smart-responses {
+      margin: 1rem 0;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+
+    }
+    
+    .chip {
+      background: var(--bg-body);
+      border: 1px solid var(--text-muted);
+      color: var(--text-primary);
+      padding: .25rem .5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform .05s ease;
+
+      &:hover { background: var(--bg-pilot-card); }
+      &:active { transform: translateY(1px); }
+      &:focus-visible { outline: 2px solid var(--color-active); outline-offset: 2px; }
+
+      .confidence {
+        margin-left: .4rem;
+        padding-left: .4rem;
+        border-left: 1px solid var(--text-muted);
+        font-size: .65rem;
+        color: var(--text-secondary);
+      }
+    }
+
+    /* QUICK RESPONSES */
+    .qa-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 40px;
+      padding: 0.5rem;
+      background-color: var(--bg-body);
+      color: var(--text-primary);
+      border: 1px solid var(--text-muted);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease, box-shadow .2s ease;
+
+      &:focus {
+        border-color: var(--color-new);
+        outline: none;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-new) 20%, transparent);
+      }
+    }
+
+    /* FOOTER */
+    .response-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .5rem;
+
+      .compose-hint {
+        margin-left: .5rem;
+        font-size: .8rem;
+        color: var(--text-secondary);
+      }
+
+      .right-side {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+
+        .char-counter {
+          font-size: .75rem;
+          color: var(--text-secondary);
+          opacity: .9;
+          white-space: nowrap;
+        }
+      }
+
+      .send-btn {
+        background-color: var(--color-new);
+        font-variant: all-petite-caps;
+        font-weight: 600;
+        border: none;
+        color: #fff;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform .05s ease;
+
+        &:hover { background-color: var(--color-responded); filter: brightness(1.05); }
+        &:active { transform: translateY(1px); }
+        &:focus-visible:disabled {
+          outline: 2px solid var(--text-muted);
+          outline-offset: 2px;
+        }
+        &:disabled {
+          background-color: var(--text-muted);
+          color: var(--text-secondary);
+          cursor: not-allowed;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeSlideDown {
+  from { opacity: 0.5; transform: translateY(-2px); }
+  to   { opacity: 1;   transform: translateY(0); }
+}
+
+$step-status-styles: (
+  responded: (color: var(--color-responded), bg: var(--bg-responded)),
+  standby:   (color: var(--color-new), bg: var(--bg-new)),
+  new:       (color: var(--color-new),       bg: var(--bg-new)),
+  loaded:    (color: var(--color-active),    bg: var(--bg-active)),
+  executed:  (color: var(--color-active),    bg: var(--bg-active)),
+  closed:    (color: var(--color-closed),    bg: var(--bg-closed)),
+  timeout:   (color: var(--color-inactive),  bg: var(--bg-inactive)),
+  cancelled: (color: var(--color-inactive),  bg: var(--bg-inactive)),
+  error:     (color: var(--color-inactive),  bg: var(--bg-inactive)),
+  idle:      (color: var(--color-inactive),  bg: var(--bg-inactive)),
+  cancel:    (color: var(--color-inactive),  bg: var(--bg-inactive)),
+  unable:    (color: var(--color-inactive),  bg: var(--bg-inactive))
+);
+
+@each $status, $props in $step-status-styles {
+  .step-card.#{$status} {
+    border-color: map-get($props, color);
+    background-color: map-get($props, bg);
+
+    .step-label {
+      color: map-get($props, color);
+    }
+  }
+}
+
+/* Pastilles statut */
+.step-status.responded { background-color: var(--color-responded); }
+.step-status.standby { background-color: var(--color-new); }
+
+.step-status.new { background-color: var(--color-new); }
+
+.step-status.loaded,
+.step-status.executed { background-color: var(--color-active); }
+
+.step-status.closed { background-color: var(--color-closed); }
+
+.step-status.timeout,
+.step-status.cancelled,
+.step-status.error,
+.step-status.idle,
+.step-status.cancel,
+.step-status.unable { background-color: var(--color-inactive); }
+
+.chips-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .25rem .5rem;
+  border: 1px dashed var(--text-muted);
+  border-radius: 8px;
+}
+
+.loader {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.15);
+  border-top-color: var(--text-primary);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+.loading-text { font-size: .85rem; color: var(--text-primary); }
+
+@keyframes spin { to { transform: rotate(360deg); } }

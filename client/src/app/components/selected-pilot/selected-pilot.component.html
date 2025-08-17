@@ -1,0 +1,44 @@
+@if (selectedPilot) {
+  <div class="selected-wrapper animate-entry">
+    <!-- Header -->
+    <div class="pilot-header">
+      <button class="back-btn" (click)="selectPilot(selectedPilot.sid)">
+        <span>←</span> back
+      </button>
+      <span class="pilot-id" [style.color]="selectedPilot.color">
+        {{ selectedPilot.sid.substring(0, 4).toUpperCase() }}
+      </span>
+    </div>
+
+    <div class="section">
+      <!-- Active -->
+      <div class="active-section">
+        <h3 class="section-title">Open Requests ({{activeSteps.length}})</h3>
+        <div class="steps-grid">
+          @for (step of activeSteps; track step.step_code) {
+            <app-request-log [step]="step" />
+          }
+        </div>
+      </div>
+
+      <div class="active-section">
+        <h3 class="section-title">Responded Requests ({{respondedSteps.length}})</h3>
+        <div class="steps-grid">
+            @for (step of respondedSteps; track step.step_code) {
+              <app-request-log [step]="step" />
+            }
+        </div>
+      </div>
+
+      <!-- Inactive -->
+      <div class="inactive-section">
+        <h3 class="section-title">Inactive Requests ({{inactiveSteps.length}})</h3>
+        <div class="steps-grid">
+          @for (step of inactiveSteps; track step.step_code) {
+            <app-request-log [step]="step" />
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}

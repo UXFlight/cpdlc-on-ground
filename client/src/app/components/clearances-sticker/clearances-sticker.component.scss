@@ -1,0 +1,142 @@
+.clearance-sticker-container {
+    max-width: fit-content;
+    min-width: 215px;
+    background-color: var(--bg-container);
+    color: var(--text-primary);
+    border: 2px solid var(--text-muted);
+    border-radius: 8px;
+    font-size: 18px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+    transition: background-color 0.2s ease;
+    opacity: 0.95;
+    padding: 0;
+    overflow: hidden;
+    resize: horizontal;
+}
+
+.sticker-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 2px solid var(--text-muted);
+    font-size: 20px;
+    font-weight: 600;
+    cursor: move;
+    user-select: none;
+}
+
+.drag-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+/* Single sticker item */
+.clearance-sticker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem;
+    border-bottom: 1px solid var(--text-muted);
+    background-color: var(--bg-container);
+}
+
+.clearance-sticker:last-child {
+    border-bottom: none;
+}
+
+.clearance-sticker:hover {
+    background: var(--bg-body);
+}
+
+.pilot-avatar {
+    height: 26px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.pilot-sid {
+    flex: 1;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 0.5rem;
+    user-select: none;
+}
+
+.toggle-checkbox {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background-color: var(--text-muted);
+    border-radius: 999px;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--text-primary);
+    transition: transform 0.3s ease;
+}
+
+.toggle-checkbox:checked + .toggle-slider {
+    background-color: var(--color-active);
+}
+
+.toggle-checkbox:checked + .toggle-slider::before {
+    transform: translateX(16px);
+}
+
+.pilot-clearance {
+    font-size: 16px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.no-clearances {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background-color: var(--bg-container);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    opacity: 0.85;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.2s ease;
+}
+
+.no-clearances-text {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.no-clearances-icon {
+    font-size: 14px;
+    color: var(--text-muted);
+    opacity: 0.9;
+}

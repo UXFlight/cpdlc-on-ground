@@ -1,0 +1,30 @@
+<div id="map-container">
+    <canvas #canvas></canvas>
+
+    <div class="map-controls-wrapper">
+        @if (checkNoZoom()) {
+            <button 
+                class="map-controls" 
+                id="reset-button" 
+                (click)="onResetMap()"
+                [title]="'CTRL+R to reset map to default view'"
+            >
+                ⟳
+            </button>
+        }
+
+        <label 
+            class="map-controls toggle-label"
+            [title]="'CTRL+S to view labels (zoom enough to see them)'"
+        >
+            Show Labels
+            <input
+                type="checkbox"
+                class="toggle-checkbox"
+                [checked]="showLabels"
+                (change)="toggleLabels()"
+            />
+            <span class="toggle-slider"></span>
+        </label>
+    </div>
+</div>

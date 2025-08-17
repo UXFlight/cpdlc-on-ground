@@ -1,0 +1,107 @@
+@import "~leaflet/dist/leaflet.css";
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-new:         #50C878;
+  --color-responded:   #3498db;
+  --color-active:      #00bcd4;
+  --color-inactive:    #a6a2a2;
+  --color-closed:      #3a3a3a;
+
+  --color-responded-rgb:         52 152 219;
+  --color-new-rgb:   80 200 120;
+  --color-active-rgb:      0 188 212;
+  --color-inactive-rgb:    166 162 162;
+  --color-closed-rgb:      58 58 58;
+
+  --bg-new:         rgb(var(--color-new-rgb) / 10%);
+  --bg-responded:   rgb(var(--color-responded-rgb) / 10%);
+  --bg-active:      rgb(var(--color-active-rgb) / 10%);
+  --bg-inactive:    rgb(var(--color-inactive-rgb) / 15%);
+  --bg-closed:      rgb(var(--color-closed-rgb) / 10%);
+
+  --bg-body: #4a4b51;
+  --bg-container: #14151a;
+  --bg-secondary: #22232b;
+  
+  --bg-pilot-card: linear-gradient(145deg, #1c1f1d, #131614);
+
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #4b5563;
+
+  --color-primary: #3b82f6;
+  --color-accent: #60a5fa;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #f3f4f6;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #2c3e50;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #cccdd2;
+  color: #010920;
+}
+::-moz-selection {
+  background-color: #cccdd2;
+  color: #010920;
+}
+
+/* STATUS */
+.status-responded {
+  color: white;
+  background-color: var(--color-responded);
+}
+.status-new {
+  background-color: var(--color-new);
+}
+.status-active {
+  background-color: var(--color-active);
+}
+.status-inactive {
+  background-color: var(--color-inactive);
+}
+.status-closed {
+  background-color: var(--color-closed);
+}
+
+/* ERROR SNACKBAR */
+.real-snack {
+  background-color: #0f172a !important; 
+  color: #f8fafc !important;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  padding: 12px 16px;
+  max-width: 350px;
+  word-break: break-word;
+  white-space: pre-wrap;
+  margin: 16px;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+}
+
+.snackbar-bottom-right {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 10000 !important;
+}

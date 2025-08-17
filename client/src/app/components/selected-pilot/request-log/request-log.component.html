@@ -1,0 +1,73 @@
+<div 
+    class="step-card"
+    [ngClass]="[statusClass]"
+    [class.expanded]="expanded"
+    [title]="getStepTooltip(step)"
+    (click)="toggleExpand($event)"
+>
+    <div class="step-top">
+        <span class="step-status" [ngClass]="step.status.toLowerCase()">{{ step.status.toUpperCase() }}</span>
+        <span class="step-label">{{ step.label }}</span>
+        <span class="step-time">{{ formattedTime }}</span>
+    </div>
+
+    <div class="step-message">
+        {{ step.message || 'No message provided.' }}
+    </div>
+
+    @if (expanded && isRespondable) {
+        <div class="step-expanded">
+      
+          <!-- SMART RESPONSES -->
+          <div class="smart-responses">
+            @if (smartResponses && smartResponses.length) {
+              <div class="section-header">
+                Smart responses
+              </div>
+        
+              <div class="chips">
+                @for (resp of smartResponses; track resp) {
+                  <button type="button" class="chip" (click)="applySmart(resp, $event)">{{ resp }}</button>
+                }
+              </div>
+            }
+          </div>
+      
+          <!-- QUICK RESPONSES -->
+            <div class="quick-responses">
+              <div class="section-header">
+                <span>Quick responses</span>
+              </div>
+              <div class="qa-buttons">
+                  @for(button of quickResponses; track button) {
+                      <button type="button" class="chip" (click)="setQuickResponse(button, $event)">{{ button }}</button>
+                  }
+              </div>
+            </div>
+      
+          <!-- INPUT -->
+            <label for="response-input-{{ step.request_id }}"></label>
+            <textarea
+              id="response-input-{{ step.request_id }}"
+              placeholder="Type your response..."
+              [(ngModel)]="response"
+              (keydown.control.enter)="submitResponse($event)"
+              (change)="onInputChange($event)"
+              maxlength="500"
+              (click)="$event.stopPropagation()"
+            ></textarea>
+      
+          <!-- FOOTER -->
+            <div class="response-footer">
+              <span class="compose-hint">Ctrl+Enter to send</span>
+              
+        
+              <div class="right-side">
+                <span class="char-counter">{{ response.length || 0 }}/500</span>
+                <button [disabled]="!response.length" type="button" class="send-btn" (click)="submitResponse($event)">Send</button>
+              </div>
+            </div>
+        </div>
+      }
+      
+</div>

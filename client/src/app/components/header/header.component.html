@@ -1,0 +1,28 @@
+<div class="slim-header">
+  <div class="info">
+    <span class="value">
+      {{ pilotCount }}
+    </span>
+    <span class="label">
+      pilots online
+    </span>
+  </div>
+
+  <div class="presence"  [title]="this.getJoinedSidList()">
+    <span class="avatars">
+      @for (sid of sids.slice(0, 4); track sid) {
+        <img src="/assets/user.png" class="avatar" [title]="getSidLabel(sid)" />
+      }
+    </span>
+
+    <span class="value">
+      {{ sids.length }}
+    </span>
+    <span class="label">atc connected</span>
+
+    <div class="status" [ngClass]="{ online: isConnected, offline: !isConnected }">
+      <span class="dot"></span>
+      <span class="text">{{ isConnected ? 'Online' : 'Offline' }}</span>
+    </div>
+  </div>
+</div>
