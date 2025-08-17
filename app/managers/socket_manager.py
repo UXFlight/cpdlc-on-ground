@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Optional
 from app.utils.constants import DEFAULT_ATC_RESPONSES, TIMER_DURATION
 from app.utils.time_utils import get_current_timestamp
 from app.utils.types import GssConnectInfo, SocketError, StepStatus, UpdateStepData
-from app.classes.gss_client import gss_client
 from app.managers.log_manager import logger
 
 if TYPE_CHECKING:
@@ -19,7 +18,10 @@ class SocketManager:
         self.socket: "SocketService" = socket_service
         self.pilots: "PilotManager" = pilot_manager
         self.logger = logger
-        self.gss_connection_info: Optional[GssConnectInfo] = None
+        self.gss_connection_info: GssConnectInfo = {
+            "facility": "",
+            "connectedSince": ""
+        }
 
     def _emit_event(self, sid: str, result: dict | SocketError):
         if not result or not isinstance(result, dict):
@@ -37,7 +39,7 @@ class SocketManager:
         self.socket.listen("sendAction", self.on_action_event)
 
         # GSS EVENTS
-        gss_client.listen("gss_connected", self.on_gss_connect)
+        # gss_client.listen("gss_connected", self.on_gss_connect)
         # gss_client.listen("step_updated", self.on_receive_step_update)
 
     ## PILOT UIS EVENTS
@@ -46,7 +48,7 @@ class SocketManager:
         sid = request.sid
         self.pilots.create(sid)
         logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"✅ Pilot connected: {sid}")
-        gss_client.send_new_pilot(sid)
+        # gss_client.send_new_pilot(sid)
 
         if self.gss_connection_info:
             self.socket.send("connectedToAtc", self.gss_connection_info, room=sid)
@@ -55,7 +57,7 @@ class SocketManager:
         sid = request.sid
         self.pilots.remove(sid)
         logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"⚠️ Pilot disconnected: {sid}")
-        gss_client.send_pilot_disconnected(sid)
+        # gss_client.send_pilot_disconnected(sid)
 
     ## === SEND REQUESTS
     def on_send_request(self, data: dict):
@@ -67,7 +69,7 @@ class SocketManager:
         try:
             step_payload: UpdateStepData = pilot.handle_send_request(data)
             print("STEP PAYLOAD", step_payload.to_dict())
-            gss_client.send_update_step(step_payload.to_dict())
+            # gss_client.send_update_step(step_payload.to_dict())
             self._emit_event(sid, {
                 "event": "requestAcknowledged",
                 "payload": step_payload.to_ack_payload()
@@ -84,7 +86,7 @@ class SocketManager:
 
         try:
             update_data: UpdateStepData = pilot.handle_cancel_request(data)
-            gss_client.send_update_step(update_data.to_dict())
+            # gss_client.send_update_step(update_data.to_dict())
 
             self._emit_event(sid, {
                 "event": "requestCancelled",
@@ -102,7 +104,7 @@ class SocketManager:
 
         try:
             update_data : UpdateStepData = pilot.process_action(data)
-            gss_client.send_update_step(update_data.to_dict())
+            # gss_client.send_update_step(update_data.to_dict())
             self._emit_event(sid, {
                 "event": "actionAcknowledged",
                 "payload": update_data.to_ack_payload()
@@ -161,40 +163,3 @@ class SocketManager:
         except Exception as e:
             error_payload = pilot._error("GSS_UPDATE", str(e), update.step_code)
             self._emit_event(sid, error_payload)
-
-    def _simulate_and_emit_response(self, pilot: "Pilot", sid: str, step_code: str, request_id: str):
-        step = pilot.get_step(step_code)
-        if not step or step.request_id != request_id or step.status != StepStatus.REQUESTED:
-            reason = (
-                "step missing" if not step else
-                "request ID mismatch" if step.request_id != request_id else
-                f"invalid status ({step.status.value})"
-            )
-            logger.log_event(pilot.sid, "SKIP", f"Ignored simulated ATC for {step_code} — {reason}")
-            return
-
-        message = DEFAULT_ATC_RESPONSES.get(step_code, f"ROGER, {step_code.upper()}")
-        update = UpdateStepData(
-            pilot_sid=pilot.sid,
-            step_code=step_code,
-            label=step.label,
-            status=StepStatus.NEW,
-            message=message,
-            validated_at=get_current_timestamp(),
-            request_id=step.request_id,
-            time_left=TIMER_DURATION
-        )
-
-        pilot.handle_step_update(update)
-        gss_client.send_update_step(update.to_dict())
-        logger.log_request(pilot.sid, step_code, "new", message)
-
-        self.socket.send("atcResponse", {
-            "step_code": step_code,
-            "status": update.status.value,
-            "message": update.message,
-            "timestamp": update.validated_at,
-            "time_left": update.time_left,
-        }, room=sid)
-
-        pilot.start_timer_for_step(step_code, self.socket, gss_client)

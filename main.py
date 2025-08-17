@@ -8,7 +8,6 @@ from flask_socketio import SocketIO
 from app.classes.socket import SocketService
 from app.managers import PilotManager, SocketManager, PilotStats
 from app.routes import general
-from app.classes.gss_client import gss_client
 
 exit_event = threading.Event()
 
@@ -39,13 +38,10 @@ if __name__ == '__main__':
     general.pilot_stats = pilot_stats
     general.pilot_manager = pilot_manager
     general.socket_service = socket_service
-    general.gss_client = gss_client
     app.register_blueprint(general.general_bp)
 
     socket_manager = SocketManager(socket_service, pilot_manager)
     socket_manager.init_events()
-
-    gss_client.connect()
 
     try:
         host = "0.0.0.0"

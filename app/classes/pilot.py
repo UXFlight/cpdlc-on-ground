@@ -1,7 +1,6 @@
 from typing import Optional, Dict
 import uuid
 
-from app.classes.gss_client import GSSClient
 from app.classes.step import Step
 from app.managers.log_manager import logger
 from app.utils.constants import ACTION_DEFINITIONS, DEFAULT_STEPS
@@ -213,7 +212,7 @@ class Pilot:
         }
 
     ## === Timer ===
-    def start_timer_for_step(self, step_code: str, socket: SocketService, gss_client : GSSClient):
+    def start_timer_for_step(self, step_code: str, socket: SocketService):
         step = self.get_step(step_code)
         if not step:
             return
@@ -223,7 +222,7 @@ class Pilot:
             step=step,
             step_code=step_code,
             on_tick=lambda step_code, step: self.handle_tick(step_code, step, socket),
-            on_timeout=lambda step_code, step: self.handle_timeout(step_code, step, socket, gss_client)
+            on_timeout=lambda step_code, step: self.handle_timeout(step_code, step, socket)
         )
 
     def handle_tick(self, step_code: str, step: Step, socket: SocketService):
@@ -232,7 +231,7 @@ class Pilot:
             "timeLeft": step.time_left
         }, room=self.sid)
 
-    def handle_timeout(self, step_code: str, step: Step, socket: SocketService, gss_client: GSSClient):
+    def handle_timeout(self, step_code: str, step: Step, socket: SocketService):
         if step.status.value in {"wilco", "cancelled", "unable", "executed", "closed"}:
             logger.log_event(self.sid, "TIMEOUT_SKIP", f"Ignored timeout for {step_code} — already {step.status}")
             return
@@ -258,7 +257,7 @@ class Pilot:
             "timeLeft": update.time_left,
         }, room=self.sid)
 
-        gss_client.send_update_step(update.to_dict())
+        # gss_client.send_update_step(update.to_dict()) #keeping track of gss
         logger.log_event(self.sid, "TIMEOUT", f"{step_code} expired.")
 
     ## === Cleanup ===
