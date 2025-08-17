@@ -69,17 +69,9 @@
 
     <div class="content">
         <!-- Message Log -->
-        <div class="message-log">
-            <span id="filter-btn" class="icon-wrap">
-                <svg id="filter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                    <path d="M53.39 8H10.61a5.61 5.61 0 0 0-4.15 9.38L25 37.77V57a2 2 0 0 0 1.13 1.8 1.94 1.94 0 0 0 .87.2 2 2 0 0 0 1.25-.44l10-8A2 2 0 0 0 39 49V37.77l18.54-20.39A5.61 5.61 0 0 0 53.39 8z"
-                        stroke-width="5" />
-                </svg>                      
-            </span>
-            <div id="history-log-box" class="log-box empty">
-                <!-- Past messages and sent requests will appear here -->
-                <p id="empty-history-message" class="empty-box-message">No message history.</p>
-            </div>
+        <div id="history-log-box" class="log-box empty">
+            <!-- Past messages and sent requests will appear here -->
+            <p id="empty-history-message" class="empty-box-message">No message history.</p>
         </div>
         
         <div class="taxi-clearance-box">
@@ -106,8 +98,8 @@
                         <div class="overlay-actions{% if item.type == 'pushback' %} pushback-overlay{% endif %}">
                         {% if item.type == 'pushback' %}
                             <div class="pushback-direction">
-                            <button class="direction-button" id="pushback-left">left</button>
-                            <button class="direction-button" id="pushback-right">right</button>
+                                <button class="direction-button" id="pushback-left">left</button>
+                                <button class="direction-button" id="pushback-right">right</button>
                             </div>
                         {% endif %}
 
@@ -154,92 +146,55 @@
           </div>
           
         <!-- Stats Section -->
-        <div class="stats-section">
-            <h3 class="section-title">Flight Performance</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="dashboard-connection">0</div>
-                    <div class="stat-label">Connection Time</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="dashboard-messages">0</div>
-                    <div class="stat-label">Messages</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="dashboard-reply">0s</div>
-                    <div class="stat-label">Avg Reply Time</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="dashboard-latency">-</div>
-                    <div class="stat-label">Latency</div>
-                </div>
-            </div>
-            <div class="performance-ring" id="success-ring-container" style="--performance: 0;">
-                <div class="ring-container">
-                <div class="ring">
-                    <div class="ring-value" id="dashboard-success-value">—</div>
-                </div>
-                </div>
-                <div class="ring-info">
-                <h3>Success Rate</h3>
-                <p id="dashboard-success-info">Awaiting communication activity.</p>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Configuration Section -->
         <div class="config-section">
-            <h3 class="section-title">Display Options</h3>
             <div class="config-list">
                 <div class="config-item">
                     <div class="config-info">
-                        <div class="config-title">Audio Notifications</div>
-                        <div class="config-desc">Sound alerts for incoming messages</div>
+                        <div class="config-title">Message-To-Text Audio Notifications</div>
+                        <div class="config-desc">Enable speech synthesis to have a virtual voice read ATC messages aloud.</div>
+                        <div class="config-desc italic">Note: This replaces the default notification sound with voice playback. The system will always produce audio feedback.</div>
                     </div>
                     <div class="toggle-switch" data-setting="audioNotis"></div>
                 </div>
 
                 <div class="config-item">
                     <div class="config-info">
-                        <div class="config-title">History Logs</div>
-                        <div class="config-desc">Show advanced history of message logs</div>
+                        <div class="config-title">Full Advanced History Logs</div>
+                        <div class="config-desc">Display the complete message history since system start.</div>
                     </div>
                     <div class="toggle-switch" data-setting="verboseLogs"></div>
                 </div>
 
-                <!-- <div class="config-item">
+                <div class="config-item">
                     <div class="config-info">
-                        <div class="config-title">Display Time</div>
-                        <div class="config-desc">Show UTC clock in the interface</div>
+                        <div class="config-title">Auto-Box Closed Messages</div>
+                        <div class="config-desc">Automatically hide inactive messages and only show those requiring action.</div>
                     </div>
-                    <div class="toggle-switch" data-setting="utcDisplay"></div>
+                    <div class="toggle-switch" data-setting="autoBox"></div>
                 </div>
 
                 <div class="config-item">
                     <div class="config-info">
-                        <div class="config-title">Display Temperature</div>
-                        <div class="config-desc">Display current airport temperature data</div>
-                    </div>
-                    <div class="toggle-switch" data-setting="tempReadings"></div>
-                </div> -->
-
-                <div class="config-item">
-                    <div class="config-info">
-                        <div class="config-title">Auto-Acknowledge</div>
-                        <div class="config-desc">Automatically loads taxi clearances [or expected]</div>
+                        <div class="config-title">Auto-Acknowledge Clearances</div>
+                        <div class="config-desc">Automatically load taxi clearances or expected routes into the AMM.</div>
                     </div>
                     <div class="toggle-switch" data-setting="autoAck"></div>
                 </div>
 
                 <div class="config-item">
                     <div class="config-info">
-                        <div class="config-title">Auto Retry on Timeout ⚠️</div>
-                        <div class="config-desc">Automatically retry requests after a timeout</div>
+                        <div class="config-title">Auto Retry On Timeout ⚠️</div>
+                        <div class="config-desc">Retry failed requests after timeout without manual action.</div>
+                        <div class="config-desc italic">Note: Use with caution to avoid unintended message loops.</div>
                     </div>
                     <div class="toggle-switch" data-setting="autoRetry"></div>
                 </div>
             </div>
         </div>
+
 
         <!-- Action Section -->
         <button class="action-btn" id="download-btn">
