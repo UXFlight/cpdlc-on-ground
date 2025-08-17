@@ -47,7 +47,6 @@ class Echo:
         self._set_output(self._requests, name, value)
 
     def set_action(self, name: str, value: bool):
-        print(f"[Action] {self.pilot_id} setting action '{name}' to {value}")
         self._set_output(self._actions, name, value)
 
     def reset(self):
