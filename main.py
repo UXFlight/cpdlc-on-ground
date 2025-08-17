@@ -6,7 +6,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO
 from app.classes.socket import SocketService
-from app.managers import PilotManager, SocketManager, PilotStats
+from app.managers import PilotManager, SocketManager
 from app.routes import general
 
 exit_event = threading.Event()
@@ -33,9 +33,7 @@ if __name__ == '__main__':
 
     socket_service = SocketService(socketio)
     pilot_manager = PilotManager()
-    pilot_stats = PilotStats(pilot_manager)
 
-    general.pilot_stats = pilot_stats
     general.pilot_manager = pilot_manager
     general.socket_service = socket_service
     app.register_blueprint(general.general_bp)
