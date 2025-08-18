@@ -32,7 +32,7 @@ export class ClearancesStickerComponent implements OnDestroy, OnInit  {
 
   configSubscriptions(): void {
     this.pilotsSubscription = this.mainpageService.pilotsPreviews$.subscribe((pilots: PilotPublicView[]) => {
-      this.pilots = pilots.filter(pilot => pilot.clearances && pilot.clearances.length > 0);
+      this.pilots = pilots.filter(pilot => pilot.clearances);
     });
   }
 
@@ -42,10 +42,10 @@ export class ClearancesStickerComponent implements OnDestroy, OnInit  {
   }
 
   getPilotLatestClearance(pilot: PilotPublicView): string {
-    if (!pilot.clearances || pilot.clearances.length === 0) {
-      return 'No clearances available';
-    }
-    const latestClearance = pilot.clearances[pilot.clearances.length - 1];
-    return latestClearance.instruction || 'No instruction provided';
+    // if (!pilot.clearances || pilot.clearances.length === 0) {
+    //   return 'No clearances available';
+    // }
+    // const latestClearance = pilot.clearances[pilot.clearances.length - 1]; latestClearance.instruction || 
+    return 'No instruction provided';
   }
 }

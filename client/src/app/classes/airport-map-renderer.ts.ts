@@ -157,54 +157,56 @@ export class AirportMapRenderer {
   }
 
   private drawPilotClearances(pilot: PilotPublicView, options: MapRenderOptions): void {
-    const clearances = pilot.clearances;
-    if (!clearances || clearances.length === 0) return;
+    const clearances = (pilot.clearances);
+    if (!clearances) return;
+
+    return;
   
-    const color = pilot.color || AIRPORT_STYLES.taxiway;
+    // const color = pilot.color || AIRPORT_STYLES.taxiway;
   
-    for (const c of clearances) {
-      const dashed = c.type === 'expected_taxi';
-      this.drawClearancePath(c.coords, options, color, dashed);
+    // for (const c of Object.values(clearances)) {
+    //   const dashed = c.type === 'expected_taxi';
+    //   this.drawClearancePath(c.coords, options, color, dashed);
   
-      const finalPos = pilot.plane?.final_pos;
-      if (finalPos) {
-        this.drawFinalDestinationMarker(this.ctx, options.project, finalPos, color);
-      }
-    }
+    //   const finalPos = pilot.plane?.final_pos;
+    //   if (finalPos) {
+    //     this.drawFinalDestinationMarker(this.ctx, options.project, finalPos, color);
+    //   }
+    // }
   }
   
   
-  private drawClearancePath(
-    coords: LonLat[],
-    options: MapRenderOptions,
-    color: string,
-    dashed: boolean
-  ): void {
-    if (!coords || coords.length < 2) return;
+  // private drawClearancePath(
+  //   coords: LonLat[],
+  //   options: MapRenderOptions,
+  //   color: string,
+  //   dashed: boolean
+  // ): void {
+  //   if (!coords || coords.length < 2) return;
   
-    const ctx = this.ctx;
-    const pts: [number, number][] = coords.map(options.project);
+  //   const ctx = this.ctx;
+  //   const pts: [number, number][] = coords.map(options.project);
   
-    const zoomFactor = options.zoomLevel ?? 1;
-    const baseLineWidth = 3.5;
-    const scaledLineWidth = baseLineWidth * Math.sqrt(zoomFactor);
+  //   const zoomFactor = options.zoomLevel ?? 1;
+  //   const baseLineWidth = 3.5;
+  //   const scaledLineWidth = baseLineWidth * Math.sqrt(zoomFactor);
   
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(pts[0][0], pts[0][1]);
-    for (let i = 1; i < pts.length; i++) {
-      ctx.lineTo(pts[i][0], pts[i][1]);
-    }
+  //   ctx.save();
+  //   ctx.beginPath();
+  //   ctx.moveTo(pts[0][0], pts[0][1]);
+  //   for (let i = 1; i < pts.length; i++) {
+  //     ctx.lineTo(pts[i][0], pts[i][1]);
+  //   }
   
-    ctx.lineWidth = scaledLineWidth;
-    ctx.strokeStyle = color;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    if (dashed) ctx.setLineDash([10, 20]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
-  }
+  //   ctx.lineWidth = scaledLineWidth;
+  //   ctx.strokeStyle = color;
+  //   ctx.lineJoin = 'round';
+  //   ctx.lineCap = 'round';
+  //   if (dashed) ctx.setLineDash([10, 20]);
+  //   ctx.stroke();
+  //   ctx.setLineDash([]);
+  //   ctx.restore();
+  // }
   
   
   // helpers
@@ -374,21 +376,21 @@ export class AirportMapRenderer {
     ctx.closePath();
   }
 
-  private drawFinalDestinationMarker(
-    ctx: CanvasRenderingContext2D,
-    project: (coord: LonLat) => [number, number],
-    finalPos: LonLat,
-    color: string = AIRPORT_STYLES.pointFill
-  ): void {
-    const [fx, fy] = project(finalPos);
+  // private drawFinalDestinationMarker(
+  //   ctx: CanvasRenderingContext2D,
+  //   project: (coord: LonLat) => [number, number],
+  //   finalPos: LonLat,
+  //   color: string = AIRPORT_STYLES.pointFill
+  // ): void {
+  //   const [fx, fy] = project(finalPos);
   
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(fx, fy, 6, 0, Math.PI * 2); // Rayon de 6px
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.restore();
-  }
+  //   ctx.save();
+  //   ctx.beginPath();
+  //   ctx.arc(fx, fy, 6, 0, Math.PI * 2); // Rayon de 6px
+  //   ctx.fillStyle = color;
+  //   ctx.fill();
+  //   ctx.restore();
+  // }
     
   // --- Shared private logic ---
   private drawLineFeatures(
