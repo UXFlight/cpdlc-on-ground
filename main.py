@@ -5,6 +5,7 @@ import mimetypes
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from app.classes.agent import Echo
 from app.classes.socket import SocketService
 from app.managers import PilotManager, SocketManager, AtcManager
 from app.routes import general
@@ -31,6 +32,9 @@ if __name__ == '__main__':
     import logging
     logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
+    # agent = Echo()
+    # Echo.start_ingescape_agent() #! to start ingescape agent
+
     socket_service = SocketService(socketio)
     pilot_manager = PilotManager()
     atc_manager = AtcManager()
@@ -41,6 +45,7 @@ if __name__ == '__main__':
 
     socket_manager = SocketManager(socket_service=socket_service, pilot_manager=pilot_manager, atc_manager=atc_manager)
     socket_manager.init_events()
+    
 
     try:
         host = "0.0.0.0"
