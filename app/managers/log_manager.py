@@ -23,6 +23,7 @@ class LogManager:
         timestamp = get_current_timestamp()
         log_dir = self._get_log_dir(pilot_id)
         line = f"[{timestamp}] [{event_type.upper():<10}] {message}\n"
+        print(line.strip())
         self._write_line(log_dir / "cpdlc_backend.log", line)
 
     def log_request(self, pilot_id: str, request_type: str, status: str, message: str = "", time_left=None):
