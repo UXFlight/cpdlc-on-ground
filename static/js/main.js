@@ -12,7 +12,6 @@ import { downloadReport } from './events/downloadStats.js';
 import { initVoice } from './text-to-speech.js/speech.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  // initState(); // Initialize the state object
   setConfig();
   updateDashboardPanel()
   setupSocketListeners() // ok
