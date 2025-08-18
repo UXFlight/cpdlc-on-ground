@@ -3,19 +3,25 @@ import uuid
 
 from app.classes.step import Step
 from app.managers.log_manager import logger
+from app.utils.color import set_pilot_color
 from app.utils.constants import ACTION_DEFINITIONS, DEFAULT_STEPS
 from app.utils.time_utils import get_current_timestamp
 from app.managers import TimerManager
 from app.classes.socket import SocketService
-from app.utils.types import SocketError, StepStatus, UpdateStepData
+from app.utils.types import Clearance, ClearanceType, Plane, SocketError, StepStatus, UpdateStepData, PilotPublicView
 
 
 class Pilot:
     def __init__(self, sid: str):
         self.sid = sid
         self.steps: Dict[str, Step] = {}
+        self.color : str = set_pilot_color(sid)
         self.history: list[UpdateStepData] = []
         self.timer_manager = TimerManager(self.sid)
+        
+        self.plane: Plane = self.init_plane()
+        self.clearances = self.init_clearances()
+        self.current_clearance : ClearanceType = "none"
         self.initialize_steps()
 
     def initialize_steps(self):
@@ -23,11 +29,29 @@ class Pilot:
             code = step_info["requestType"]
             label = step_info["label"]
             self.steps[code] = Step(step_code=code, label=label)
+            
+    def init_plane(self) -> Plane:
+        return {
+            "spawn_pos": (0.0, 0.0),
+            "current_pos": (0.0, 0.0),
+            "final_pos": (0.0, 0.0),
+            "current_heading": 0.0,
+            "current_speed": 0.0
+        }
+        
+    def init_clearances(self) -> Dict[ClearanceType, Clearance]:
+        return {
+            "none": {
+                "kind": "none",
+                "instruction": "",
+                "coords": [],
+            }
+        }
 
     def get_step(self, step_code: str) -> Optional[Step]:
         return self.steps.get(step_code)
 
-    ## === Handle GSS Step Update ===
+    ## === Handle ATC Step Update ===
     def handle_step_update(self, update: UpdateStepData) -> dict:
         step = self.get_step(update.step_code)
         if not step:
@@ -266,6 +290,28 @@ class Pilot:
             logger.log_event(self.sid, "SYSTEM", "Cleaning up pilot session.")
             self.timer_manager.stop_all()
             self.steps.clear()
+            self.history.clear()
+            self.expected_clearance = None
+            self.active_clearance = None
+            self.previous_clearance = None
+            self.color = set_pilot_color(self.sid)  # Reset color for next session
             logger.log_event(self.sid, "SYSTEM", "Pilot cleanup complete.")
         except Exception as e:
             logger.log_error(self.sid, "CLEANUP", f"Cleanup failed: {e}")
+            
+    ## === Public View ===
+    def get_plane_data(self) -> Plane:
+        return self.plane
+
+
+    # format helpers
+    def to_public(self) -> PilotPublicView:
+        return {
+            "sid": self.sid,
+            "color": self.color,
+            "steps": {code: step.to_step_public_view() for code, step in self.steps.items()},
+            "history": [update.to_step_event() for update in self.history],
+            "plane": self.plane,
+            "clearances": self.clearances,
+            "current_clearance": self.current_clearance
+        }
