@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { io, Socket } from 'socket.io-client';
 
+const ROLE_ATC = 1;
+
 @Injectable({
     providedIn: 'root',
 })
@@ -18,7 +20,7 @@ export class ClientSocketService {
     connect() {
         if (!this.isSocketAlive()) {
             const url = `${environment.serverUrl}`;
-            this.socket = io(url, { transports: ['websocket'] });
+            this.socket = io(url, { auth: { r: ROLE_ATC} });
         }
     }
 
