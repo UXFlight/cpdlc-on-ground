@@ -1,26 +1,28 @@
 from flask import request  # type: ignore
 import threading
 import random
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from app.utils.constants import DEFAULT_ATC_RESPONSES, TIMER_DURATION
 from app.utils.time_utils import get_current_timestamp
-from app.utils.types import GssConnectInfo, SocketError, StepStatus, UpdateStepData
+from app.utils.types import GssConnectInfo, SocketError, UpdateStepData
 from app.managers.log_manager import logger
 
 if TYPE_CHECKING:
     from app.classes.pilot import Pilot
     from app.managers.pilot_manager import PilotManager
+    from app.managers.atc_manager import AtcManager
     from app.classes.socket import SocketService
 
 
 class SocketManager:
-    def __init__(self, socket_service: "SocketService", pilot_manager: "PilotManager"):
+    def __init__(self, socket_service: "SocketService", pilot_manager: "PilotManager", atc_manager: "AtcManager"):
         self.socket: "SocketService" = socket_service
         self.pilots: "PilotManager" = pilot_manager
+        self.atc_manager: "AtcManager" = atc_manager
         self.logger = logger
         self.gss_connection_info: GssConnectInfo = {
             "facility": "",
-            "connectedSince": ""
+            "connectedSince": get_current_timestamp()
         }
 
     def _emit_event(self, sid: str, result: dict | SocketError):
@@ -37,6 +39,9 @@ class SocketManager:
         self.socket.listen("sendRequest", self.on_send_request)
         self.socket.listen("cancelRequest", self.on_cancel_request)
         self.socket.listen("sendAction", self.on_action_event)
+        
+        # ATC EVENTS
+        self.socket.listen("get_pilot_list", self.handle_pilot_list)
 
         # GSS EVENTS
         # gss_client.listen("gss_connected", self.on_gss_connect)
@@ -46,18 +51,42 @@ class SocketManager:
     ## === CONNECT
     def on_connect(self, auth=None):
         sid = request.sid
-        self.pilots.create(sid)
-        logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"✅ Pilot connected: {sid}")
-        # gss_client.send_new_pilot(sid)
+        role = auth.get("r") if auth else None  # 0 = pilot, 1 = atc
 
-        if self.gss_connection_info:
-            self.socket.send("connectedToAtc", self.gss_connection_info, room=sid)
-    ## === DISCONNECT
+        if role == 0:
+            self.pilots.create(sid)
+            logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"Pilot connected: {sid}")
+            if self.atc_manager.has_any():
+                self.socket.send("new_pilot_connected", {"sid": sid}, room="atc_room")
+
+        elif role == 1:
+            self.atc_manager.create(sid)
+            self.socket.enter_room(sid, room="atc_room")
+            logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"ATC connected: {sid}")
+            for pid in self.pilots.get_all_sids():
+                self.socket.send("new_pilot_connected", {"sid": pid}, room=sid)
+
+        else:
+            logger.log_event(pilot_id=sid, event_type="SOCKET", message="Unknown role -- disconnecting")
+            self.socket.disconnect(sid)
+
     def on_disconnect(self):
         sid = request.sid
-        self.pilots.remove(sid)
-        logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"⚠️ Pilot disconnected: {sid}")
-        # gss_client.send_pilot_disconnected(sid)
+
+        if self.pilots.exists(sid):
+            self.pilots.remove(sid)
+            logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"Pilot disconnected: {sid}")
+
+            if self.atc_manager.has_any():
+                self.socket.send("pilot_disconnected", {"sid": sid}, room="atc_room")
+
+        elif self.atc_manager.exists(sid):
+            self.atc_manager.remove(sid)
+            logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"ATC disconnected: {sid}")
+
+        else:
+            logger.log_event(pilot_id=sid, event_type="SOCKET", message="Unknown SID disconnected")
+
 
     ## === SEND REQUESTS
     def on_send_request(self, data: dict):
@@ -163,3 +192,13 @@ class SocketManager:
         except Exception as e:
             error_payload = pilot._error("GSS_UPDATE", str(e), update.step_code)
             self._emit_event(sid, error_payload)
+    
+    ## ATC EVENTS
+    ## === PILOT LIST
+    def handle_pilot_list(self, data: dict):
+        sid = request.sid
+        pilot_list : Pilot = self.pilots.get_all_pilots()
+
+    ## helpers
+    def send_to_all_atc(self, event: str, data: dict) -> None:
+        self.socket.send(event, data, room="atc_room")
