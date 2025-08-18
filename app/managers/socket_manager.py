@@ -4,7 +4,7 @@ import random
 from typing import TYPE_CHECKING
 from app.utils.constants import DEFAULT_ATC_RESPONSES, TIMER_DURATION
 from app.utils.time_utils import get_current_timestamp
-from app.utils.types import GssConnectInfo, SocketError, UpdateStepData
+from app.utils.types import ConnectInfo, PilotPublicView, SocketError, UpdateStepData
 from app.managers.log_manager import logger
 
 if TYPE_CHECKING:
@@ -20,8 +20,8 @@ class SocketManager:
         self.pilots: "PilotManager" = pilot_manager
         self.atc_manager: "AtcManager" = atc_manager
         self.logger = logger
-        self.gss_connection_info: GssConnectInfo = {
-            "facility": "",
+        self.connection_info: ConnectInfo = {
+            "facility": "KLAX",
             "connectedSince": get_current_timestamp()
         }
 
@@ -41,11 +41,13 @@ class SocketManager:
         self.socket.listen("sendAction", self.on_action_event)
         
         # ATC EVENTS
-        self.socket.listen("get_pilot_list", self.handle_pilot_list)
+        self.socket.listen("getPilotList", self.handle_pilot_list)
+        self.socket.listen("selectPilot", self.handle_atc_select_pilot)
 
         # GSS EVENTS
         # gss_client.listen("gss_connected", self.on_gss_connect)
         # gss_client.listen("step_updated", self.on_receive_step_update)
+        self.socket.listen("atcSendResponse", self.on_receive_atc_response)
 
     ## PILOT UIS EVENTS
     ## === CONNECT
@@ -54,17 +56,21 @@ class SocketManager:
         role = auth.get("r") if auth else None  # 0 = pilot, 1 = atc
 
         if role == 0:
-            self.pilots.create(sid)
+            public_view : PilotPublicView = self.pilots.create(sid)
             logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"Pilot connected: {sid}")
+            self.socket.send("connectedToAtc", self.connection_info, room=sid)
             if self.atc_manager.has_any():
-                self.socket.send("new_pilot_connected", {"sid": sid}, room="atc_room")
+                self.socket.send("pilot_connected", public_view, room="atc_room")
 
         elif role == 1:
             self.atc_manager.create(sid)
             self.socket.enter_room(sid, room="atc_room")
             logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"ATC connected: {sid}")
-            for pid in self.pilots.get_all_sids():
-                self.socket.send("new_pilot_connected", {"sid": pid}, room=sid)
+            for pilot in self.pilots.get_all_pilots(): #! temp
+                public_view: PilotPublicView = pilot.to_public()
+                self.socket.send("pilot_connected", public_view, room=sid)
+            atc_list = self.atc_manager.get_all()
+            self.socket.send("atc_list", atc_list, room="atc_room")
 
         else:
             logger.log_event(pilot_id=sid, event_type="SOCKET", message="Unknown role -- disconnecting")
@@ -82,6 +88,8 @@ class SocketManager:
 
         elif self.atc_manager.exists(sid):
             self.atc_manager.remove(sid)
+            atc_list = self.atc_manager.get_all()
+            self.socket.send("atc_list", atc_list, room="atc_room")
             logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"ATC disconnected: {sid}")
 
         else:
@@ -92,12 +100,9 @@ class SocketManager:
     def on_send_request(self, data: dict):
         sid = request.sid
         pilot = self.pilots.get(sid)
-        
-        print("REQUEST DATA", data)
 
         try:
             step_payload: UpdateStepData = pilot.handle_send_request(data)
-            print("STEP PAYLOAD", step_payload.to_dict())
             # gss_client.send_update_step(step_payload.to_dict())
             self._emit_event(sid, {
                 "event": "requestAcknowledged",
@@ -145,22 +150,13 @@ class SocketManager:
 
 
     ## GSS EVENTS
-    ## === CONNECT
-    def on_gss_connect(self, data: dict):
-        print("[GSS] Connected to ATC", data)
-        self.gss_connection_info : GssConnectInfo = {
-            "facility": data.get("facility") or "",
-            "connectedSince": data.get("connected_since") or ""
-        }
-
-        for sid in self.pilots.get_all_sids():
-            self.socket.send("connectedToAtc", self.gss_connection_info, room=sid)
-
     # ## === STEP UPDATE
-    def on_receive_step_update(self, data: dict):
-        sid = data.get("pilot_sid")
-        if not sid:
-            print("[RECEIVE] ❌ Missing pilot_sid in update")
+    def on_receive_atc_response(self, data: dict):
+        print(data)
+        sid = request.sid # atc sid
+        pilot_sid = data.get("pilot_sid")
+        if not pilot_sid:
+            print("[RECEIVE] Missing pilot_sid in update")
             return
 
         pilot = self.pilots.get(sid)
@@ -173,13 +169,13 @@ class SocketManager:
         try:
             step_dict = pilot.handle_step_update(update)
             
-            # self.socket.send("atcResponse", {
-            #     "step_code": step_code,
-            #     "status": update.status.value,
-            #     "message": update.message,
-            #     "timestamp": update.validated_at,
-            #     "time_left": update.time_left,
-            # }, room=sid)
+            self.socket.send("atcResponse", {
+                "step_code": step_dict["step_code"],
+                "status": update.status.value,
+                "message": update.message,
+                "timestamp": update.validated_at,
+                "time_left": update.time_left,
+            }, room=sid)
 
             logger.log_request(
                 pilot_id=sid,
@@ -195,10 +191,24 @@ class SocketManager:
     
     ## ATC EVENTS
     ## === PILOT LIST
-    def handle_pilot_list(self, data: dict):
+    def handle_pilot_list(self):
         sid = request.sid
-        pilot_list : Pilot = self.pilots.get_all_pilots()
+        pilot_list : list[Pilot] = self.pilots.get_all_pilots()
+        pilot_list_data = [pilot.to_public() for pilot in pilot_list]
+        self.socket.send("pilot_list", pilot_list_data, room=sid)
 
-    ## helpers
-    def send_to_all_atc(self, event: str, data: dict) -> None:
-        self.socket.send(event, data, room="atc_room")
+    ## === SELECT PILOT
+    def handle_atc_select_pilot(self, data: dict):
+        sid = request.sid
+        pilot_sid = data.get("pilot_sid")
+        if not pilot_sid:
+            self.socket.send("error", {"message": "Missing pilot SID"}, room=sid)
+            return
+
+        if not self.pilots.exists(pilot_sid):
+            self.socket.send("error", {"message": f"Pilot with SID {pilot_sid} does not exist"}, room=sid)
+            return
+
+        pilot = self.pilots.get(pilot_sid)
+        public_view: PilotPublicView = pilot.to_public()
+        self.socket.send("selectedPilot", public_view, room=sid)
