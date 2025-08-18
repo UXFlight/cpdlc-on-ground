@@ -1,0 +1,2 @@
+class AirportCache:
+    pass
