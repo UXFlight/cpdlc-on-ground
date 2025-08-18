@@ -1,16 +1,17 @@
 import { StepStatus } from "./StepStatus";
 
+// PLANE
 export type LonLat = [number, number];
 
 export interface Plane {
-    spawn_pos: LonLat;
-    current_pos: LonLat;
-    final_pos: LonLat | null;
-    current_heading: number;
-    current_speed: number;
-    current_altitude: number;
-    current_gate?: string | null;
+  spawn_pos: LonLat;
+  current_pos: LonLat;
+  final_pos: LonLat;
+  current_heading: number;
+  current_speed: number;
 }
+
+// STEP
 export interface StepPublicView {
     step_code: string;
     label: string;
@@ -30,38 +31,26 @@ export interface StepEvent {
     request_id: string;
 }
 
-export type ClearanceType =
-  | 'expected_taxi'
-  | 'taxi_clearance'
-  | 'route_modification';
-
-export type ClearanceEventKind =
-  | 'CROSS'
-  | 'HOLD_SHORT'
-  | 'STOP'
-  | 'POINT';
-
-export interface ClearanceEvent {
-  i: number;
-  kind: ClearanceEventKind;
-  name: string;
-}
+// CLEARANCE
+export type ClearanceType = "none" | "expected" | "taxi" | "route_change"; // ✅ correct
 
 export interface Clearance {
-  type: ClearanceType;
+  kind: ClearanceType;
   instruction: string;
-  coords: LonLat[];
-  events: ClearanceEvent[];
-  remarks?: string;
+  coords: [number, number][];
+  timestamp?: number;
 }
 
+
 export interface PilotPublicView {
-    color: string;
     sid: string;
     steps: Record<string, StepPublicView>;
+    color: string;
     history: StepEvent[];
+    plane: Plane;
+    clearances: Record<string, Clearance>;   
+
+    // frontend specific
     notificationCount: number;
-    plane?: Plane;
-    clearances?: Clearance[];
     renderClearance?: boolean;
 }
