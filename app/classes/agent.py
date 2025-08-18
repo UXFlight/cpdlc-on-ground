@@ -3,15 +3,13 @@ from app.utils.constants import REQUEST_OUTPUTS, ACTION_OUTPUTS
 import sys
 
 class Echo:
-    def __init__(self, pilot_id: str):
-        self.pilot_id = pilot_id
+    def __init__(self):
         self._requests = {name: False for name in REQUEST_OUTPUTS}
         self._actions = {name: False for name in ACTION_OUTPUTS}
+        self.positions = {} #! lon, lat, speed, head; final_pos would be nice
         self._register_callbacks()
 
     ## PRIVATE ##
-    def _prefixed(self, name: str) -> str: #! temp
-        return f"{self.pilot_id}::{name}"
 
     def _register_callbacks(self):
         igs.observe_agent_events(Echo.on_agent_event_callback, self)
@@ -28,12 +26,12 @@ class Echo:
     @staticmethod
     def _on_freeze_callback(my_data):
         assert isinstance(my_data, Echo)
-        print(f"[Freeze] Agent {my_data.pilot_id} frozen.")
+        print(f"[Freeze] Agent frozen.")
 
     @staticmethod
     def _reset_callback(my_data):
         assert isinstance(my_data, Echo)
-        print(f"[Reset] Reset triggered for {my_data.pilot_id}")
+        print(f"[Reset] Reset triggered")
         my_data.reset()
 
     def _set_output(self, pool, name, value):
