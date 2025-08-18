@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from app.utils.types import AtcPublicView
+
 if TYPE_CHECKING:
     from app.classes.atc import Atc
 
@@ -27,8 +29,8 @@ class AtcManager:
     def get_all_sids(self) -> list[str]:
         return list(self._atcs.keys())
 
-    def get_all(self) -> list["Atc"]:
-        return list(self._atcs.values())
+    def get_all(self) -> list[AtcPublicView]:
+        return [atc.to_public() for atc in self._atcs.values()]
 
     def has_any(self) -> bool:
         return len(self._atcs) > 0
