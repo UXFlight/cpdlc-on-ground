@@ -5,7 +5,7 @@ import { ClientSocketService } from './client-socket.service';
 import { CommunicationService, ErrorMessage } from './communication.service';
 import { Atc } from '@app/interfaces/Atc';
 import { SelectedRequestInfo } from '@app/interfaces/SelectedRequest';
-import { ClearanceSocketPayload, ResponseCache, SmartResponse, StepUpdate } from '@app/interfaces/Payloads';
+import { ClearanceSocketPayload, ResponseCache, StepUpdate } from '@app/interfaces/Payloads'; // SmartResponse
 import { StepStatus } from '@app/interfaces/StepStatus';
 
 @Injectable({
@@ -46,13 +46,21 @@ export class MainPageService {
   }
 
   private listenToSocketEvents(): void {
+    // connections events
     this.clientSocketService.listen('connect', this.onConnect);
     this.clientSocketService.listen('disconnect', this.onDisconnect);
-    this.clientSocketService.listen<PilotPublicView>('new_pilot', this.onNewPilotPublicView)
+
+    // pilot events
+    this.clientSocketService.listen<PilotPublicView[]>('pilot_list', this.pilotListUpdate);
+    this.clientSocketService.listen<PilotPublicView>('pilot_connected', this.onNewPilotPublicView)
     this.clientSocketService.listen<string>('pilot_disconnected', this.onPilotDisconnect)
     this.clientSocketService.listen<PilotPublicView>('step_updated', this.onStepUpdate)
-    this.clientSocketService.listen<Atc[]>('atc_list', this.onAtcListUpdate);
     this.clientSocketService.listen<ClearanceSocketPayload>('clearance_sent', this.onClearanceReceived);
+
+    // atc events
+    this.clientSocketService.listen<Atc[]>('atc_list', this.onAtcListUpdate);
+    
+    // global error handling
     this.clientSocketService.listen<{message:string}>('error', this.onError)
   }
 
@@ -99,18 +107,12 @@ export class MainPageService {
     return pilot?.color || '#fffff';
   }
 
-  setPilotColor(sid: string): string {
-    const hash = [...sid].reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
-    const safeHue = 80 + Math.abs(hash % 190);
-    return `hsl(${safeHue}, 60%, 65%)`;
-  }
-
   selectRequest(requestInfo : SelectedRequestInfo): void {
     this.selectedRequestIdSubject.next(requestInfo);
   }
 
   selectPilot(pilotSid: string, sendRequest: boolean = true): void {
-    if(sendRequest) this.clientSocketService.send('select_pilot', pilotSid);
+    if(sendRequest) this.clientSocketService.send('selectPilot', pilotSid);
     if (this.selectedPilotSubject.getValue()?.sid === pilotSid) {
       this.selectedPilotSubject.next(null);
       return;
@@ -137,15 +139,15 @@ export class MainPageService {
     return this.clientSocketService.getSocketId();
   }
 
-  private setPilotCache(payload: SmartResponse) {
-    const { responses, pilot_sid, step_code } = payload;
+  // private setPilotCache(payload: SmartResponse) {
+  //   const { responses, pilot_sid, step_code } = payload;
   
-    if (!this.responseCache[pilot_sid]) this.responseCache[pilot_sid] = {};
+  //   if (!this.responseCache[pilot_sid]) this.responseCache[pilot_sid] = {};
   
-    this.responseCache[pilot_sid][step_code] = {
-      responses: responses
-    };
-  }
+  //   this.responseCache[pilot_sid][step_code] = {
+  //     responses: responses
+  //   };
+  // }
 
   // === Socket Event Handlers ===
   private onConnect = () => {
@@ -162,7 +164,6 @@ export class MainPageService {
   private onNewPilotPublicView = (preview: PilotPublicView) => {
     preview.notificationCount = 0;
     preview.renderClearance = true
-    preview.color = this.setPilotColor(preview.sid);
 
     const currentPreviews = this.pilotsPreviewsSubject.getValue();
     this.pilotsPreviewsSubject.next([...currentPreviews, preview]);
@@ -183,32 +184,39 @@ export class MainPageService {
     this.updatePilotStep(payload);
   }
 
-  private onAtcListUpdate = (atcs: Atc[]) => {
-    const formattedAtcs = atcs.map(atc => ({
-      ...atc,
-      sid: atc.sid.substring(0, 6).toUpperCase()
-    }));
-    this.atcSubject.next(formattedAtcs);
+  private pilotListUpdate = (pilots: PilotPublicView[]) => {
+    pilots.forEach(pilot => {
+      pilot.notificationCount = 0;
+      pilot.renderClearance = true;
+    });
+    this.pilotsPreviewsSubject.next(pilots);
+  }
+
+  private onAtcListUpdate = (atcList: Atc[]) => {
+    atcList.forEach(atc => {
+      atc.sid = atc.sid.substring(0, 6).toUpperCase();
+    });
+    this.atcSubject.next(atcList);
   }
 
   private onClearanceReceived = (payload: ClearanceSocketPayload) => {
-    const { pilot_sid, clearance, expected } = payload;
+    const { pilot_sid } = payload; //, clearance, expected
     const currentPreviews = this.pilotsPreviewsSubject.getValue();
     const pilotIndex = currentPreviews.findIndex(p => p.sid === pilot_sid);
     if (pilotIndex === -1) return;
 
     const pilot = currentPreviews[pilotIndex];
-    if (!pilot.clearances) pilot.clearances = [];
+    // if (!pilot.clearances) pilot.clearances = [];
     
-    pilot.clearances.push(clearance);
-    if (expected) {
-      pilot.clearances[0] = clearance;
-      this.setPilotCache({
-        responses: [clearance.instruction],
-        step_code: 'DM_136',
-        pilot_sid: pilot.sid
-      });
-    }
+    // pilot.clearances.push(clearance);
+    // if (expected) {
+    //   pilot.clearances[0] = clearance;
+    //   this.setPilotCache({
+    //     responses: [clearance.instruction],
+    //     step_code: 'DM_136',
+    //     pilot_sid: pilot.sid
+    //   });
+    // }
     
     currentPreviews[pilotIndex] = pilot;
     this.pilotsPreviewsSubject.next(currentPreviews);
@@ -222,19 +230,9 @@ export class MainPageService {
   }
   
   // === Public ===
-  async fetchPilotPublicViews(): Promise<void> {
-    const response = await this.communicationService.get<{ pilots: PilotPublicView[] }>('atc-request/get-pilot-list');
-  
-    if (response?.pilots) {
-      response.pilots.forEach(pilot => {
-        pilot.notificationCount = 0
-        pilot.renderClearance = true;
-        pilot.color = this.setPilotColor(pilot.sid);
-      });
-      this.pilotsPreviewsSubject.next(response.pilots);
-    } else {
-      this.pilotsPreviewsSubject.next([]);
-    }
+  // GET
+  fetchPilotPublicViews(): void {
+    this.clientSocketService.send('getPilotList');
   }
 
   fetchSmartResponse(pilotSid: string, stepCode: string): void {
@@ -243,17 +241,19 @@ export class MainPageService {
     this.smartResponsesSubject.next(cachedResponses);
   }
 
-  sendResponse(payload : StepUpdate): void {
-    const { pilot_sid, step_code, request_id, message } = payload;
-    if (!pilot_sid || !step_code || !request_id || !message) return this.communicationService.handleError('Invalid Payload');
-    this.clientSocketService.send('send_step_update', payload);
-  }
-
+  
   fetchClearance(pilotSid: string, stepCode: string): void {
     if (!['DM_136', 'DM_135'].includes(stepCode)) this.communicationService.handleError('Invalid Request');
     if (!pilotSid || !stepCode) return this.communicationService.handleError('Invalid Payload');
     const expected = stepCode === 'DM_136';
     const payload = { pilot_sid: pilotSid, expected: expected };
     this.clientSocketService.send('clearance', payload);
+  }
+
+  // SEND
+  sendResponse(payload : StepUpdate): void {
+    const { pilot_sid, step_code, request_id, message } = payload;
+    if (!pilot_sid || !step_code || !request_id || !message) return this.communicationService.handleError('Invalid Payload');
+    this.clientSocketService.send('send_step_update', payload);
   }
 }
