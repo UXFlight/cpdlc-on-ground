@@ -36,16 +36,6 @@ export class CommunicationService {
     }
   }
 
-  async post<T, R = any>(endpoint: string, body: T): Promise<R | null> {
-    const url = `${this.baseUrl}/${endpoint}`;
-    try {
-      return await firstValueFrom(this.http.post<R>(url, body));
-    } catch (error) {
-      this.handleError(error);
-      return null;
-    }
-  }
-
   //! bloat, slop, call it whatever you want. idc anymore
   private getErrorMessage(err: unknown): string {
     const defaultErr : string = 'An unexpected error occurred.';
