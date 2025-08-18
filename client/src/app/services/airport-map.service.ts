@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CommunicationService } from './communication.service';
+// import { CommunicationService } from './communication.service';
 import {
   GeoJSONFeatureCollection,
   GeoJSONFeature,
@@ -50,15 +50,15 @@ export class AirportMapService {
   private panOffset = { x: 0, y: 0 };
 
   constructor(
-    private readonly communicationService: CommunicationService,
+    // private readonly communicationService: CommunicationService,
     private readonly socketClientService: ClientSocketService
   ) {}
 
   async fetchAirportMapData(): Promise<void> {
-    if (this.airportMapSubject.value) return;
-    console.log('Fetching airport map data...');
-    const data = await this.communicationService.get<GeoJSONFeatureCollection>('atc-request/get-airport-info');
-    this.airportMapSubject.next(data);
+    // if (this.airportMapSubject.value) return;
+    // console.log('Fetching airport map data...');
+    // const data = await this.communicationService.get<GeoJSONFeatureCollection>('atc-request/get-airport-info');
+    // this.airportMapSubject.next(data);
   }
 
   updateCanvasSize(width: number, height: number): void {
@@ -166,7 +166,7 @@ export class AirportMapService {
   }
 
   focusOnPilot(pilot: PilotPublicView, zoomLevel = 2): void {
-    this.socketClientService.send('select_pilot', pilot.sid);
+    this.socketClientService.send('selectPilot', pilot.sid);
     const selectedPlane = this.selectedPlaneSubject.value;
     if (selectedPlane && selectedPlane.sid === pilot.sid) return this.resetZoom();
     this.selectPlane(pilot);
@@ -216,7 +216,7 @@ export class AirportMapService {
   resetPlaneSelection(): void {
     const currentPlaneSid = this.selectedPlaneSubject.value?.sid;
     if (!currentPlaneSid) return;
-    this.socketClientService.send('select_pilot', currentPlaneSid);
+    this.socketClientService.send('selectPilot', currentPlaneSid);
     this.selectedPlaneSubject.next(null);
   }
 
