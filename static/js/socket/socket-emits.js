@@ -8,7 +8,6 @@ export function emitRequest(requestType, data = {}) {
   });
 }
 
-
 export function emitCancelRequest(requestType) {
   send(SOCKET_EMITS.CANCEL_REQUEST, { requestType });
 }

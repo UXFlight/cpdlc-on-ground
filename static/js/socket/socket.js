@@ -1,6 +1,10 @@
 import { SERVER_URL } from "../utils/consts/serverUrl.js";
 
-const socket = io(SERVER_URL); //! single connection for each pilot
+const ROLE_PILOT = 0;
+
+const socket = io(SERVER_URL, { //! single connection for each pilot
+  auth: { r: ROLE_PILOT }
+}); 
 
 function send(event, data) {
   socket.emit(event, data);
