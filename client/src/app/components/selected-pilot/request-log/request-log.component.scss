@@ -66,15 +66,6 @@
     animation: fadeSlideDown 0.2s ease-in-out;
     gap: 0.5rem;
 
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: .5rem;
-      font-size: .8rem;
-      color: var(--text-secondary);
-    }
-
     .smart-responses,
     .quick-responses {
       display: grid;

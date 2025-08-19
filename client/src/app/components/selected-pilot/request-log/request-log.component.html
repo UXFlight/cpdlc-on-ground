@@ -35,9 +35,6 @@
       
           <!-- QUICK RESPONSES -->
             <div class="quick-responses">
-              <div class="section-header">
-                <span>Quick responses</span>
-              </div>
               <div class="qa-buttons">
                   @for(button of quickResponses; track button) {
                       <button type="button" class="chip" (click)="setQuickResponse(button, $event)">{{ button }}</button>
