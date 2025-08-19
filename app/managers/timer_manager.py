@@ -1,7 +1,6 @@
 import threading
 import time
 from app.classes.step import Step
-from app.classes.socket import SocketService
 from app.managers.log_manager import logger
 
 class TimerManager:
