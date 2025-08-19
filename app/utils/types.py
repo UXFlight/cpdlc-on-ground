@@ -209,8 +209,9 @@ class Plane(TypedDict):
 ClearanceType = Literal["none", "expected", "taxi", "route_change"]
 class Clearance(TypedDict):
     kind: ClearanceType
-    instruction: str     # ex. "TAXI VIA A B C"
-    coords: List[LonLat]
+    instruction: str
+    coords: List[LocationInfo]  # <- mise à jour ici
+    issued_at: str
     
 # === Step Public View ===
 class StepPublicView(TypedDict):
