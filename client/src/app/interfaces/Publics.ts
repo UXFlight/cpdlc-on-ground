@@ -3,10 +3,16 @@ import { StepStatus } from "./StepStatus";
 // PLANE
 export type LonLat = [number, number];
 
+export interface LocationInfo {
+  name: string;
+  type: "parking" | "taxiway" | "runway";
+  coord: LonLat;
+}
+
 export interface Plane {
-  spawn_pos: LonLat;
-  current_pos: LonLat;
-  final_pos: LonLat;
+  spawn_pos: LocationInfo;
+  current_pos: LocationInfo;
+  final_pos: LocationInfo;
   current_heading: number;
   current_speed: number;
 }
@@ -41,7 +47,6 @@ export interface Clearance {
   timestamp?: number;
 }
 
-
 export interface PilotPublicView {
     sid: string;
     steps: Record<string, StepPublicView>;
@@ -53,4 +58,16 @@ export interface PilotPublicView {
     // frontend specific
     notificationCount: number;
     renderClearance?: boolean;
+}
+
+// NEW REQUEST
+export interface AckUpdatePayload {
+    pilot_sid: string;
+    step_code: string;
+    label: string;
+    status: StepStatus;
+    message: string;
+    validated_at: number;
+    request_id: string,
+    time_left?: number
 }

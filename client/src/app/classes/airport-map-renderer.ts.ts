@@ -1,9 +1,4 @@
-import {
-  GeoJSONFeature,
-  GeoJSONLineString,
-  GeoJSONPoint
-} from '@app/interfaces/AirMap';
-
+import { Helipad, ParkingPosition, Runway, Taxiway } from '@app/interfaces/AirMap';
 import { LonLat, PilotPublicView, StepEvent } from '@app/interfaces/Publics';
 import { StepStatus } from '@app/interfaces/StepStatus';
 import { AIRPORT_STYLES } from '@app/interfaces/airport-colors';
@@ -30,44 +25,21 @@ export class AirportMapRenderer {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  drawRunways(features: GeoJSONFeature[], options: MapRenderOptions): void {
-    const filteredFeatures = features.filter(f => f.properties?.type === 'runway');
-    if (filteredFeatures.length === 0) return;
-    this.drawLineFeatures(
-      filteredFeatures,
-      options,
-      AIRPORT_STYLES.runway
-    );
+  // === Drawers publics ===
+  drawRunways(runways: Runway[], options: MapRenderOptions): void {
+    this.drawLine(runways, options, AIRPORT_STYLES.runway);
   }
 
-  drawTaxiways(features: GeoJSONFeature[], options: MapRenderOptions): void {
-    const filteredFeatures = features.filter(f => f.properties?.type === 'taxiway');
-    if (filteredFeatures.length === 0) return;
-    this.drawLineFeatures(
-      filteredFeatures,
-      options,
-      AIRPORT_STYLES.taxiway
-    );
+  drawTaxiways(taxiways: Taxiway[], options: MapRenderOptions): void {
+    this.drawLine(taxiways, options, AIRPORT_STYLES.taxiway);
   }
 
-  drawHelipads(features: GeoJSONFeature[], options: MapRenderOptions): void {
-    const filteredFeatures = features.filter(f => f.properties?.type === 'helipad');
-    if (filteredFeatures.length === 0) return;
-    this.drawPointFeatures(
-      filteredFeatures,
-      options,
-      AIRPORT_STYLES.helipad
-    );
+  drawHelipads(helipads: Helipad[], options: MapRenderOptions): void {
+    this.drawPoint(helipads, options, AIRPORT_STYLES.helipad);
   }
 
-  drawParkings(features: GeoJSONFeature[], options: MapRenderOptions): void {
-    const filteredFeatures = features.filter(f => f.properties?.type === 'parking');
-    if (filteredFeatures.length === 0) return;
-    this.drawPointFeatures(
-      filteredFeatures,
-      options,
-      AIRPORT_STYLES.parking
-    );
+  drawParkings(parkings: ParkingPosition[], options: MapRenderOptions): void {
+    this.drawPoint(parkings, options, AIRPORT_STYLES.parking);
   }
 
   // PILOTS METHODS //
@@ -75,7 +47,7 @@ export class AirportMapRenderer {
     for (const pilot of pilots) {
       if (!pilot.plane) continue;
   
-      const [x, y] = options.project(pilot.plane.current_pos);
+      const [x, y] = options.project(pilot.plane.current_pos.coord);
       const heading = pilot.plane.current_heading ?? 0;
       const zoom = options.zoomLevel ?? 1;
   
@@ -256,25 +228,26 @@ export class AirportMapRenderer {
   }
   
   // LINES METHODS //
-  drawAllLineLabels (features: GeoJSONFeature[], options: MapRenderOptions): void {
+  drawAllLineLabels(
+    items: { start: LonLat; end: LonLat; name?: string }[],
+    options: MapRenderOptions
+  ): void {
     const seenLabels = new Set<string>();
     const zoom = options.zoomLevel ?? 1;
+    const usedBoundingBoxes: DOMRect[] = [];
   
-    for (const feature of features) {
-      const name = feature.properties?.name;
-      const coords = (feature.geometry as GeoJSONLineString).coordinates;
-      const projectedPoints = coords.map(options.project);
+    for (const item of items) {
+      const name = item.name;
+      if (!name || seenLabels.has(name)) continue;
   
-      if (!name || projectedPoints.length < 2 || !this.isVisible(projectedPoints)) continue;
-      if (!options.showLabels || zoom < 2 || seenLabels.has(name)) continue;
-
-      const usedBoundingBoxes: DOMRect[] = [];
+      const projectedPoints = [item.start, item.end].map(options.project);
+      if (projectedPoints.length < 2 || !this.isVisible(projectedPoints)) continue;
+      if (!options.showLabels || zoom < 2) continue;
   
       this.drawLineLabel(name, projectedPoints, zoom, usedBoundingBoxes);
       seenLabels.add(name);
     }
   }
-
   
   private isVisible(pts: [number, number][]): boolean {
     return pts.some(([x, y]) =>
@@ -286,7 +259,7 @@ export class AirportMapRenderer {
   private drawLinePath(
     points: [number, number][],
     color: string,
-    feature: GeoJSONFeature,
+    feature: { name?: string; status?: string }, // plus générique
     zoom: number
   ): void {
     const { ctx } = this;
@@ -303,6 +276,7 @@ export class AirportMapRenderer {
     ctx.stroke();
     ctx.setLineDash([]);
   }
+  
   
   private drawLineLabel(
     name: string,
@@ -393,32 +367,30 @@ export class AirportMapRenderer {
   // }
     
   // --- Shared private logic ---
-  private drawLineFeatures(
-    features: GeoJSONFeature[],
+  private drawLine(
+    segments: { start: LonLat; end: LonLat; name?: string }[],
     options: MapRenderOptions,
     defaultColor: string
   ): void {
     const zoom = options.zoomLevel ?? 1;
   
-    for (const feature of features) {
-      const coords = (feature.geometry as GeoJSONLineString).coordinates;
-      const projectedPoints = coords.map(options.project);
-      const strokeColor = this.getStrokeColor(feature) || defaultColor;
-      this.drawLinePath(projectedPoints, strokeColor, feature, zoom);
+    for (const segment of segments) {
+      const projectedPoints = [segment.start, segment.end].map(options.project);
+      const strokeColor = defaultColor;
+      this.drawLinePath(projectedPoints, strokeColor, segment, zoom);
     }
   }
   
-  
-  private drawPointFeatures(
-    features: GeoJSONFeature[],
+  private drawPoint(
+    points: { location: LonLat; name?: string }[],
     options: MapRenderOptions,
     defaultColor: string
-  ) {
+  ): void {
     const { ctx } = this;
     const zoom = options.zoomLevel ?? 1;
   
-    for (const feat of features) {
-      const [x, y] = options.project((feat.geometry as GeoJSONPoint).coordinates);
+    for (const point of points) {
+      const [x, y] = options.project(point.location);
   
       ctx.beginPath();
       ctx.arc(x, y, 3 * Math.min(zoom, 1), 0, 2 * Math.PI);
@@ -428,32 +400,31 @@ export class AirportMapRenderer {
       ctx.lineWidth = 1;
       ctx.stroke();
   
-      const label = feat.properties?.name;
-      if (options.showLabels && label && zoom >= 4.5) {
+      if (options.showLabels && point.name && zoom >= 4.5) {
         ctx.font = 'bold 10px "Inter", sans-serif';
         ctx.fillStyle = AIRPORT_STYLES.pointLabel;
         ctx.strokeStyle = AIRPORT_STYLES.pointLabelStroke;
         ctx.lineWidth = 2;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
-        ctx.strokeText(label, x + 8, y - 6);
-        ctx.fillText(label, x + 8, y - 6);
+        ctx.strokeText(point.name, x + 8, y - 6);
+        ctx.fillText(point.name, x + 8, y - 6);
       }
     }
   }
   
   
-  private getStrokeColor(feat: GeoJSONFeature): string {
-    switch (feat.properties?.type) {
-      case 'runway': return AIRPORT_STYLES.runway;
-      case 'taxiway': return AIRPORT_STYLES.taxiway;
-      case 'helipad': return AIRPORT_STYLES.helipad;
-      case 'parking': return AIRPORT_STYLES.parking;
-      default: return AIRPORT_STYLES.outline;
-    }
-  }
+  // private getStrokeColor(feat: GeoJSONFeature): string {
+  //   switch (feat.properties?.type) {
+  //     case 'runway': return AIRPORT_STYLES.runway;
+  //     case 'taxiway': return AIRPORT_STYLES.taxiway;
+  //     case 'helipad': return AIRPORT_STYLES.helipad;
+  //     case 'parking': return AIRPORT_STYLES.parking;
+  //     default: return AIRPORT_STYLES.outline;
+  //   }
+  // }
 
-  private getLineDash(feat: GeoJSONFeature): number[] {
-    return feat.properties?.status === 'LOADED' ? [6, 4] : [];
+  private getLineDash(obj: { status?: string }): number[] {
+    return obj.status === 'LOADED' ? [6, 4] : [];
   }
 }

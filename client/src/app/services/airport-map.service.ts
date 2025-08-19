@@ -1,26 +1,21 @@
 import { Injectable } from '@angular/core';
 // import { CommunicationService } from './communication.service';
-import {
-  GeoJSONFeatureCollection,
-  GeoJSONFeature,
-  GeoJSONLineString,
-  GeoJSONPoint
-} from '@app/interfaces/AirMap';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MapRenderOptions } from '@app/classes/airport-map-renderer.ts';
 import { PilotPublicView } from '@app/interfaces/Publics';
 import { ClientSocketService } from './client-socket.service';
+import { AirportMapData } from '@app/interfaces/AirMap';
 
 @Injectable({ providedIn: 'root' })
 export class AirportMapService {
-  airportMapSubject = new BehaviorSubject<GeoJSONFeatureCollection | null>(null);
-  airportMap$: Observable<GeoJSONFeatureCollection | null> = this.airportMapSubject.asObservable();
+  airportMapSubject = new BehaviorSubject<AirportMapData | null>(null);
+  airportMap$: Observable<AirportMapData | null> = this.airportMapSubject.asObservable();
 
-  private loadedRouteSubject = new BehaviorSubject<GeoJSONFeature[]>([]);
-  loadedRoute$: Observable<GeoJSONFeature[]> = this.loadedRouteSubject.asObservable();
+  private loadedRouteSubject = new BehaviorSubject<AirportMapData[]>([]);
+  loadedRoute$: Observable<AirportMapData[]> = this.loadedRouteSubject.asObservable();
 
-  private executedRouteSubject = new BehaviorSubject<GeoJSONFeature[]>([]);
-  executedRoute$: Observable<GeoJSONFeature[]> = this.executedRouteSubject.asObservable();
+  private executedRouteSubject = new BehaviorSubject<AirportMapData[]>([]);
+  executedRoute$: Observable<AirportMapData[]> = this.executedRouteSubject.asObservable();
 
   selectedPlaneSubject = new BehaviorSubject<PilotPublicView | null>(null);
   selectedPlane$: Observable<PilotPublicView | null> = this.selectedPlaneSubject.asObservable();
@@ -52,13 +47,16 @@ export class AirportMapService {
   constructor(
     // private readonly communicationService: CommunicationService,
     private readonly socketClientService: ClientSocketService
-  ) {}
+  ) {
+    this.listenToSocketEvents();
+  }
 
-  async fetchAirportMapData(): Promise<void> {
-    // if (this.airportMapSubject.value) return;
-    // console.log('Fetching airport map data...');
-    // const data = await this.communicationService.get<GeoJSONFeatureCollection>('atc-request/get-airport-info');
-    // this.airportMapSubject.next(data);
+  private listenToSocketEvents(): void {
+    this.socketClientService.listen('airport_map_data', this.onAirportMapData);
+  }
+
+  fetchAirportMapData(): void {
+    this.socketClientService.send('getAirportMapData');
   }
 
   updateCanvasSize(width: number, height: number): void {
@@ -70,36 +68,50 @@ export class AirportMapService {
   private computeProjection(): void {
     const map = this.airportMapSubject.value;
     if (!map) return;
-
-    const allCoords = map.features.reduce((acc: [number, number][], feat) => {
-      if (feat.geometry.type === 'LineString') {
-        return acc.concat((feat.geometry as GeoJSONLineString).coordinates);
-      } else if (feat.geometry.type === 'Point') {
-        return acc.concat([(feat.geometry as GeoJSONPoint).coordinates]);
-      }
-      return acc;
-    }, []);
-
-    const lons = allCoords.map(([lon]) => lon);
-    const lats = allCoords.map(([, lat]) => lat);
+  
+    // === Collect all LonLat coordinates ===
+    const allCoords: [number, number][] = [];
+  
+    map.runways.forEach(rw => {
+      allCoords.push(rw.start, rw.end);
+    });
+  
+    map.helipads.forEach(h => {
+      allCoords.push(h.location);
+    });
+  
+    map.taxiways.forEach(t => {
+      allCoords.push(t.start, t.end);
+    });
+  
+    map.parking.forEach(p => {
+      allCoords.push(p.location);
+    });
+  
+    if (!allCoords.length) return;
+  
+    // === Extract bounds ===
+    const lons = allCoords.map(([lon, _]) => lon);
+    const lats = allCoords.map(([_, lat]) => lat);
     this.minLon = Math.min(...lons);
     this.maxLon = Math.max(...lons);
     this.minLat = Math.min(...lats);
     this.maxLat = Math.max(...lats);
-
+  
+    // === Compute scaling factors ===
     const W = this.canvasWidth - 2 * this.padding;
     const H = this.canvasHeight - 2 * this.padding;
     const scaleX = W / (this.maxLon - this.minLon);
     const scaleY = H / (this.maxLat - this.minLat);
     this.baseScale = Math.min(scaleX, scaleY);
-
+  
+    // === Center offset ===
     const projectedWidth = (this.maxLon - this.minLon) * this.baseScale;
     const projectedHeight = (this.maxLat - this.minLat) * this.baseScale;
-
     this.offsetCenterX = (this.canvasWidth - projectedWidth) / 2;
     this.offsetCenterY = (this.canvasHeight - projectedHeight) / 2;
   }
-
+  
   getRenderOptions(): MapRenderOptions | null {
     if (!this.canvasWidth || !this.canvasHeight || !this.airportMapSubject.value) return null;
 
@@ -171,7 +183,7 @@ export class AirportMapService {
     if (selectedPlane && selectedPlane.sid === pilot.sid) return this.resetZoom();
     this.selectPlane(pilot);
   
-    const pan = this.centerOnCoordinate(pilot.plane!.current_pos, zoomLevel);
+    const pan = this.centerOnCoordinate(pilot.plane!.current_pos.coord, zoomLevel);
     this.animateZoomAndPan(zoomLevel, pan);
   }
   
@@ -252,10 +264,14 @@ export class AirportMapService {
     this.panOffset.x += dx * factor;
     this.panOffset.y += dy * factor;
   }
-  
 
   getBaseScale(): number {
     return this.baseScale || 1; // fallback pour éviter division par 0
   }
-  
+
+  // === Socket events ===
+  private onAirportMapData = (data: AirportMapData): void => {
+    this.airportMapSubject.next(data);
+    this.computeProjection();
+  }
 }

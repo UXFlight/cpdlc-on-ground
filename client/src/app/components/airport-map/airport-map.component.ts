@@ -9,9 +9,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AirportMapService } from '@app/services/airport-map.service';
-import {
-  GeoJSONFeatureCollection
-} from '@app/interfaces/AirMap';
+import { AirportMapData } from '@app/interfaces/AirMap';
 import { PilotPublicView } from '@app/interfaces/Publics';
 import { AirportMapRenderer, MapRenderOptions } from '@app/classes/airport-map-renderer.ts';
 import { MainPageService } from '@app/services/main-page.service';
@@ -35,7 +33,7 @@ export class AirportMapComponent implements OnInit, AfterViewInit, OnDestroy {
   private renderSubject!: Subscription;
 
   pilots: PilotPublicView[] = [];
-  airportMap: GeoJSONFeatureCollection | null = null;
+  airportMap: AirportMapData | null = null;
 
   private isDragging = false;
   private lastMouseX = 0;
@@ -150,20 +148,21 @@ export class AirportMapComponent implements OnInit, AfterViewInit, OnDestroy {
   private render(): void {
     const options: MapRenderOptions | null = this.airportMapService.getRenderOptions();
     if (!this.airportMap || !options || !this.renderer) return;
-
+  
     this.renderer.clear();
-    this.renderer.drawTaxiways(this.airportMap.features, options);
-    this.renderer.drawRunways(this.airportMap.features, options);
-    this.renderer.drawParkings(this.airportMap.features, options);
+  
+    this.renderer.drawTaxiways(this.airportMap.taxiways, options);
+    this.renderer.drawRunways(this.airportMap.runways, options);
+    this.renderer.drawParkings(this.airportMap.parking, options);
+    this.renderer.drawHelipads(this.airportMap.helipads, options);
+  
     if (this.showLabels) {
-      this.renderer.drawAllLineLabels(
-        this.airportMap.features.filter(f => f.geometry.type === 'LineString' ),
-        options
-      );
-    }
-    this.renderer.drawHelipads(this.airportMap.features, options);
+      this.renderer.drawAllLineLabels(this.airportMap.taxiways, options);
+      }
+  
     this.renderer.drawPilots(this.pilots, options);
   }
+  
 
   onResetMap(): void {
     this.airportMapService.resetZoom();
@@ -198,7 +197,7 @@ export class AirportMapComponent implements OnInit, AfterViewInit, OnDestroy {
     for (const pilot of this.pilots) {
       if (!pilot.plane) continue;
   
-      const [projX, projY] = options.project(pilot.plane.current_pos);
+      const [projX, projY] = options.project(pilot.plane.current_pos.coord);
       const dx = x - projX;
       const dy = y - projY;
       const dist = Math.sqrt(dx * dx + dy * dy);
