@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from typing import Optional
-from app.utils.time_utils import get_current_timestamp
+from app.utils.time_utils import get_current_timestamp, get_formatted_time
 
 class LogManager:
     def __init__(self, base_logs_dir: Optional[Path] = None):
@@ -20,14 +20,14 @@ class LogManager:
 
     # PUBLIC
     def log_event(self, pilot_id: str, event_type: str, message: str):
-        timestamp = get_current_timestamp()
+        timestamp = get_formatted_time(get_current_timestamp())
         log_dir = self._get_log_dir(pilot_id)
         line = f"[{timestamp}] [{event_type.upper():<10}] {message}\n"
         print(line.strip())
         self._write_line(log_dir / "cpdlc_backend.log", line)
 
     def log_request(self, pilot_id: str, request_type: str, status: str, message: str = "", time_left=None):
-        timestamp = get_current_timestamp()
+        timestamp = get_formatted_time(get_current_timestamp())
         log_data = {
             "timestamp": timestamp,
             "type": request_type,
@@ -37,10 +37,11 @@ class LogManager:
         }
         log_dir = self._get_log_dir(pilot_id)
         line = f"[{timestamp}] [REQUEST   ] {json.dumps(log_data, ensure_ascii=False)}\n"
+        print(line.strip())
         self._write_line(log_dir / "cpdlc_backend.log", line)
 
     def log_action(self, pilot_id: str, action_type: str, status: str, message: str = "", time_left=None):
-        timestamp = get_current_timestamp()
+        timestamp = get_formatted_time(get_current_timestamp())
         log_data = {
             "timestamp": timestamp,
             "action": action_type,
@@ -50,6 +51,7 @@ class LogManager:
         }
         log_dir = self._get_log_dir(pilot_id)
         line = f"[{timestamp}] [ACTION    ] {json.dumps(log_data, ensure_ascii=False)}\n"
+        print(line.strip())
         self._write_line(log_dir / "cpdlc_backend.log", line)
 
 
@@ -59,6 +61,7 @@ class LogManager:
         log_dir = self._get_log_dir(pilot_id)
         extra = f" [timeLeft={time_left}s]" if time_left is not None else ""
         line = f"[{timestamp}] [ERROR     ] [{context}]{extra} {error_msg}\n"
+        print(line.strip())
         self._write_line(log_dir / "cpdlc_errors.log", line)
 
 
