@@ -50,6 +50,7 @@ class Pilot:
                 "kind": "none",
                 "instruction": "",
                 "coords": [],
+                "issued_at": ""
             }
         }
 
