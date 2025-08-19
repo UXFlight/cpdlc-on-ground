@@ -1,9 +1,10 @@
 from flask import request  # type: ignore
 from typing import TYPE_CHECKING, Optional
 from app.utils.constants import DEFAULT_PILOT_REQUESTS, TIMER_DURATION
-from app.utils.time_utils import get_current_timestamp
-from app.utils.types import ConnectInfo, PilotPublicView, SocketError, StepStatus, UpdateStepData
+from app.utils.time_utils import get_current_timestamp, get_formatted_time
+from app.utils.types import Clearance, ClearanceType, ConnectInfo, PilotPublicView, SocketError, StepStatus, UpdateStepData
 from app.managers.log_manager import logger
+from app.classes.clearance import ClearanceEngine
 
 if TYPE_CHECKING:
     from app.classes.pilot import Pilot
@@ -12,13 +13,13 @@ if TYPE_CHECKING:
     from app.managers.atc_manager import AtcManager
     from app.managers.airport_map_manager import AirportMapManager
 
-
 class SocketManager:
     def __init__(self, socket_service: "SocketService", pilot_manager: "PilotManager", atc_manager: "AtcManager", airport_map_manager : "AirportMapManager"):
         self.socket: "SocketService" = socket_service
         self.pilots: "PilotManager" = pilot_manager
         self.atc_manager: "AtcManager" = atc_manager
         self.airport_map_manager : "AirportMapManager" = airport_map_manager
+        self.clearance_engine = ClearanceEngine(airport_map_manager.map_data)
         
         # not injected
         self.logger = logger
@@ -105,17 +106,38 @@ class SocketManager:
 
         try:
             step_payload: UpdateStepData = pilot.handle_send_request(data)
+            step_code = step_payload.step_code
             # gss_client.send_update_step(step_payload.to_dict())
             self._emit_event(sid, {
                 "event": "requestAcknowledged",
                 "payload": step_payload.to_ack_payload()
             })
             
-            message = self.interpolate_request_message(step_payload.step_code, pilot, data.get("direction"))
+            message = self.interpolate_request_message(step_code, pilot, data.get("direction"))
             step_payload.message = message
             
             status = self.parse_status(step_payload.status)
             step_payload.status = status
+            
+            if step_code in ["DM_135", "DM_136"]:
+                kind: ClearanceType = "expected" if step_code == "DM_136" else "taxi"
+                issued_at = get_formatted_time(get_current_timestamp())
+                instruction, coords = self.clearance_engine.generate_clearance(pilot)
+
+                clearance: Clearance = {
+                    "kind": kind,
+                    "instruction": instruction,
+                    "coords": coords,
+                    "issued_at": issued_at
+                }
+
+                self._emit_event("atc_room", {
+                    "event": "proposed_clearance",
+                    "payload": {
+                        "pilot_sid": pilot.sid,
+                        "clearance": clearance
+                    }
+                })
                      
             self._emit_event("atc_room", {
                 "event": "new_request",
@@ -141,7 +163,6 @@ class SocketManager:
             .replace("[pos]", location_str)
             .replace("[dir]", dir_str)
         )
-
             
     def parse_status(self, status: StepStatus) -> StepStatus:
         if status == StepStatus.REQUESTED:
@@ -225,6 +246,12 @@ class SocketManager:
             self._emit_event(sid, error_payload)
     
     ## ATC EVENTS
+    ## === SEND RESPONSE
+    def on_atc_response(self, data: dict):
+        sid = request.sid # type: ignore
+        atc = self.atc_manager.get(sid)
+        
+        
     ## === PILOT LIST
     def handle_pilot_list(self):
         sid = request.sid # type: ignore
