@@ -127,17 +127,21 @@ class SocketManager:
             self._emit_event(sid, error_payload)
             
     def interpolate_request_message(self, step_code: str, pilot: "Pilot", direction: Optional[str] = None) -> str:
-            raw_msg = DEFAULT_PILOT_REQUESTS.get(step_code, "Request sent")
+        raw_msg = DEFAULT_PILOT_REQUESTS.get(step_code, "Request sent")
 
-            from_loc = pilot.plane.get("from_location", {})
-            location_str = f"{from_loc.get('name')} ({from_loc.get('type')})" if from_loc else "UNKNOWN POS"
-            dir_str = direction.upper() if direction else "UNKNOWN DIR"
+        from_loc = pilot.plane.get("current_pos", {})
+        name = from_loc.get("name", "UNKNOWN")
+        type_ = from_loc.get("type", "POS")
+        location_str = f"{name} ({type_})"
 
-            return (
-                raw_msg
-                .replace("[pos]", location_str)
-                .replace("[dir]", dir_str)
-            )
+        dir_str = direction.upper() if direction else "UNKNOWN DIR"
+
+        return (
+            raw_msg
+            .replace("[pos]", location_str)
+            .replace("[dir]", dir_str)
+        )
+
             
     def parse_status(self, status: StepStatus) -> StepStatus:
         if status == StepStatus.REQUESTED:
