@@ -41,6 +41,7 @@ class StepUpdatePayload(TypedDict):
 
 
 class AckUpdatePayload(TypedDict):
+    pilot_sid: str
     step_code: str
     status: str
     message: str
@@ -62,12 +63,25 @@ class UpdateStepData:
 
     def to_ack_payload(self) -> AckUpdatePayload:
         return {
+            "pilot_sid": self.pilot_sid,
             "step_code": self.step_code,
             "status": self.status.value,
             "message": self.message,
             "validated_at": self.validated_at,
             "time_left": self.time_left,
             "label": self.label
+        }
+        
+    def to_atc_payload(self) -> StepUpdatePayload:
+        return {
+            "pilot_sid": self.pilot_sid,
+            "step_code": self.step_code,
+            "label": self.label,
+            "status": self.status.value,
+            "message": self.message,
+            "validated_at": self.validated_at,
+            "request_id": self.request_id,
+            "time_left": self.time_left
         }
         
     def to_step_event(self) -> "StepEvent":
@@ -179,10 +193,15 @@ class AirportMapData(TypedDict):
     parking: List[ParkingPosition]
 
 # === Plane ===
+class LocationInfo(TypedDict):
+    name: str
+    type: Literal["parking", "taxiway", "runway"]
+    coord: LonLat
+
 class Plane(TypedDict):
-    spawn_pos: LonLat
-    current_pos: LonLat
-    final_pos: LonLat
+    spawn_pos: LocationInfo
+    current_pos: LocationInfo
+    final_pos: LocationInfo
     current_heading: float
     current_speed: float
     
@@ -204,13 +223,12 @@ class StepPublicView(TypedDict):
     
     
 # SIMPLIFIED STEP FOR PILOT HISTORY
-@dataclass
-class StepEvent:
+class StepEvent(TypedDict):
     step_code: str
     status: str
     timestamp: float
-    message: str = ''
-    request_id: str = ''
+    message: str
+    request_id: str
 
 # ===============================
 

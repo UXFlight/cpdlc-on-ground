@@ -8,18 +8,32 @@ from app.utils.constants import ACTION_DEFINITIONS, DEFAULT_STEPS
 from app.utils.time_utils import get_current_timestamp
 from app.managers import TimerManager
 from app.classes.socket import SocketService
-from app.utils.types import Clearance, ClearanceType, Plane, SocketError, StepStatus, UpdateStepData, PilotPublicView
+from app.utils.types import Clearance, ClearanceType, LocationInfo, Plane, SocketError, StepStatus, UpdateStepData, PilotPublicView
 
+DEFAULT_LOCATION: LocationInfo = {
+    "coord": (0.0, 0.0),
+    "type": "parking",
+    "name": "UNKNOWN"
+}
+
+DEFAULT_PLANE: Plane = {
+    "spawn_pos": DEFAULT_LOCATION,
+    "current_pos": DEFAULT_LOCATION,
+    "final_pos": DEFAULT_LOCATION,
+    "current_heading": 0.0,
+    "current_speed": 0.0
+}
 
 class Pilot:
-    def __init__(self, sid: str):
+    def __init__(self, sid: str, plane: Plane = DEFAULT_PLANE):
         self.sid = sid
         self.steps: Dict[str, Step] = {}
         self.color : str = set_pilot_color(sid)
         self.history: list[UpdateStepData] = []
         self.timer_manager = TimerManager(self.sid)
         
-        self.plane: Plane = self.init_plane()
+        self.plane: Plane = plane
+        
         self.clearances = self.init_clearances()
         self.current_clearance : ClearanceType = "none"
         self.initialize_steps()
@@ -30,15 +44,6 @@ class Pilot:
             label = step_info["label"]
             self.steps[code] = Step(step_code=code, label=label)
             
-    def init_plane(self) -> Plane:
-        return {
-            "spawn_pos": (0.0, 0.0),
-            "current_pos": (0.0, 0.0),
-            "final_pos": (0.0, 0.0),
-            "current_heading": 0.0,
-            "current_speed": 0.0
-        }
-        
     def init_clearances(self) -> Dict[ClearanceType, Clearance]:
         return {
             "none": {
