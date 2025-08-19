@@ -21,3 +21,4 @@ ingescape
 python-dateutil==2.9.0.post0
 numpy==1.26.4
 reportlab==4.1.0
+xplane_airports==4.0.1
