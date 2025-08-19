@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { PilotPublicView, StepPublicView } from '@app/interfaces/Publics';
+import { AckUpdatePayload, PilotPublicView, StepPublicView } from '@app/interfaces/Publics';
 import { ClientSocketService } from './client-socket.service';
 import { CommunicationService, ErrorMessage } from './communication.service';
 import { Atc } from '@app/interfaces/Atc';
@@ -54,34 +54,73 @@ export class MainPageService {
     this.clientSocketService.listen<PilotPublicView[]>('pilot_list', this.pilotListUpdate);
     this.clientSocketService.listen<PilotPublicView>('pilot_connected', this.onNewPilotPublicView)
     this.clientSocketService.listen<string>('pilot_disconnected', this.onPilotDisconnect)
-    this.clientSocketService.listen<PilotPublicView>('step_updated', this.onStepUpdate)
+    this.clientSocketService.listen<AckUpdatePayload>('new_request', this.onNewRequest)
     this.clientSocketService.listen<ClearanceSocketPayload>('clearance_sent', this.onClearanceReceived);
 
-    // atc events
+    // atc events 
     this.clientSocketService.listen<Atc[]>('atc_list', this.onAtcListUpdate);
+    this.clientSocketService.listen<Atc>("selected_pilot", this.onAtcPilotSelect);
+
     
     // global error handling
     this.clientSocketService.listen<{message:string}>('error', this.onError)
   }
 
-  private updatePilotStep(pilotUpdate : PilotPublicView): void {
+  private buildStepViewFromAck(payload: AckUpdatePayload): StepPublicView {
+    return {
+      step_code: payload.step_code,
+      label: payload.label,
+      status: payload.status,
+      message: payload.message,
+      timestamp: Date.now(), // ou un autre timestamp si nécessaire
+      validated_at: payload.validated_at,
+      request_id: payload.request_id,
+      time_left: payload.time_left ?? null
+    };
+  }
+
+  private updatePilotPreview(pilot: PilotPublicView, payload: AckUpdatePayload): void {
+    pilot.steps[payload.step_code] = this.buildStepViewFromAck(payload);
+  
+    pilot.history.push({
+      step_code: payload.step_code,
+      status: payload.status,
+      timestamp: payload.validated_at,
+      message: payload.message,
+      request_id: payload.request_id
+    });
+  }
+
+  private updatePilotStep(pilotUpdate: AckUpdatePayload): void {
     const currentPreviews = this.pilotsPreviewsSubject.getValue();
-    const pilotIndex = currentPreviews.findIndex(p => p.sid === pilotUpdate.sid);
+    const pilotIndex = currentPreviews.findIndex(p => p.sid === pilotUpdate.pilot_sid);
     if (pilotIndex === -1) return;
+  
     const pilot = currentPreviews[pilotIndex];
     if (!pilot) return;
-    pilot.steps = pilotUpdate.steps;
-    pilot.history = pilotUpdate.history;
-    pilot.plane = pilotUpdate.plane; //! waiting for backend implementation
+  
+    this.updatePilotPreview(pilot, pilotUpdate);
+  
     this.pilotsPreviewsSubject.next([...currentPreviews]);
-    if (pilot?.sid !== this.selectedPilotSubject.getValue()?.sid) pilot.notificationCount += 1;
+  
+    const selectedPilot = this.selectedPilotSubject.getValue();
+    if (pilot.sid !== selectedPilot?.sid) pilot.notificationCount += 1;
     else this.selectedPilotSubject.next(pilot);
-    const currentStep = pilot.history[pilotUpdate.history.length - 1];
+  
+    const lastIndx = pilot.history.length - 1;
+    const currentStep = pilot.history[lastIndx];
     const selectedStep = this.selectedRequestIdSubject.getValue();
-    if (selectedStep.stepCode === currentStep.step_code && selectedStep.requestId !== currentStep.request_id) {
-      this.selectedRequestIdSubject.next({stepCode: currentStep.step_code, requestId: currentStep.request_id});
+    if (
+      selectedStep.stepCode === currentStep?.step_code &&
+      selectedStep.requestId !== currentStep?.request_id
+    ) {
+      this.selectedRequestIdSubject.next({
+        stepCode: currentStep.step_code,
+        requestId: currentStep.request_id
+      });
     }
   }
+  
 
   getPilotBySid(sid: string): PilotPublicView | undefined {
     return this.pilotsPreviewsSubject.getValue().find(pilot => pilot.sid === sid);
@@ -112,6 +151,7 @@ export class MainPageService {
   }
 
   selectPilot(pilotSid: string, sendRequest: boolean = true): void {
+    console.log('send request:', sendRequest, 'pilotSid:', pilotSid);
     if(sendRequest) this.clientSocketService.send('selectPilot', pilotSid);
     if (this.selectedPilotSubject.getValue()?.sid === pilotSid) {
       this.selectedPilotSubject.next(null);
@@ -174,13 +214,15 @@ export class MainPageService {
   };
     
   private onPilotDisconnect = (pilotSid: string) => {
+    console.log('Pilot disconnected:', pilotSid);
     const currentPreviews = this.pilotsPreviewsSubject.getValue();
     const updatedPreviews = currentPreviews.filter(pilot => pilot.sid !== pilotSid);
     this.pilotsPreviewsSubject.next(updatedPreviews);
     if (this.selectedPilotSubject.getValue()?.sid === pilotSid) this.selectPilot(pilotSid);
   }
 
-  private onStepUpdate = (payload: PilotPublicView) => {
+  private onNewRequest = (payload: AckUpdatePayload) => {
+    console.log('New Request Payload:', payload);
     this.updatePilotStep(payload);
   }
 
@@ -197,6 +239,19 @@ export class MainPageService {
       atc.sid = atc.sid.substring(0, 6).toUpperCase();
     });
     this.atcSubject.next(atcList);
+  }
+
+  private onAtcPilotSelect = (atc: Atc) => {
+    const frontSid = atc.sid.substring(0, 6).toUpperCase();
+    const currentAtcList = this.atcSubject.getValue();
+    const atcIdx = currentAtcList.findIndex(a => a.sid === frontSid);
+    if (atcIdx === -1) return;
+    const updatedAtcList = [...currentAtcList];
+    updatedAtcList[atcIdx] = {
+      ...currentAtcList[atcIdx],
+      selectedPilot: atc.selectedPilot
+    };
+    this.atcSubject.next(updatedAtcList);
   }
 
   private onClearanceReceived = (payload: ClearanceSocketPayload) => {
