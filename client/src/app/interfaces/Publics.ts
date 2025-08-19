@@ -38,13 +38,13 @@ export interface StepEvent {
 }
 
 // CLEARANCE
-export type ClearanceType = "none" | "expected" | "taxi" | "route_change"; // ✅ correct
+export type ClearanceType = "none" | "expected" | "taxi" | "route_change";
 
 export interface Clearance {
   kind: ClearanceType;
   instruction: string;
-  coords: [number, number][];
-  timestamp?: number;
+  coords: LocationInfo[];
+  issued_at: string;
 }
 
 export interface PilotPublicView {
@@ -70,4 +70,10 @@ export interface AckUpdatePayload {
     validated_at: number;
     request_id: string,
     time_left?: number
+}
+
+// NEW CLEARANCE
+export interface ClearancePayload {
+    pilot_sid: string;
+    clearance: Clearance;
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { AckUpdatePayload, PilotPublicView, StepPublicView } from '@app/interfaces/Publics';
+import { AckUpdatePayload, ClearancePayload, PilotPublicView, StepPublicView } from '@app/interfaces/Publics';
 import { ClientSocketService } from './client-socket.service';
 import { CommunicationService, ErrorMessage } from './communication.service';
 import { Atc } from '@app/interfaces/Atc';
 import { SelectedRequestInfo } from '@app/interfaces/SelectedRequest';
-import { ClearanceSocketPayload, ResponseCache, StepUpdate } from '@app/interfaces/Payloads'; // SmartResponse
+import { ResponseCache, StepUpdate } from '@app/interfaces/Payloads'; // SmartResponse
 import { StepStatus } from '@app/interfaces/StepStatus';
 
 @Injectable({
@@ -55,7 +55,7 @@ export class MainPageService {
     this.clientSocketService.listen<PilotPublicView>('pilot_connected', this.onNewPilotPublicView)
     this.clientSocketService.listen<string>('pilot_disconnected', this.onPilotDisconnect)
     this.clientSocketService.listen<AckUpdatePayload>('new_request', this.onNewRequest)
-    this.clientSocketService.listen<ClearanceSocketPayload>('clearance_sent', this.onClearanceReceived);
+    this.clientSocketService.listen<ClearancePayload>('proposed_clearance', this.updatePilotClearance);
 
     // atc events 
     this.clientSocketService.listen<Atc[]>('atc_list', this.onAtcListUpdate);
@@ -119,6 +119,10 @@ export class MainPageService {
         requestId: currentStep.request_id
       });
     }
+  }
+
+  private updatePilotClearance(payload : ClearancePayload): void {
+    console.log('Update Pilot Clearance Payload:', payload);
   }
   
 
@@ -252,32 +256,6 @@ export class MainPageService {
       selectedPilot: atc.selectedPilot
     };
     this.atcSubject.next(updatedAtcList);
-  }
-
-  private onClearanceReceived = (payload: ClearanceSocketPayload) => {
-    const { pilot_sid } = payload; //, clearance, expected
-    const currentPreviews = this.pilotsPreviewsSubject.getValue();
-    const pilotIndex = currentPreviews.findIndex(p => p.sid === pilot_sid);
-    if (pilotIndex === -1) return;
-
-    const pilot = currentPreviews[pilotIndex];
-    // if (!pilot.clearances) pilot.clearances = [];
-    
-    // pilot.clearances.push(clearance);
-    // if (expected) {
-    //   pilot.clearances[0] = clearance;
-    //   this.setPilotCache({
-    //     responses: [clearance.instruction],
-    //     step_code: 'DM_136',
-    //     pilot_sid: pilot.sid
-    //   });
-    // }
-    
-    currentPreviews[pilotIndex] = pilot;
-    this.pilotsPreviewsSubject.next(currentPreviews);
-    this.smartResponsesSubject.next(this.responseCache[pilot_sid]?.['DM_136']?.responses || []);
-
-    if (this.selectedPilotSubject.getValue()?.sid === pilot_sid) this.selectedPilotSubject.next(pilot)
   }
 
   private onError = (payload : ErrorMessage) => {

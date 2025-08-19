@@ -1,5 +1,3 @@
-import { Clearance } from "./Publics";
-
 export interface SmartResponse {
     responses: string[];
     step_code: string;
@@ -19,10 +17,4 @@ export interface ResponseCache {
             responses: string[];
         };
     };
-}
-
-export interface ClearanceSocketPayload {
-    pilot_sid: string;
-    clearance: Clearance;
-    expected: boolean;
 }
