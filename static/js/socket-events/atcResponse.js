@@ -7,6 +7,7 @@ import { REQUEST_TYPE } from "../utils/consts/flightConsts.js";
 import { autoLoadAction } from "../events/action.js";
 import { closeOverlay } from "../events/overlay.js";
 import { speak } from "../text-to-speech.js/speech.js";
+import { enableButtonsByStatus } from "../ui/buttons-ui.js";
 
 export const handleAtcResponse = (data) => {
     const {
@@ -16,6 +17,7 @@ export const handleAtcResponse = (data) => {
         timestamp,
         time_left,
     } = data
+
     const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${step_code}"]`);
     if (cancelBtn) cancelBtn.disabled = true;
 
@@ -24,17 +26,12 @@ export const handleAtcResponse = (data) => {
     updateStep(step_code, status, message, timestamp, time_left);
 
     if (checkAutoLoad(step_code, status)) setTimeout(() => autoLoadAction(step_code), 200);
-    if (getBool(CONFIG_KEYS.AUDIO)) {
-        speak(step_code);
-        speak(message);
-    } else {
-        playNotificationSound();
-    }
+    if (getBool(CONFIG_KEYS.AUDIO)) speak(message);
+    else playNotificationSound();
+
+    enableButtonsByStatus(status, step_code);
+
     displayHistoryLogs();
-    if (step_code === REQUEST_TYPE.PUSHBACK) {
-        const direction = direction;
-        // document.getElementById(`pushback-${direction}`).disabled = true;
-    }
 }
 
 function checkAutoLoad(step_code, status) {

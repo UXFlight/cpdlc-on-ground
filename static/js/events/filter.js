@@ -49,8 +49,6 @@ export const displayHistoryLogs = () => {
   
     return tB - tA;
   });
-    
 
-  console.log("DISPLAY HISTORY LOGS", visibleLogs);
   visibleLogs.forEach(createGroupedLog);
 };

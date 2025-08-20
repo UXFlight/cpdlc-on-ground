@@ -19,7 +19,6 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
     const showLogs = getBool(CONFIG_KEYS.LOGS);
     const historyContainer = showLogs ? createHistoryDetails(history.slice(0, -1)) : null;
 
-    console.log("CREATE GROUPED LOG", label);
     const header = createHeader({
         timestamp: latest.timestamp,
         title: label,
@@ -43,7 +42,9 @@ export function createGroupedLog({ stepKey, label, latest, history }) {
     const hasButtons = [MSG_STATUS.NEW, MSG_STATUS.LOADED, MSG_STATUS.EXECUTED, MSG_STATUS.STANDBY].includes(latest.status);
 
     if (hasButtons) {
-        div.appendChild(createButton(stepKey, latest.status));
+        const message = latest.message.startsWith('Standby') ? latest.message : '';
+        const btn = createButton(stepKey, latest.status, message)
+        if (btn) div.appendChild(createButton(stepKey, latest.status, message));
         flashElement(div);
     }
 

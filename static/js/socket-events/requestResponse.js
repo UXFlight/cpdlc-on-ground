@@ -4,7 +4,6 @@ import { displayHistoryLogs } from "../events/filter.js";
 
 export const handleRequestAck = (data) => {
     const { step_code, status, message, timestamp, label } = data;
-    console.log("REQUEST ACK", data);
     const cancelBtn = document.querySelector(`.cancel-button[data-requesttype="${step_code}"]`);
     updateStep(step_code, status, message, timestamp, null, label);
     if (cancelBtn) cancelBtn.disabled = false;
