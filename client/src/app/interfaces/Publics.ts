@@ -38,7 +38,7 @@ export interface StepEvent {
 }
 
 // CLEARANCE
-export type ClearanceType = "none" | "expected" | "taxi" | "route_change";
+export type ClearanceType = "expected" | "taxi" | "route_change";
 
 export interface Clearance {
   kind: ClearanceType;
@@ -64,7 +64,7 @@ export interface PilotPublicView {
 export interface AckUpdatePayload {
     pilot_sid: string;
     step_code: string;
-    label: string;
+    label?: string;
     status: StepStatus;
     message: string;
     validated_at: number;

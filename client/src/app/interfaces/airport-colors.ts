@@ -4,11 +4,7 @@ export const AIRPORT_STYLES = {
   taxiway: '#eab308',
   helipad: '#f472b6',
   parking: '#94a3b8',
-
-  // STEP STYLES
-  taxiwayLoaded: '#10b981',
-  taxiwayExecuted: '#059669',
-
+  
   // OUTLINES
   outline: '#0f172a',
 

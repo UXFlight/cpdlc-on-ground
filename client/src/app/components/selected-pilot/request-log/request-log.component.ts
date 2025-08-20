@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { formatQuickResponse, getQReponseByStepCode, QuickResponse, StepCode } from '@app/interfaces/Messages';
 import { StepUpdate } from '@app/interfaces/Payloads';
@@ -17,19 +17,24 @@ import { Subscription } from 'rxjs';
   templateUrl: './request-log.component.html',
   styleUrl: './request-log.component.scss'
 })
-export class RequestLogComponent implements OnInit, OnDestroy {
+export class RequestLogComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() step!: StepPublicView;
+  @ViewChild('content') contentRef?: ElementRef<HTMLDivElement>;
+
+  
+  private selectedPlaneSubscription: Subscription;
+  
+  private selectedPilotSubscription: Subscription;
+  
+  // payload attributes
+  selectedPilotSid: string = '';
+  selectedAction: 'affirm' | 'standby' | 'unable' | null = null;
+  response: string = '';
+  selectedRequestInfo: SelectedRequestInfo; // only the stepCode
+  // ----
 
   requestIdSubscription: Subscription;
-  selectedRequestInfo: SelectedRequestInfo;
-
-  private selectedPlaneSubscription: Subscription;
-
-  private selectedPilotSubscription: Subscription;
-  selectedPilotSid: string = '';
-
   expanded = false;
-  response: string = '';
 
   quickResponses : string[] = [];
   smartResponses: string[] = [];
@@ -57,18 +62,18 @@ export class RequestLogComponent implements OnInit, OnDestroy {
     if (this.expanded) this.selectRequest('', '');
   }
 
+  ngAfterViewInit(): void {
+    if (this.expanded) {
+      this.scrollToCard();
+    }
+  }
+
   configSubscription(): void {
     this.requestIdSubscription = this.mainPageService.selectedRequestId$.subscribe((requestInfo : SelectedRequestInfo) => {
       this.selectedRequestInfo = requestInfo;
       const isEmpty = requestInfo.stepCode || requestInfo.requestId;
       this.expanded = !!isEmpty && this.selectedRequestInfo.requestId === this.step.request_id
-      if (this.expanded) {
-        if (['DM_136', 'DM_135'].includes(this.selectedRequestInfo.stepCode)) this.mainPageService.fetchClearance(this.selectedPilotSid, this.selectedRequestInfo.stepCode)
-        else this.smartResponses = [];
-        this.quickResponses = getQReponseByStepCode(this.selectedRequestInfo.stepCode as StepCode);
-
-      }
-
+      if (this.expanded) this.quickResponses = getQReponseByStepCode(this.selectedRequestInfo.stepCode as StepCode);
     })
 
     this.smartResponsesSubscription = this.mainPageService.smartResponses$.subscribe((responses: string[]) => {
@@ -84,6 +89,7 @@ export class RequestLogComponent implements OnInit, OnDestroy {
     });
   }
 
+
   get statusClass(): string {
     return this.step?.status?.toLowerCase() ?? 'idle';
   }
@@ -95,55 +101,71 @@ export class RequestLogComponent implements OnInit, OnDestroy {
       minute: '2-digit'
     });
   }
-
+  
+  // payload selection
   setSelectedPilotSid(sid: string = '') {
     if (!sid) return
     if (!this.selectedPilotSid) this.selectedPilotSid = sid;
     if (this.selectedPilotSid !== sid) this.selectedPilotSid = sid;
   }
-
-
-  toggleExpand(event: MouseEvent): void {
-    event.stopPropagation();
-    if (this.expanded) return this.selectRequest('', '');
-    this.selectRequest(
-      this.step.step_code,
-      this.step.request_id
-    );
-  }
-
-  onInputChange(event: Event) : void {
-    const input = event.target as HTMLTextAreaElement;
-    const value = input.value;
-
-    this.quickResponses.forEach(qr => {
-      if (value.toUpperCase().includes(qr)) {
-        this.response = formatQuickResponse(qr as QuickResponse, this.step.step_code as StepCode) || this.response;
-      }
-    });
-
+  
+  selectRequest(stepCode: string, requestId: string): void {
+    const requestInfo: SelectedRequestInfo = { stepCode, requestId };
+    this.mainPageService.selectRequest(requestInfo);
   }
 
   submitResponse(event: Event): void {
     event.stopPropagation();
+  
     const formattedResponse = this.response.trim();
     if (!formattedResponse) return;
-
-    const payload : StepUpdate = {
+    if (!this.selectedAction) return;
+  
+    const payload: StepUpdate & { action: string } = {
       pilot_sid: this.selectedPilotSid,
       step_code: this.step.step_code,
       request_id: this.step.request_id,
-      message: formattedResponse
-    }
+      message: formattedResponse,
+      action: this.selectedAction
+    };
 
     this.mainPageService.sendResponse(payload);
     this.response = '';
     this.smartResponses = [];
+    this.selectedAction = null;
   }
 
-  selectRequest(stepCode: string, requestId: string): void {
-    const requestInfo: SelectedRequestInfo = { stepCode, requestId };
-    this.mainPageService.selectRequest(requestInfo);
+  setQuickResponse(text: string, event: MouseEvent): void {
+    event.stopPropagation();
+    const selectedStepCode = this.selectedRequestInfo?.stepCode as StepCode;
+    if (!selectedStepCode) return;
+    const formattedText = formatQuickResponse(text as QuickResponse, selectedStepCode);
+    if (!formattedText) return;
+  
+    this.response = formattedText;
+    this.selectedAction = text.toLowerCase() as 'affirm' | 'standby' | 'unable';
+  }
+
+  applySmart(text: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.response = text;
+  }
+
+  // visual
+  scrollToCard(): void {
+    requestAnimationFrame(() => {
+      this.contentRef?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+  }
+
+  toggleExpand(event: MouseEvent): void {
+    event.stopPropagation();
+    if (this.expanded) return this.selectRequest('', '');
+    this.selectRequest(this.step.step_code, this.step.request_id);
+    this.scrollToCard();
   }
 
   getStepTooltip(step: StepPublicView): string {
@@ -166,19 +188,5 @@ REQUEST ID: ${step.request_id}
       minute: '2-digit',
       second: '2-digit'
     });
-  }
-
-  setQuickResponse(text: string, event: MouseEvent): void {
-    event.stopPropagation();
-    const selectedStepCode = this.selectedRequestInfo?.stepCode as StepCode;
-    if (!selectedStepCode) return;
-    const formattedText = formatQuickResponse(text as QuickResponse, selectedStepCode);
-    if (!formattedText) return;
-    this.response = formattedText;
-  }
-
-  applySmart(text: string, event: MouseEvent): void {
-    event.stopPropagation();
-    this.response = text;
   }
 }

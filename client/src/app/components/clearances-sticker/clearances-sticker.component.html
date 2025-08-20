@@ -34,6 +34,7 @@
                 type="checkbox"
                 class="toggle-checkbox"
                 [checked]="pilot.renderClearance"
+                [disabled]="!hasValidClearance(pilot)"
                 (change)="toggleClearance(pilot)"
             />
             <span class="toggle-slider"></span>

@@ -1,6 +1,7 @@
 .clearance-sticker-container {
-    max-width: fit-content;
-    min-width: 215px;
+    max-width: 750px;
+    width: 220px;
+    min-width: 220px;
     background-color: var(--bg-container);
     color: var(--text-primary);
     border: 2px solid var(--text-muted);
@@ -58,9 +59,9 @@
 }
 
 .pilot-sid {
-    flex: 1;
     font-weight: 600;
     font-size: 20px;
+    margin-right: 10px;
 }
 
 .toggle-label {
@@ -106,6 +107,7 @@
 }
 
 .pilot-clearance {
+    flex: 1;
     font-size: 16px;
     color: var(--text-secondary);
     white-space: nowrap;
@@ -139,4 +141,15 @@
     font-size: 14px;
     color: var(--text-muted);
     opacity: 0.9;
+}
+
+.toggle-checkbox:disabled + .toggle-slider {
+    background-color: var(--text-muted);
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.toggle-checkbox:disabled + .toggle-slider::before {
+    background-color: var(--text-primary);
+    opacity: 0.5;
 }

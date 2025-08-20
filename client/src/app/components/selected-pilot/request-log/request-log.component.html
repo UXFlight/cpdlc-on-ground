@@ -4,6 +4,7 @@
     [class.expanded]="expanded"
     [title]="getStepTooltip(step)"
     (click)="toggleExpand($event)"
+    #content
 >
     <div class="step-top">
         <span class="step-status" [ngClass]="step.status.toLowerCase()">{{ step.status.toUpperCase() }}</span>
@@ -49,7 +50,6 @@
               placeholder="Type your response..."
               [(ngModel)]="response"
               (keydown.control.enter)="submitResponse($event)"
-              (change)="onInputChange($event)"
               maxlength="500"
               (click)="$event.stopPropagation()"
             ></textarea>

@@ -49,12 +49,14 @@ export const enableAllRequestButtons = () => {
     });
 };
 
-export function createButton(requestType, status) {
+export function createButton(requestType, status, message = '') {
+    if (message) return 
     const btnContainer = document.createElement('div');
     btnContainer.classList.add('action-buttons-grp');
 
     const available = WORKFLOW_BUTTONS[requestType]?.[status]
-                    || WORKFLOW_BUTTONS.default.NEW;
+    || WORKFLOW_BUTTONS.default[status?.toUpperCase()] // display only wilco/ unable if status is standby
+    || WORKFLOW_BUTTONS.default.NEW;
 
     const actionsToShow = !LOADABLE_REQUEST_TYPES.includes(requestType)
 

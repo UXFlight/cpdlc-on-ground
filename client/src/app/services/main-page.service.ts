@@ -7,6 +7,8 @@ import { Atc } from '@app/interfaces/Atc';
 import { SelectedRequestInfo } from '@app/interfaces/SelectedRequest';
 import { ResponseCache, StepUpdate } from '@app/interfaces/Payloads'; // SmartResponse
 import { StepStatus } from '@app/interfaces/StepStatus';
+import { AirportMapService } from './airport-map.service';
+import { LABELS } from '@app/modules/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +43,10 @@ export class MainPageService {
   constructor(
     private readonly clientSocketService: ClientSocketService,
     private readonly communicationService: CommunicationService,
+    private readonly airportMapService: AirportMapService
   ) {
     this.listenToSocketEvents();
+    this.airportMapService // to sub to the plane... maybe later
   }
 
   private listenToSocketEvents(): void {
@@ -69,7 +73,7 @@ export class MainPageService {
   private buildStepViewFromAck(payload: AckUpdatePayload): StepPublicView {
     return {
       step_code: payload.step_code,
-      label: payload.label,
+      label: payload.label || LABELS[payload.step_code] || payload.step_code,
       status: payload.status,
       message: payload.message,
       timestamp: Date.now(), // ou un autre timestamp si nécessaire
@@ -121,10 +125,6 @@ export class MainPageService {
     }
   }
 
-  private updatePilotClearance(payload : ClearancePayload): void {
-    console.log('Update Pilot Clearance Payload:', payload);
-  }
-  
 
   getPilotBySid(sid: string): PilotPublicView | undefined {
     return this.pilotsPreviewsSubject.getValue().find(pilot => pilot.sid === sid);
@@ -155,7 +155,6 @@ export class MainPageService {
   }
 
   selectPilot(pilotSid: string, sendRequest: boolean = true): void {
-    console.log('send request:', sendRequest, 'pilotSid:', pilotSid);
     if(sendRequest) this.clientSocketService.send('selectPilot', pilotSid);
     if (this.selectedPilotSubject.getValue()?.sid === pilotSid) {
       this.selectedPilotSubject.next(null);
@@ -207,7 +206,7 @@ export class MainPageService {
 
   private onNewPilotPublicView = (preview: PilotPublicView) => {
     preview.notificationCount = 0;
-    preview.renderClearance = true
+    preview.renderClearance = false
 
     const currentPreviews = this.pilotsPreviewsSubject.getValue();
     this.pilotsPreviewsSubject.next([...currentPreviews, preview]);
@@ -218,7 +217,6 @@ export class MainPageService {
   };
     
   private onPilotDisconnect = (pilotSid: string) => {
-    console.log('Pilot disconnected:', pilotSid);
     const currentPreviews = this.pilotsPreviewsSubject.getValue();
     const updatedPreviews = currentPreviews.filter(pilot => pilot.sid !== pilotSid);
     this.pilotsPreviewsSubject.next(updatedPreviews);
@@ -226,16 +224,28 @@ export class MainPageService {
   }
 
   private onNewRequest = (payload: AckUpdatePayload) => {
-    console.log('New Request Payload:', payload);
     this.updatePilotStep(payload);
   }
 
   private pilotListUpdate = (pilots: PilotPublicView[]) => {
     pilots.forEach(pilot => {
       pilot.notificationCount = 0;
-      pilot.renderClearance = true;
+      pilot.renderClearance = false;
     });
     this.pilotsPreviewsSubject.next(pilots);
+  }
+
+
+  private updatePilotClearance = (payload : ClearancePayload) => {
+    const currentPreviews = this.pilotsPreviewsSubject.getValue();
+    const pilotIndex = currentPreviews.findIndex(p => p.sid === payload.pilot_sid);
+    if (pilotIndex === -1) return;
+    const pilot = currentPreviews[pilotIndex];
+    if (!pilot) return;
+    const kind = payload.clearance.kind
+    pilot.clearances[kind] = payload.clearance;
+    this.pilotsPreviewsSubject.next([...currentPreviews]);
+    if (this.selectedPilotSubject.getValue()?.sid === payload.pilot_sid) this.selectedPilotSubject.next(pilot);
   }
 
   private onAtcListUpdate = (atcList: Atc[]) => {
@@ -270,23 +280,26 @@ export class MainPageService {
 
   fetchSmartResponse(pilotSid: string, stepCode: string): void {
     const cachedResponses = this.responseCache[pilotSid]?.[stepCode]?.responses;
-    console.log('Cached Responses:', cachedResponses);
     this.smartResponsesSubject.next(cachedResponses);
   }
 
-  
-  fetchClearance(pilotSid: string, stepCode: string): void {
-    if (!['DM_136', 'DM_135'].includes(stepCode)) this.communicationService.handleError('Invalid Request');
-    if (!pilotSid || !stepCode) return this.communicationService.handleError('Invalid Payload');
-    const expected = stepCode === 'DM_136';
-    const payload = { pilot_sid: pilotSid, expected: expected };
-    this.clientSocketService.send('clearance', payload);
-  }
-
   // SEND
-  sendResponse(payload : StepUpdate): void {
-    const { pilot_sid, step_code, request_id, message } = payload;
-    if (!pilot_sid || !step_code || !request_id || !message) return this.communicationService.handleError('Invalid Payload');
-    this.clientSocketService.send('send_step_update', payload);
+  sendResponse(payload: StepUpdate & { action: string }): void {
+    const requiredFields: [keyof typeof payload, string][] = [
+      ['pilot_sid', 'Pilot SID is missing.'],
+      ['step_code', 'Step code is missing.'],
+      ['request_id', 'Request ID is missing.'],
+      ['message', 'Message is missing.'],
+      ['action', 'Action is missing.']
+    ];
+  
+    for (const [field, errorMsg] of requiredFields) {
+      if (!payload[field]) {
+        this.communicationService.handleError(errorMsg);
+        return;
+      }
+    }
+  
+    this.clientSocketService.send('atcResponse', payload);
   }
 }

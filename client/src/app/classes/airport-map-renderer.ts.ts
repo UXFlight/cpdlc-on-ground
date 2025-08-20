@@ -1,5 +1,5 @@
 import { Helipad, ParkingPosition, Runway, Taxiway } from '@app/interfaces/AirMap';
-import { LonLat, PilotPublicView, StepEvent } from '@app/interfaces/Publics';
+import { ClearanceType, LocationInfo, LonLat, PilotPublicView, StepEvent } from '@app/interfaces/Publics';
 import { StepStatus } from '@app/interfaces/StepStatus';
 import { AIRPORT_STYLES } from '@app/interfaces/airport-colors';
 import { LABELS } from '@app/modules/constants';
@@ -74,7 +74,6 @@ export class AirportMapRenderer {
 
       this.ctx.drawImage(tempCanvas, -size / 2, -size / 2);
      
-  
       this.ctx.restore();
   
       const activeSteps = this.getActivePilotSteps(pilot);
@@ -129,57 +128,113 @@ export class AirportMapRenderer {
   }
 
   private drawPilotClearances(pilot: PilotPublicView, options: MapRenderOptions): void {
-    const clearances = (pilot.clearances);
-    if (!clearances) return;
+    const allClearances = Object.values(pilot.clearances)
+      .filter(c => c?.instruction?.trim())
+      .sort((a, b) => {
+        const priority = (type: ClearanceType): number => {
+          return type === 'route_change' ? 0 : type === 'taxi' ? 1 : 2;
+        };
+  
+        const pa = priority(a.kind);
+        const pb = priority(b.kind);
+  
+        return pa - pb
+      });
+  
+    const clearance = allClearances[0];
+    if (!clearance || !clearance.coords?.length) return;
+  
+    const color = pilot.color || AIRPORT_STYLES.taxiway;
+    const dashed = clearance.kind === 'expected';
+  
+    const pathCoords = clearance.coords;
+    this.drawClearancePath(pathCoords, options, color, dashed);
+  
+    const labels = clearance.coords.map(c => c.name).join(' → ');
+    console.log(`Drawing clearance for ${pilot.sid}: ${labels}`);
+  
+    const finalPos = pilot.plane.final_pos.coord;
+    this.drawFinalDestinationMarker(this.ctx, options.project, finalPos, color);
+  }
+  
 
-    return;
+  private drawClearancePath(
+    coords: LocationInfo[],
+    options: MapRenderOptions,
+    color: string,
+    dashed: boolean
+  ): void {
+    if (!coords || coords.length < 2) return;
   
-    // const color = pilot.color || AIRPORT_STYLES.taxiway;
+    const ctx = this.ctx;
+    const pts: [number, number][] = coords.map(loc => options.project(loc.coord));
+    const zoomFactor = options.zoomLevel ?? 1;
+    const baseLineWidth = 3.5;
+    const scaledLineWidth = baseLineWidth * Math.sqrt(zoomFactor);
   
-    // for (const c of Object.values(clearances)) {
-    //   const dashed = c.type === 'expected_taxi';
-    //   this.drawClearancePath(c.coords, options, color, dashed);
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) {
+      ctx.lineTo(pts[i][0], pts[i][1]);
+    }
   
-    //   const finalPos = pilot.plane?.final_pos;
-    //   if (finalPos) {
-    //     this.drawFinalDestinationMarker(this.ctx, options.project, finalPos, color);
-    //   }
-    // }
+    ctx.lineWidth = scaledLineWidth;
+    ctx.strokeStyle = color;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    if (dashed) ctx.setLineDash([10, 20]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  
+    const minZoomForLabels = 4.0;
+    if (zoomFactor >= minZoomForLabels) {
+      ctx.save();
+      const fontSize = 10 * Math.sqrt(zoomFactor);
+      ctx.font = `bold ${fontSize}px sans-serif`;
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+  
+      for (let i = 0; i < coords.length; i++) {
+        const pt = pts[i];
+        const label = coords[i].name;
+        if (!label) continue;
+  
+        ctx.fillText(label, pt[0], pt[1] - 12);
+      }
+  
+      ctx.restore();
+    }
   }
   
   
-  // private drawClearancePath(
-  //   coords: LonLat[],
-  //   options: MapRenderOptions,
-  //   color: string,
-  //   dashed: boolean
-  // ): void {
-  //   if (!coords || coords.length < 2) return;
+  private drawFinalDestinationMarker(
+    ctx: CanvasRenderingContext2D,
+    project: (coord: LonLat) => [number, number],
+    finalPos: LonLat,
+    color: string = AIRPORT_STYLES.pointFill,
+    label?: string
+  ): void {
+    const [fx, fy] = project(finalPos);
   
-  //   const ctx = this.ctx;
-  //   const pts: [number, number][] = coords.map(options.project);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(fx, fy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.restore();
   
-  //   const zoomFactor = options.zoomLevel ?? 1;
-  //   const baseLineWidth = 3.5;
-  //   const scaledLineWidth = baseLineWidth * Math.sqrt(zoomFactor);
-  
-  //   ctx.save();
-  //   ctx.beginPath();
-  //   ctx.moveTo(pts[0][0], pts[0][1]);
-  //   for (let i = 1; i < pts.length; i++) {
-  //     ctx.lineTo(pts[i][0], pts[i][1]);
-  //   }
-  
-  //   ctx.lineWidth = scaledLineWidth;
-  //   ctx.strokeStyle = color;
-  //   ctx.lineJoin = 'round';
-  //   ctx.lineCap = 'round';
-  //   if (dashed) ctx.setLineDash([10, 20]);
-  //   ctx.stroke();
-  //   ctx.setLineDash([]);
-  //   ctx.restore();
-  // }
-  
+    if (label) {
+      ctx.save();
+      ctx.font = `12px sans-serif`;
+      ctx.fillStyle = color;
+      ctx.textAlign = 'left';
+      ctx.fillText(label, fx + 8, fy);
+      ctx.restore();
+    }
+  }
   
   // helpers
   private getActivePilotSteps(pilot: PilotPublicView): StepEvent[] {
@@ -350,22 +405,7 @@ export class AirportMapRenderer {
     ctx.closePath();
   }
 
-  // private drawFinalDestinationMarker(
-  //   ctx: CanvasRenderingContext2D,
-  //   project: (coord: LonLat) => [number, number],
-  //   finalPos: LonLat,
-  //   color: string = AIRPORT_STYLES.pointFill
-  // ): void {
-  //   const [fx, fy] = project(finalPos);
-  
-  //   ctx.save();
-  //   ctx.beginPath();
-  //   ctx.arc(fx, fy, 6, 0, Math.PI * 2); // Rayon de 6px
-  //   ctx.fillStyle = color;
-  //   ctx.fill();
-  //   ctx.restore();
-  // }
-    
+     
   // --- Shared private logic ---
   private drawLine(
     segments: { start: LonLat; end: LonLat; name?: string }[],

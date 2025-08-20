@@ -37,15 +37,24 @@ export class ClearancesStickerComponent implements OnDestroy, OnInit  {
   }
 
   toggleClearance(pilot: PilotPublicView): void {
+    if (!this.hasValidClearance(pilot)) return;
     pilot.renderClearance = !pilot.renderClearance;
-    this.airportMapService.renderSubject.next(true)
+    this.airportMapService.renderSubject.next(true);
   }
 
   getPilotLatestClearance(pilot: PilotPublicView): string {
-    // if (!pilot.clearances || pilot.clearances.length === 0) {
-    //   return 'No clearances available';
-    // }
-    // const latestClearance = pilot.clearances[pilot.clearances.length - 1]; latestClearance.instruction || 
-    return 'No instruction provided';
+    const clearances = Object.values(pilot.clearances || {});
+    if (!clearances.length) return 'No clearances available';
+    const validClearances = clearances.filter(c => c.instruction?.trim());
+    if (!validClearances.length) return 'No instruction provided';
+    validClearances.sort((a, b) => new Date(b.issued_at).getTime() - new Date(a.issued_at).getTime() );
+  
+    return validClearances[0].instruction;
+  }
+
+  hasValidClearance(pilot: PilotPublicView): boolean {
+    return Object.values(pilot.clearances || {}).some(
+      c => c.instruction?.trim()
+    );
   }
 }

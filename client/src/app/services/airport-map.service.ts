@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 // import { CommunicationService } from './communication.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MapRenderOptions } from '@app/classes/airport-map-renderer.ts';
-import { PilotPublicView } from '@app/interfaces/Publics';
+import { Clearance, ClearancePayload, PilotPublicView } from '@app/interfaces/Publics';
 import { ClientSocketService } from './client-socket.service';
 import { AirportMapData } from '@app/interfaces/AirMap';
 
@@ -53,6 +53,9 @@ export class AirportMapService {
 
   private listenToSocketEvents(): void {
     this.socketClientService.listen('airport_map_data', this.onAirportMapData);
+
+    this.socketClientService.listen<ClearancePayload>('proposed_clearance', this.updatePilotClearance);
+    
   }
 
   fetchAirportMapData(): void {
@@ -130,7 +133,7 @@ export class AirportMapService {
 
     return {
       project,
-      showLabels: true,
+      showLabels: this.showLabelsSubject.value,
       zoomLevel: this.zoomFactor
     };
   }
@@ -273,5 +276,22 @@ export class AirportMapService {
   private onAirportMapData = (data: AirportMapData): void => {
     this.airportMapSubject.next(data);
     this.computeProjection();
+  }
+
+  private updatePilotClearance = (payload: ClearancePayload): void => {
+    const currentPlane = this.selectedPlaneSubject.value;
+    if (!currentPlane || currentPlane.sid !== payload.pilot_sid) return;
+
+    const { kind, instruction, coords, issued_at } = payload.clearance;
+
+    const clearance: Clearance = {
+      kind: kind,
+      instruction: instruction,
+      coords: coords,
+      issued_at: issued_at
+    };
+
+    currentPlane.clearances[kind] = clearance;
+    this.selectedPlaneSubject.next(currentPlane);
   }
 }

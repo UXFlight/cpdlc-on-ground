@@ -78,6 +78,42 @@ export class AirportMapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // never settle for less UX, this event is only used for the cursor style. 
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(event: MouseEvent): void {
+    const canvas = this.canvasRef.nativeElement;
+  
+    if (this.isDragging) {
+      const dx = event.clientX - this.lastMouseX;
+      const dy = event.clientY - this.lastMouseY;
+  
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) this.dragMoved = true;
+  
+      this.lastMouseX = event.clientX;
+      this.lastMouseY = event.clientY;
+  
+      this.airportMapService.applyPan(dx, dy);
+      this.render();
+      return;
+    }
+  
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+  
+    const options = this.airportMapService.getRenderOptions();
+  
+    const hovered = this.pilots.some(pilot => {
+      if (!pilot.plane || !options) return false;
+      const [px, py] = options.project(pilot.plane.current_pos.coord);
+      const dx = x - px;
+      const dy = y - py;
+      return Math.sqrt(dx * dx + dy * dy) < 12;
+    });
+  
+    canvas.style.cursor = hovered ? 'pointer' : 'default';
+  }
+  
+  
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: MouseEvent): void {
     if (event.button !== 0) return;
@@ -85,31 +121,15 @@ export class AirportMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dragMoved = false;
     this.lastMouseX = event.clientX;
     this.lastMouseY = event.clientY;
+    this.canvasRef.nativeElement.style.cursor = 'grabbing';
   }
   
   @HostListener('mouseup')
   @HostListener('mouseleave')
   onMouseUp(): void {
     this.isDragging = false;
+    this.canvasRef.nativeElement.style.cursor = 'default';
   }
-
-  @HostListener('mousemove', ['$event'])
-  onMouseMove(event: MouseEvent): void {
-    if (!this.isDragging) return;
-  
-    const dx = event.clientX - this.lastMouseX;
-    const dy = event.clientY - this.lastMouseY;
-  
-    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) this.dragMoved = true; // if we actually moved
-  
-    this.lastMouseX = event.clientX;
-    this.lastMouseY = event.clientY;
-  
-    this.airportMapService.applyPan(dx, dy);
-    this.render();
-    this.canvasRef.nativeElement.style.cursor = 'grabbing';
-  }
-  
 
   private resizeCanvas(): void {
     const canvas = this.canvasRef.nativeElement;

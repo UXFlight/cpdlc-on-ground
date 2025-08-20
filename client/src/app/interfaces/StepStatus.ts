@@ -11,5 +11,5 @@ export enum StepStatus {
     UNABLE = 'unable',
     TIMEOUT = 'timeout',
     ERROR = 'error',
-  }
+}
   
