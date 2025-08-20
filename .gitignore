@@ -4,5 +4,5 @@ __pycache__/
 *.pyo
 *.pyd
 .DS_Store
-logs/
+logs/ 
 app/data/apt.dat
