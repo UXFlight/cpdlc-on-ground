@@ -1,0 +1,5752 @@
+{
+  "runways": [
+    {
+      "name": "16L/34R",
+      "start": [
+        25.2960934,
+        51.6088991
+      ],
+      "end": [
+        25.2554627,
+        51.6267774
+      ],
+      "width": 60.0,
+      "surface": 1
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.2909775,
+        51.5897457
+      ],
+      "end": [
+        25.2553696,
+        51.6054373
+      ],
+      "width": 60.0,
+      "surface": 1
+    }
+  ],
+  "helipads": [],
+  "taxiways": [
+    {
+      "name": "V",
+      "start": [
+        25.25458,
+        51.623879
+      ],
+      "end": [
+        25.254626,
+        51.624053
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.254399,
+        51.623298
+      ],
+      "end": [
+        25.25458,
+        51.623879
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.254754,
+        51.6229
+      ],
+      "end": [
+        25.254399,
+        51.623298
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.258767,
+        51.621159
+      ],
+      "end": [
+        25.254754,
+        51.6229
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.259057,
+        51.621127
+      ],
+      "end": [
+        25.258767,
+        51.621159
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.259272,
+        51.621316
+      ],
+      "end": [
+        25.259057,
+        51.621127
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.259387,
+        51.621472
+      ],
+      "end": [
+        25.259272,
+        51.621316
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.259432,
+        51.621588
+      ],
+      "end": [
+        25.259387,
+        51.621472
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "V",
+      "start": [
+        25.259528,
+        51.621901
+      ],
+      "end": [
+        25.259432,
+        51.621588
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.255618,
+        51.62671
+      ],
+      "end": [
+        25.257214,
+        51.626008
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.257214,
+        51.626008
+      ],
+      "end": [
+        25.26047,
+        51.624575
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.26047,
+        51.624575
+      ],
+      "end": [
+        25.269029,
+        51.620809
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.269029,
+        51.620809
+      ],
+      "end": [
+        25.273174,
+        51.618984
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.273174,
+        51.618984
+      ],
+      "end": [
+        25.276276,
+        51.617619
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.276276,
+        51.617619
+      ],
+      "end": [
+        25.279093,
+        51.616379
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.279093,
+        51.616379
+      ],
+      "end": [
+        25.279814,
+        51.616062
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.279814,
+        51.616062
+      ],
+      "end": [
+        25.282442,
+        51.614906
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.282442,
+        51.614906
+      ],
+      "end": [
+        25.289535,
+        51.611784
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.289535,
+        51.611784
+      ],
+      "end": [
+        25.294415,
+        51.609637
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16L/34R",
+      "start": [
+        25.294415,
+        51.609637
+      ],
+      "end": [
+        25.295846,
+        51.609008
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.289331,
+        51.590474
+      ],
+      "end": [
+        25.290627,
+        51.589898
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.285524,
+        51.592156
+      ],
+      "end": [
+        25.289331,
+        51.590474
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.278604,
+        51.595203
+      ],
+      "end": [
+        25.285524,
+        51.592156
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.277737,
+        51.595586
+      ],
+      "end": [
+        25.278604,
+        51.595203
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.274929,
+        51.596813
+      ],
+      "end": [
+        25.277737,
+        51.595586
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.271961,
+        51.598133
+      ],
+      "end": [
+        25.273388,
+        51.59751
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.273388,
+        51.59751
+      ],
+      "end": [
+        25.274929,
+        51.596813
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.269359,
+        51.599276
+      ],
+      "end": [
+        25.271961,
+        51.598133
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.26716,
+        51.60024
+      ],
+      "end": [
+        25.269359,
+        51.599276
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.260589,
+        51.603135
+      ],
+      "end": [
+        25.26716,
+        51.60024
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.255672,
+        51.605304
+      ],
+      "end": [
+        25.257458,
+        51.604515
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "16R/34L",
+      "start": [
+        25.257458,
+        51.604515
+      ],
+      "end": [
+        25.260589,
+        51.603135
+      ],
+      "is_runway": true,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.294607,
+        51.606435
+      ],
+      "end": [
+        25.295001,
+        51.606492
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A12",
+      "start": [
+        25.295001,
+        51.606492
+      ],
+      "end": [
+        25.29517,
+        51.606727
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A12",
+      "start": [
+        25.29517,
+        51.606727
+      ],
+      "end": [
+        25.295341,
+        51.607215
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A",
+      "start": [
+        25.254951,
+        51.624945
+      ],
+      "end": [
+        25.254626,
+        51.624053
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.255956,
+        51.624536
+      ],
+      "end": [
+        25.254951,
+        51.624945
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.259858,
+        51.622807
+      ],
+      "end": [
+        25.255956,
+        51.624536
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A2",
+      "start": [
+        25.259858,
+        51.622807
+      ],
+      "end": [
+        25.259528,
+        51.621901
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.265639,
+        51.620281
+      ],
+      "end": [
+        25.259858,
+        51.622807
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.265782,
+        51.62021
+      ],
+      "end": [
+        25.265639,
+        51.620281
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.265782,
+        51.62021
+      ],
+      "end": [
+        25.265438,
+        51.619283
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.271165,
+        51.617833
+      ],
+      "end": [
+        25.265782,
+        51.62021
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.271165,
+        51.617833
+      ],
+      "end": [
+        25.270837,
+        51.616908
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.275611,
+        51.615873
+      ],
+      "end": [
+        25.271165,
+        51.617833
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.270837,
+        51.616908
+      ],
+      "end": [
+        25.275275,
+        51.614949
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A6",
+      "start": [
+        25.275611,
+        51.615873
+      ],
+      "end": [
+        25.275275,
+        51.614949
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "R",
+      "start": [
+        25.275275,
+        51.614949
+      ],
+      "end": [
+        25.274938,
+        51.614055
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.259528,
+        51.621901
+      ],
+      "end": [
+        25.262334,
+        51.620653
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.262334,
+        51.620653
+      ],
+      "end": [
+        25.265438,
+        51.619283
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E",
+      "start": [
+        25.261987,
+        51.619749
+      ],
+      "end": [
+        25.262334,
+        51.620653
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.265438,
+        51.619283
+      ],
+      "end": [
+        25.265122,
+        51.618362
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.265968,
+        51.617988
+      ],
+      "end": [
+        25.265122,
+        51.618362
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.265438,
+        51.619283
+      ],
+      "end": [
+        25.266284,
+        51.618925
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.265968,
+        51.617988
+      ],
+      "end": [
+        25.266284,
+        51.618925
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.265085,
+        51.615565
+      ],
+      "end": [
+        25.265103,
+        51.615277
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.265103,
+        51.615277
+      ],
+      "end": [
+        25.265303,
+        51.615009
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E3",
+      "start": [
+        25.266874,
+        51.614308
+      ],
+      "end": [
+        25.267023,
+        51.614253
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.269663,
+        51.616371
+      ],
+      "end": [
+        25.265968,
+        51.617988
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E3",
+      "start": [
+        25.269292,
+        51.615359
+      ],
+      "end": [
+        25.269663,
+        51.616371
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.266284,
+        51.618925
+      ],
+      "end": [
+        25.269986,
+        51.617281
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.269986,
+        51.617281
+      ],
+      "end": [
+        25.270837,
+        51.616908
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E3",
+      "start": [
+        25.269663,
+        51.616371
+      ],
+      "end": [
+        25.269986,
+        51.617281
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.270503,
+        51.615993
+      ],
+      "end": [
+        25.269663,
+        51.616371
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.270837,
+        51.616908
+      ],
+      "end": [
+        25.270503,
+        51.615993
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.264082,
+        51.614491
+      ],
+      "end": [
+        25.263896,
+        51.614751
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A9",
+      "start": [
+        25.279814,
+        51.616062
+      ],
+      "end": [
+        25.28094,
+        51.61468
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A8",
+      "start": [
+        25.28094,
+        51.61468
+      ],
+      "end": [
+        25.282442,
+        51.614906
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.279015,
+        51.614374
+      ],
+      "end": [
+        25.277124,
+        51.615234
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.277124,
+        51.615234
+      ],
+      "end": [
+        25.275611,
+        51.615873
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A8",
+      "start": [
+        25.279015,
+        51.614374
+      ],
+      "end": [
+        25.278681,
+        51.613458
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.282119,
+        51.613019
+      ],
+      "end": [
+        25.279015,
+        51.614374
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A9",
+      "start": [
+        25.282119,
+        51.613019
+      ],
+      "end": [
+        25.281804,
+        51.612084
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.285318,
+        51.611609
+      ],
+      "end": [
+        25.282119,
+        51.613019
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.285318,
+        51.611609
+      ],
+      "end": [
+        25.284934,
+        51.610696
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.284934,
+        51.610696
+      ],
+      "end": [
+        25.284562,
+        51.609695
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.284525,
+        51.609241
+      ],
+      "end": [
+        25.284694,
+        51.609025
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q2",
+      "start": [
+        25.288885,
+        51.61
+      ],
+      "end": [
+        25.28856,
+        51.609102
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.284934,
+        51.610696
+      ],
+      "end": [
+        25.287718,
+        51.609474
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.287718,
+        51.609474
+      ],
+      "end": [
+        25.28856,
+        51.609102
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q1",
+      "start": [
+        25.287158,
+        51.607957
+      ],
+      "end": [
+        25.287718,
+        51.609474
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.288885,
+        51.61
+      ],
+      "end": [
+        25.28804,
+        51.61041
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.28804,
+        51.61041
+      ],
+      "end": [
+        25.285318,
+        51.611609
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q1",
+      "start": [
+        25.287718,
+        51.609474
+      ],
+      "end": [
+        25.28804,
+        51.61041
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.295341,
+        51.607215
+      ],
+      "end": [
+        25.294342,
+        51.607642
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "B",
+      "start": [
+        25.294342,
+        51.607642
+      ],
+      "end": [
+        25.288885,
+        51.61
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.293992,
+        51.606708
+      ],
+      "end": [
+        25.294607,
+        51.606435
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A11",
+      "start": [
+        25.294342,
+        51.607642
+      ],
+      "end": [
+        25.293992,
+        51.606708
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L",
+      "start": [
+        25.256672,
+        51.60867
+      ],
+      "end": [
+        25.256908,
+        51.608844
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L",
+      "start": [
+        25.256908,
+        51.608844
+      ],
+      "end": [
+        25.257214,
+        51.608819
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.291079,
+        51.591733
+      ],
+      "end": [
+        25.291306,
+        51.591526
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.291306,
+        51.591526
+      ],
+      "end": [
+        25.291329,
+        51.591221
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L12",
+      "start": [
+        25.290957,
+        51.590392
+      ],
+      "end": [
+        25.290627,
+        51.589898
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L11",
+      "start": [
+        25.289331,
+        51.590474
+      ],
+      "end": [
+        25.289873,
+        51.590793
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L11",
+      "start": [
+        25.289873,
+        51.590793
+      ],
+      "end": [
+        25.290055,
+        51.591041
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L11",
+      "start": [
+        25.290291,
+        51.591456
+      ],
+      "end": [
+        25.290372,
+        51.591863
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.290164,
+        51.592141
+      ],
+      "end": [
+        25.291079,
+        51.591733
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L11",
+      "start": [
+        25.290372,
+        51.591863
+      ],
+      "end": [
+        25.290164,
+        51.592141
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.286154,
+        51.593899
+      ],
+      "end": [
+        25.290164,
+        51.592141
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.278604,
+        51.595203
+      ],
+      "end": [
+        25.279683,
+        51.595142
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.283424,
+        51.595115
+      ],
+      "end": [
+        25.286154,
+        51.593899
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.281959,
+        51.595403
+      ],
+      "end": [
+        25.283424,
+        51.595115
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.280966,
+        51.595289
+      ],
+      "end": [
+        25.281375,
+        51.595369
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.281375,
+        51.595369
+      ],
+      "end": [
+        25.281959,
+        51.595403
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.280966,
+        51.595289
+      ],
+      "end": [
+        25.281292,
+        51.595787
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.28099,
+        51.596194
+      ],
+      "end": [
+        25.283424,
+        51.595115
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.281292,
+        51.595787
+      ],
+      "end": [
+        25.28099,
+        51.596194
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.279519,
+        51.596842
+      ],
+      "end": [
+        25.28099,
+        51.596194
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.275554,
+        51.598582
+      ],
+      "end": [
+        25.279519,
+        51.596842
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L6",
+      "start": [
+        25.273992,
+        51.598344
+      ],
+      "end": [
+        25.275554,
+        51.598582
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L6",
+      "start": [
+        25.273992,
+        51.598344
+      ],
+      "end": [
+        25.27432,
+        51.59879
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.274014,
+        51.599272
+      ],
+      "end": [
+        25.275554,
+        51.598582
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L6",
+      "start": [
+        25.27432,
+        51.59879
+      ],
+      "end": [
+        25.274014,
+        51.599272
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.271178,
+        51.600489
+      ],
+      "end": [
+        25.272683,
+        51.599857
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.272683,
+        51.599857
+      ],
+      "end": [
+        25.274014,
+        51.599272
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L4",
+      "start": [
+        25.272683,
+        51.599857
+      ],
+      "end": [
+        25.272421,
+        51.599945
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L4",
+      "start": [
+        25.272421,
+        51.599945
+      ],
+      "end": [
+        25.27166,
+        51.599759
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L4",
+      "start": [
+        25.27166,
+        51.599759
+      ],
+      "end": [
+        25.270999,
+        51.599725
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L4",
+      "start": [
+        25.270999,
+        51.599725
+      ],
+      "end": [
+        25.271344,
+        51.600085
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L4",
+      "start": [
+        25.271344,
+        51.600085
+      ],
+      "end": [
+        25.271178,
+        51.600489
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L3",
+      "start": [
+        25.264889,
+        51.603286
+      ],
+      "end": [
+        25.265769,
+        51.602067
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L3",
+      "start": [
+        25.265769,
+        51.602067
+      ],
+      "end": [
+        25.26595,
+        51.602526
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.264889,
+        51.603286
+      ],
+      "end": [
+        25.266369,
+        51.602629
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L3",
+      "start": [
+        25.26595,
+        51.602526
+      ],
+      "end": [
+        25.266369,
+        51.602629
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.26121,
+        51.60491
+      ],
+      "end": [
+        25.264889,
+        51.603286
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W2",
+      "start": [
+        25.262751,
+        51.609202
+      ],
+      "end": [
+        25.262933,
+        51.609395
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W2",
+      "start": [
+        25.262933,
+        51.609395
+      ],
+      "end": [
+        25.263249,
+        51.609448
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.261882,
+        51.606771
+      ],
+      "end": [
+        25.265573,
+        51.605113
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W3",
+      "start": [
+        25.265924,
+        51.60605
+      ],
+      "end": [
+        25.265573,
+        51.605113
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "R",
+      "start": [
+        25.274938,
+        51.614055
+      ],
+      "end": [
+        25.270856,
+        51.60282
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.270196,
+        51.60095
+      ],
+      "end": [
+        25.271178,
+        51.600489
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.266369,
+        51.602629
+      ],
+      "end": [
+        25.269371,
+        51.601295
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.269371,
+        51.601295
+      ],
+      "end": [
+        25.270196,
+        51.60095
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.270029,
+        51.603162
+      ],
+      "end": [
+        25.270856,
+        51.60282
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.274938,
+        51.614055
+      ],
+      "end": [
+        25.274085,
+        51.614417
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.274085,
+        51.614417
+      ],
+      "end": [
+        25.273664,
+        51.614604
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.273664,
+        51.614604
+      ],
+      "end": [
+        25.270503,
+        51.615993
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "S",
+      "start": [
+        25.270029,
+        51.603162
+      ],
+      "end": [
+        25.274085,
+        51.614417
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "R",
+      "start": [
+        25.270856,
+        51.60282
+      ],
+      "end": [
+        25.270525,
+        51.601871
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "R",
+      "start": [
+        25.270525,
+        51.601871
+      ],
+      "end": [
+        25.270196,
+        51.60095
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "S",
+      "start": [
+        25.269371,
+        51.601295
+      ],
+      "end": [
+        25.269686,
+        51.602236
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "S",
+      "start": [
+        25.269686,
+        51.602236
+      ],
+      "end": [
+        25.270029,
+        51.603162
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "J",
+      "start": [
+        25.270525,
+        51.601871
+      ],
+      "end": [
+        25.269686,
+        51.602236
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L3",
+      "start": [
+        25.265573,
+        51.605113
+      ],
+      "end": [
+        25.265227,
+        51.604213
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L3",
+      "start": [
+        25.265227,
+        51.604213
+      ],
+      "end": [
+        25.264889,
+        51.603286
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L2",
+      "start": [
+        25.26121,
+        51.60491
+      ],
+      "end": [
+        25.261539,
+        51.605844
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L2",
+      "start": [
+        25.261539,
+        51.605844
+      ],
+      "end": [
+        25.261882,
+        51.606771
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "J",
+      "start": [
+        25.265227,
+        51.604213
+      ],
+      "end": [
+        25.261539,
+        51.605844
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L",
+      "start": [
+        25.25612,
+        51.607119
+      ],
+      "end": [
+        25.256464,
+        51.608082
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L",
+      "start": [
+        25.256464,
+        51.608082
+      ],
+      "end": [
+        25.256672,
+        51.60867
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L1",
+      "start": [
+        25.257458,
+        51.604515
+      ],
+      "end": [
+        25.256946,
+        51.605211
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.25612,
+        51.607119
+      ],
+      "end": [
+        25.257206,
+        51.60666
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L1",
+      "start": [
+        25.257016,
+        51.606136
+      ],
+      "end": [
+        25.257206,
+        51.60666
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "J",
+      "start": [
+        25.257546,
+        51.607583
+      ],
+      "end": [
+        25.256464,
+        51.608082
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L1",
+      "start": [
+        25.257206,
+        51.60666
+      ],
+      "end": [
+        25.257546,
+        51.607583
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.257214,
+        51.608819
+      ],
+      "end": [
+        25.257874,
+        51.608514
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W",
+      "start": [
+        25.257546,
+        51.607583
+      ],
+      "end": [
+        25.257874,
+        51.608514
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "J",
+      "start": [
+        25.261539,
+        51.605844
+      ],
+      "end": [
+        25.260696,
+        51.606206
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "J",
+      "start": [
+        25.260696,
+        51.606206
+      ],
+      "end": [
+        25.257546,
+        51.607583
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.261035,
+        51.60715
+      ],
+      "end": [
+        25.261882,
+        51.606771
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.260696,
+        51.606206
+      ],
+      "end": [
+        25.261035,
+        51.60715
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.257206,
+        51.60666
+      ],
+      "end": [
+        25.260385,
+        51.605265
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.260385,
+        51.605265
+      ],
+      "end": [
+        25.26121,
+        51.60491
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "G",
+      "start": [
+        25.260696,
+        51.606206
+      ],
+      "end": [
+        25.260385,
+        51.605265
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.262532,
+        51.610722
+      ],
+      "end": [
+        25.262918,
+        51.610666
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.265573,
+        51.605113
+      ],
+      "end": [
+        25.266409,
+        51.604748
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "J",
+      "start": [
+        25.269686,
+        51.602236
+      ],
+      "end": [
+        25.266081,
+        51.603843
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "J",
+      "start": [
+        25.266081,
+        51.603843
+      ],
+      "end": [
+        25.265227,
+        51.604213
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266409,
+        51.604748
+      ],
+      "end": [
+        25.266081,
+        51.603843
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.290925,
+        51.608157
+      ],
+      "end": [
+        25.293992,
+        51.606708
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.28856,
+        51.609102
+      ],
+      "end": [
+        25.290319,
+        51.60843
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.290319,
+        51.60843
+      ],
+      "end": [
+        25.290925,
+        51.608157
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q2",
+      "start": [
+        25.28856,
+        51.609102
+      ],
+      "end": [
+        25.288217,
+        51.608152
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q2",
+      "start": [
+        25.288217,
+        51.608152
+      ],
+      "end": [
+        25.288011,
+        51.607593
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.287158,
+        51.607957
+      ],
+      "end": [
+        25.287312,
+        51.607892
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.287312,
+        51.607892
+      ],
+      "end": [
+        25.288011,
+        51.607593
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.285637,
+        51.608599
+      ],
+      "end": [
+        25.287158,
+        51.607957
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.284694,
+        51.609025
+      ],
+      "end": [
+        25.285028,
+        51.608881
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.285028,
+        51.608881
+      ],
+      "end": [
+        25.285637,
+        51.608599
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.284562,
+        51.609695
+      ],
+      "end": [
+        25.284509,
+        51.609514
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Q",
+      "start": [
+        25.284509,
+        51.609514
+      ],
+      "end": [
+        25.284525,
+        51.609241
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.283833,
+        51.611185
+      ],
+      "end": [
+        25.284934,
+        51.610696
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.283155,
+        51.611479
+      ],
+      "end": [
+        25.283833,
+        51.611185
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.281804,
+        51.612084
+      ],
+      "end": [
+        25.282526,
+        51.611751
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.282526,
+        51.611751
+      ],
+      "end": [
+        25.283155,
+        51.611479
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.281272,
+        51.612311
+      ],
+      "end": [
+        25.281804,
+        51.612084
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.28049,
+        51.612667
+      ],
+      "end": [
+        25.281272,
+        51.612311
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.279851,
+        51.612945
+      ],
+      "end": [
+        25.28049,
+        51.612667
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.278681,
+        51.613458
+      ],
+      "end": [
+        25.279245,
+        51.613205
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.279245,
+        51.613205
+      ],
+      "end": [
+        25.279851,
+        51.612945
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.277919,
+        51.613787
+      ],
+      "end": [
+        25.278681,
+        51.613458
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.275275,
+        51.614949
+      ],
+      "end": [
+        25.277259,
+        51.614096
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.277259,
+        51.614096
+      ],
+      "end": [
+        25.277919,
+        51.613787
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "Y",
+      "start": [
+        25.280874,
+        51.600532
+      ],
+      "end": [
+        25.281021,
+        51.600938
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "Y",
+      "start": [
+        25.280727,
+        51.600128
+      ],
+      "end": [
+        25.280874,
+        51.600532
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "Y",
+      "start": [
+        25.280574,
+        51.59971
+      ],
+      "end": [
+        25.280727,
+        51.600128
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "Y",
+      "start": [
+        25.280433,
+        51.59932
+      ],
+      "end": [
+        25.280574,
+        51.59971
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "Y",
+      "start": [
+        25.279519,
+        51.596842
+      ],
+      "end": [
+        25.28028,
+        51.598899
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "Y",
+      "start": [
+        25.28028,
+        51.598899
+      ],
+      "end": [
+        25.280425,
+        51.5993
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "C"
+    },
+    {
+      "name": "Y",
+      "start": [
+        25.280425,
+        51.5993
+      ],
+      "end": [
+        25.280433,
+        51.59932
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W2",
+      "start": [
+        25.261882,
+        51.606771
+      ],
+      "end": [
+        25.262255,
+        51.607821
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W2",
+      "start": [
+        25.262255,
+        51.607821
+      ],
+      "end": [
+        25.262631,
+        51.608853
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W2",
+      "start": [
+        25.262631,
+        51.608853
+      ],
+      "end": [
+        25.262751,
+        51.609202
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W2",
+      "start": [
+        25.263249,
+        51.609448
+      ],
+      "end": [
+        25.263941,
+        51.609132
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W2",
+      "start": [
+        25.263941,
+        51.609132
+      ],
+      "end": [
+        25.264903,
+        51.60872
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W3",
+      "start": [
+        25.264903,
+        51.60872
+      ],
+      "end": [
+        25.265111,
+        51.608473
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W3",
+      "start": [
+        25.265111,
+        51.608473
+      ],
+      "end": [
+        25.265421,
+        51.607669
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W3",
+      "start": [
+        25.265421,
+        51.607669
+      ],
+      "end": [
+        25.265919,
+        51.606396
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W3",
+      "start": [
+        25.265919,
+        51.606396
+      ],
+      "end": [
+        25.265924,
+        51.60605
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.265627,
+        51.609457
+      ],
+      "end": [
+        25.26574,
+        51.609346
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.264955,
+        51.609758
+      ],
+      "end": [
+        25.265627,
+        51.609457
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.264268,
+        51.610057
+      ],
+      "end": [
+        25.264955,
+        51.609758
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.263682,
+        51.610323
+      ],
+      "end": [
+        25.264268,
+        51.610057
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.262918,
+        51.610666
+      ],
+      "end": [
+        25.263072,
+        51.610602
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.263072,
+        51.610602
+      ],
+      "end": [
+        25.263682,
+        51.610323
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.262229,
+        51.610432
+      ],
+      "end": [
+        25.262369,
+        51.610633
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.262369,
+        51.610633
+      ],
+      "end": [
+        25.262532,
+        51.610722
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.262127,
+        51.610148
+      ],
+      "end": [
+        25.262229,
+        51.610432
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.26186,
+        51.609424
+      ],
+      "end": [
+        25.262127,
+        51.610148
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.261559,
+        51.608604
+      ],
+      "end": [
+        25.26186,
+        51.609424
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.261035,
+        51.60715
+      ],
+      "end": [
+        25.261254,
+        51.607777
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W1",
+      "start": [
+        25.261254,
+        51.607777
+      ],
+      "end": [
+        25.261559,
+        51.608604
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.259218,
+        51.607933
+      ],
+      "end": [
+        25.261035,
+        51.60715
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.257874,
+        51.608514
+      ],
+      "end": [
+        25.258216,
+        51.608382
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.258216,
+        51.608382
+      ],
+      "end": [
+        25.259218,
+        51.607933
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W",
+      "start": [
+        25.257874,
+        51.608514
+      ],
+      "end": [
+        25.258334,
+        51.609785
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W",
+      "start": [
+        25.258334,
+        51.609785
+      ],
+      "end": [
+        25.258678,
+        51.610711
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W",
+      "start": [
+        25.258678,
+        51.610711
+      ],
+      "end": [
+        25.258932,
+        51.611413
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E",
+      "start": [
+        25.261234,
+        51.617654
+      ],
+      "end": [
+        25.260971,
+        51.616965
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E",
+      "start": [
+        25.261508,
+        51.61843
+      ],
+      "end": [
+        25.261234,
+        51.617654
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E",
+      "start": [
+        25.261987,
+        51.619749
+      ],
+      "end": [
+        25.26189,
+        51.619448
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E",
+      "start": [
+        25.26189,
+        51.619448
+      ],
+      "end": [
+        25.261508,
+        51.61843
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.26361,
+        51.619019
+      ],
+      "end": [
+        25.262387,
+        51.61957
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.262387,
+        51.61957
+      ],
+      "end": [
+        25.261987,
+        51.619749
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.265122,
+        51.618362
+      ],
+      "end": [
+        25.264777,
+        51.618521
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "D",
+      "start": [
+        25.264777,
+        51.618521
+      ],
+      "end": [
+        25.26361,
+        51.619019
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.265122,
+        51.618362
+      ],
+      "end": [
+        25.264997,
+        51.618016
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.264997,
+        51.618016
+      ],
+      "end": [
+        25.264781,
+        51.617424
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.264781,
+        51.617424
+      ],
+      "end": [
+        25.264403,
+        51.616365
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.264403,
+        51.616365
+      ],
+      "end": [
+        25.264122,
+        51.615586
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.264122,
+        51.615586
+      ],
+      "end": [
+        25.263937,
+        51.615061
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.263937,
+        51.615061
+      ],
+      "end": [
+        25.263896,
+        51.614751
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.264366,
+        51.614342
+      ],
+      "end": [
+        25.264082,
+        51.614491
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.264975,
+        51.61408
+      ],
+      "end": [
+        25.264366,
+        51.614342
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.265636,
+        51.613797
+      ],
+      "end": [
+        25.264975,
+        51.61408
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.266254,
+        51.613512
+      ],
+      "end": [
+        25.265636,
+        51.613797
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.267117,
+        51.61319
+      ],
+      "end": [
+        25.266866,
+        51.613244
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E1",
+      "start": [
+        25.266866,
+        51.613244
+      ],
+      "end": [
+        25.266254,
+        51.613512
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.26747,
+        51.613347
+      ],
+      "end": [
+        25.267117,
+        51.61319
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.265968,
+        51.617988
+      ],
+      "end": [
+        25.265647,
+        51.617118
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.265647,
+        51.617118
+      ],
+      "end": [
+        25.265251,
+        51.616036
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.265251,
+        51.616036
+      ],
+      "end": [
+        25.265085,
+        51.615565
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.265303,
+        51.615009
+      ],
+      "end": [
+        25.266078,
+        51.614658
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E2",
+      "start": [
+        25.266078,
+        51.614658
+      ],
+      "end": [
+        25.266874,
+        51.614308
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E3",
+      "start": [
+        25.267023,
+        51.614253
+      ],
+      "end": [
+        25.26715,
+        51.614264
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E3",
+      "start": [
+        25.26715,
+        51.614264
+      ],
+      "end": [
+        25.269123,
+        51.615186
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E3",
+      "start": [
+        25.269123,
+        51.615186
+      ],
+      "end": [
+        25.269292,
+        51.615359
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.25823,
+        51.622463
+      ],
+      "end": [
+        25.259528,
+        51.621901
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.257676,
+        51.622709
+      ],
+      "end": [
+        25.25823,
+        51.622463
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.257072,
+        51.622965
+      ],
+      "end": [
+        25.257676,
+        51.622709
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.255341,
+        51.623736
+      ],
+      "end": [
+        25.257072,
+        51.622965
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A",
+      "start": [
+        25.255618,
+        51.62671
+      ],
+      "end": [
+        25.255229,
+        51.625742
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A",
+      "start": [
+        25.255229,
+        51.625742
+      ],
+      "end": [
+        25.255159,
+        51.625569
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A",
+      "start": [
+        25.255159,
+        51.625569
+      ],
+      "end": [
+        25.254951,
+        51.624945
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A1",
+      "start": [
+        25.255956,
+        51.624536
+      ],
+      "end": [
+        25.256198,
+        51.62518
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A1",
+      "start": [
+        25.256198,
+        51.62518
+      ],
+      "end": [
+        25.256363,
+        51.625611
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A1",
+      "start": [
+        25.256363,
+        51.625611
+      ],
+      "end": [
+        25.257214,
+        51.626008
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A2",
+      "start": [
+        25.26047,
+        51.624575
+      ],
+      "end": [
+        25.26013,
+        51.623584
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A2",
+      "start": [
+        25.26013,
+        51.623584
+      ],
+      "end": [
+        25.259858,
+        51.622807
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A3",
+      "start": [
+        25.269029,
+        51.620809
+      ],
+      "end": [
+        25.268257,
+        51.620586
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A3",
+      "start": [
+        25.268257,
+        51.620586
+      ],
+      "end": [
+        25.267026,
+        51.620383
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A3",
+      "start": [
+        25.267026,
+        51.620383
+      ],
+      "end": [
+        25.265782,
+        51.62021
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A4",
+      "start": [
+        25.271165,
+        51.617833
+      ],
+      "end": [
+        25.270628,
+        51.618572
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A4",
+      "start": [
+        25.270628,
+        51.618572
+      ],
+      "end": [
+        25.270411,
+        51.618881
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A4",
+      "start": [
+        25.270411,
+        51.618881
+      ],
+      "end": [
+        25.269487,
+        51.62016
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A4",
+      "start": [
+        25.269487,
+        51.62016
+      ],
+      "end": [
+        25.269029,
+        51.620809
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A5",
+      "start": [
+        25.275611,
+        51.615873
+      ],
+      "end": [
+        25.275148,
+        51.616499
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A5",
+      "start": [
+        25.275148,
+        51.616499
+      ],
+      "end": [
+        25.274833,
+        51.616953
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A5",
+      "start": [
+        25.274833,
+        51.616953
+      ],
+      "end": [
+        25.273174,
+        51.618984
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A6",
+      "start": [
+        25.275611,
+        51.615873
+      ],
+      "end": [
+        25.275928,
+        51.61677
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A6",
+      "start": [
+        25.275928,
+        51.61677
+      ],
+      "end": [
+        25.276276,
+        51.617619
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A7",
+      "start": [
+        25.279093,
+        51.616379
+      ],
+      "end": [
+        25.27684,
+        51.616067
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A7",
+      "start": [
+        25.27684,
+        51.616067
+      ],
+      "end": [
+        25.276099,
+        51.615965
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A7",
+      "start": [
+        25.276099,
+        51.615965
+      ],
+      "end": [
+        25.275611,
+        51.615873
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A8",
+      "start": [
+        25.28094,
+        51.61468
+      ],
+      "end": [
+        25.280224,
+        51.61458
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A8",
+      "start": [
+        25.280224,
+        51.61458
+      ],
+      "end": [
+        25.279783,
+        51.614499
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A8",
+      "start": [
+        25.279783,
+        51.614499
+      ],
+      "end": [
+        25.279015,
+        51.614374
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A9",
+      "start": [
+        25.28094,
+        51.61468
+      ],
+      "end": [
+        25.281366,
+        51.614069
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A9",
+      "start": [
+        25.281366,
+        51.614069
+      ],
+      "end": [
+        25.281605,
+        51.613745
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A9",
+      "start": [
+        25.281605,
+        51.613745
+      ],
+      "end": [
+        25.281883,
+        51.613374
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A9",
+      "start": [
+        25.281883,
+        51.613374
+      ],
+      "end": [
+        25.282119,
+        51.613019
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A10",
+      "start": [
+        25.289535,
+        51.611784
+      ],
+      "end": [
+        25.289224,
+        51.610912
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A10",
+      "start": [
+        25.289224,
+        51.610912
+      ],
+      "end": [
+        25.288885,
+        51.61
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A11",
+      "start": [
+        25.294342,
+        51.607642
+      ],
+      "end": [
+        25.294586,
+        51.60837
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A11",
+      "start": [
+        25.294586,
+        51.60837
+      ],
+      "end": [
+        25.294678,
+        51.608675
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A11",
+      "start": [
+        25.294678,
+        51.608675
+      ],
+      "end": [
+        25.294415,
+        51.609637
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A12",
+      "start": [
+        25.295341,
+        51.607215
+      ],
+      "end": [
+        25.295494,
+        51.607598
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A12",
+      "start": [
+        25.295494,
+        51.607598
+      ],
+      "end": [
+        25.295577,
+        51.60786
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A12",
+      "start": [
+        25.295577,
+        51.60786
+      ],
+      "end": [
+        25.295713,
+        51.608487
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "A12",
+      "start": [
+        25.295713,
+        51.608487
+      ],
+      "end": [
+        25.295846,
+        51.609008
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L11",
+      "start": [
+        25.290055,
+        51.591041
+      ],
+      "end": [
+        25.290168,
+        51.591216
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L11",
+      "start": [
+        25.290168,
+        51.591216
+      ],
+      "end": [
+        25.290291,
+        51.591456
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L10",
+      "start": [
+        25.286154,
+        51.593899
+      ],
+      "end": [
+        25.286009,
+        51.593471
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L10",
+      "start": [
+        25.286009,
+        51.593471
+      ],
+      "end": [
+        25.285891,
+        51.593175
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L10",
+      "start": [
+        25.285891,
+        51.593175
+      ],
+      "end": [
+        25.285524,
+        51.592156
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.279683,
+        51.595142
+      ],
+      "end": [
+        25.280729,
+        51.59526
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L9",
+      "start": [
+        25.280729,
+        51.59526
+      ],
+      "end": [
+        25.280966,
+        51.595289
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L8",
+      "start": [
+        25.275554,
+        51.598582
+      ],
+      "end": [
+        25.275784,
+        51.598291
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L8",
+      "start": [
+        25.275784,
+        51.598291
+      ],
+      "end": [
+        25.276578,
+        51.597148
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L8",
+      "start": [
+        25.276578,
+        51.597148
+      ],
+      "end": [
+        25.277737,
+        51.595586
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L7",
+      "start": [
+        25.274929,
+        51.596813
+      ],
+      "end": [
+        25.275275,
+        51.597811
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L7",
+      "start": [
+        25.275275,
+        51.597811
+      ],
+      "end": [
+        25.275554,
+        51.598582
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L6",
+      "start": [
+        25.271961,
+        51.598133
+      ],
+      "end": [
+        25.272817,
+        51.598198
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L6",
+      "start": [
+        25.272817,
+        51.598198
+      ],
+      "end": [
+        25.273885,
+        51.598335
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L6",
+      "start": [
+        25.273885,
+        51.598335
+      ],
+      "end": [
+        25.273992,
+        51.598344
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L5",
+      "start": [
+        25.271178,
+        51.600489
+      ],
+      "end": [
+        25.27166,
+        51.599759
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L5",
+      "start": [
+        25.27166,
+        51.599759
+      ],
+      "end": [
+        25.272103,
+        51.599136
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L5",
+      "start": [
+        25.272103,
+        51.599136
+      ],
+      "end": [
+        25.272817,
+        51.598198
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L5",
+      "start": [
+        25.272817,
+        51.598198
+      ],
+      "end": [
+        25.273388,
+        51.59751
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L4",
+      "start": [
+        25.270999,
+        51.599725
+      ],
+      "end": [
+        25.270501,
+        51.599643
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L4",
+      "start": [
+        25.270501,
+        51.599643
+      ],
+      "end": [
+        25.269359,
+        51.599276
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L3",
+      "start": [
+        25.265769,
+        51.602067
+      ],
+      "end": [
+        25.265952,
+        51.601836
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L3",
+      "start": [
+        25.265952,
+        51.601836
+      ],
+      "end": [
+        25.26716,
+        51.60024
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L2",
+      "start": [
+        25.26121,
+        51.60491
+      ],
+      "end": [
+        25.260922,
+        51.604111
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L2",
+      "start": [
+        25.260922,
+        51.604111
+      ],
+      "end": [
+        25.260589,
+        51.603135
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L1",
+      "start": [
+        25.256946,
+        51.605211
+      ],
+      "end": [
+        25.256919,
+        51.605791
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L1",
+      "start": [
+        25.256919,
+        51.605791
+      ],
+      "end": [
+        25.257016,
+        51.606136
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L",
+      "start": [
+        25.255672,
+        51.605304
+      ],
+      "end": [
+        25.255893,
+        51.606522
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L",
+      "start": [
+        25.255893,
+        51.606522
+      ],
+      "end": [
+        25.25612,
+        51.607119
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "K",
+      "start": [
+        25.291329,
+        51.591221
+      ],
+      "end": [
+        25.291311,
+        51.591109
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L12",
+      "start": [
+        25.291311,
+        51.591109
+      ],
+      "end": [
+        25.291236,
+        51.590896
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "L12",
+      "start": [
+        25.291236,
+        51.590896
+      ],
+      "end": [
+        25.290957,
+        51.590392
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.270503,
+        51.615993
+      ],
+      "end": [
+        25.270368,
+        51.615636
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.270368,
+        51.615636
+      ],
+      "end": [
+        25.27001,
+        51.614641
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.27001,
+        51.614641
+      ],
+      "end": [
+        25.269808,
+        51.614439
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.269808,
+        51.614439
+      ],
+      "end": [
+        25.269116,
+        51.614114
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.269116,
+        51.614114
+      ],
+      "end": [
+        25.268597,
+        51.613866
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.268597,
+        51.613866
+      ],
+      "end": [
+        25.268157,
+        51.613655
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.268157,
+        51.613655
+      ],
+      "end": [
+        25.267757,
+        51.613471
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "E4",
+      "start": [
+        25.267757,
+        51.613471
+      ],
+      "end": [
+        25.26747,
+        51.613347
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.267822,
+        51.60414
+      ],
+      "end": [
+        25.270029,
+        51.603162
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.266409,
+        51.604748
+      ],
+      "end": [
+        25.266978,
+        51.604504
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "H",
+      "start": [
+        25.266978,
+        51.604504
+      ],
+      "end": [
+        25.267822,
+        51.60414
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266921,
+        51.606113
+      ],
+      "end": [
+        25.266673,
+        51.605468
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266673,
+        51.605468
+      ],
+      "end": [
+        25.266409,
+        51.604748
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266884,
+        51.606454
+      ],
+      "end": [
+        25.266921,
+        51.606113
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266604,
+        51.607159
+      ],
+      "end": [
+        25.266884,
+        51.606454
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266444,
+        51.60757
+      ],
+      "end": [
+        25.266604,
+        51.607159
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266274,
+        51.607994
+      ],
+      "end": [
+        25.266444,
+        51.60757
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.254626,
+        51.624053
+      ],
+      "end": [
+        25.255272,
+        51.623758
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "C",
+      "start": [
+        25.255272,
+        51.623758
+      ],
+      "end": [
+        25.255341,
+        51.623736
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.26574,
+        51.609346
+      ],
+      "end": [
+        25.265909,
+        51.608971
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.265909,
+        51.608971
+      ],
+      "end": [
+        25.266041,
+        51.608592
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    },
+    {
+      "name": "W4",
+      "start": [
+        25.266041,
+        51.608592
+      ],
+      "end": [
+        25.266274,
+        51.607994
+      ],
+      "is_runway": false,
+      "one_way": false,
+      "width": "E"
+    }
+  ],
+  "parking": [
+    {
+      "location": [
+        25.261232,
+        51.611478
+      ],
+      "heading": 155.9,
+      "type": "gate",
+      "name": "A1"
+    },
+    {
+      "location": [
+        25.261001,
+        51.610693
+      ],
+      "heading": 156.6,
+      "type": "gate",
+      "name": "A3"
+    },
+    {
+      "location": [
+        25.259865,
+        51.610924
+      ],
+      "heading": 336.2,
+      "type": "gate",
+      "name": "A4"
+    },
+    {
+      "location": [
+        25.260731,
+        51.60988
+      ],
+      "heading": 156.3,
+      "type": "gate",
+      "name": "A5"
+    },
+    {
+      "location": [
+        25.259636,
+        51.610251
+      ],
+      "heading": 336.1,
+      "type": "gate",
+      "name": "A6"
+    },
+    {
+      "location": [
+        25.260403,
+        51.609223
+      ],
+      "heading": 149.0,
+      "type": "gate",
+      "name": "A7"
+    },
+    {
+      "location": [
+        25.259411,
+        51.609724
+      ],
+      "heading": 0.0,
+      "type": "gate",
+      "name": "A8"
+    },
+    {
+      "location": [
+        25.260137,
+        51.608799
+      ],
+      "heading": 130.7,
+      "type": "gate",
+      "name": "A9"
+    },
+    {
+      "location": [
+        25.259202,
+        51.609237
+      ],
+      "heading": 30.6,
+      "type": "gate",
+      "name": "A10"
+    },
+    {
+      "location": [
+        25.259669,
+        51.60899
+      ],
+      "heading": 65.9,
+      "type": "gate",
+      "name": "A11"
+    },
+    {
+      "location": [
+        25.262679,
+        51.615207
+      ],
+      "heading": 157.6,
+      "type": "gate",
+      "name": "B1"
+    },
+    {
+      "location": [
+        25.261914,
+        51.616512
+      ],
+      "heading": 339.4,
+      "type": "gate",
+      "name": "B2"
+    },
+    {
+      "location": [
+        25.262959,
+        51.616021
+      ],
+      "heading": 157.9,
+      "type": "gate",
+      "name": "B3"
+    },
+    {
+      "location": [
+        25.262152,
+        51.617183
+      ],
+      "heading": 338.2,
+      "type": "gate",
+      "name": "B4"
+    },
+    {
+      "location": [
+        25.263231,
+        51.616727
+      ],
+      "heading": 157.7,
+      "type": "gate",
+      "name": "B5"
+    },
+    {
+      "location": [
+        25.262391,
+        51.61778
+      ],
+      "heading": 330.8,
+      "type": "gate",
+      "name": "B6"
+    },
+    {
+      "location": [
+        25.263409,
+        51.617213
+      ],
+      "heading": 180.9,
+      "type": "gate",
+      "name": "B7"
+    },
+    {
+      "location": [
+        25.262596,
+        51.618261
+      ],
+      "heading": 298.8,
+      "type": "gate",
+      "name": "B8"
+    },
+    {
+      "location": [
+        25.263591,
+        51.617759
+      ],
+      "heading": 208.7,
+      "type": "gate",
+      "name": "B9"
+    },
+    {
+      "location": [
+        25.263192,
+        51.618026
+      ],
+      "heading": 249.3,
+      "type": "gate",
+      "name": "B10"
+    },
+    {
+      "location": [
+        25.263377,
+        51.61346
+      ],
+      "heading": 248.1,
+      "type": "gate",
+      "name": "C 1"
+    },
+    {
+      "location": [
+        25.262845,
+        51.612089
+      ],
+      "heading": 70.4,
+      "type": "gate",
+      "name": "C 2"
+    },
+    {
+      "location": [
+        25.263997,
+        51.613226
+      ],
+      "heading": 248.4,
+      "type": "gate",
+      "name": "C 3"
+    },
+    {
+      "location": [
+        25.263451,
+        51.611825
+      ],
+      "heading": 69.6,
+      "type": "gate",
+      "name": "C 4"
+    },
+    {
+      "location": [
+        25.264599,
+        51.612954
+      ],
+      "heading": 248.8,
+      "type": "gate",
+      "name": "C 5"
+    },
+    {
+      "location": [
+        25.26406,
+        51.611559
+      ],
+      "heading": 69.5,
+      "type": "gate",
+      "name": "C 6"
+    },
+    {
+      "location": [
+        25.265204,
+        51.612677
+      ],
+      "heading": 247.9,
+      "type": "gate",
+      "name": "C 7"
+    },
+    {
+      "location": [
+        25.264668,
+        51.611289
+      ],
+      "heading": 69.9,
+      "type": "gate",
+      "name": "C 8"
+    },
+    {
+      "location": [
+        25.26587,
+        51.612385
+      ],
+      "heading": 248.2,
+      "type": "gate",
+      "name": "C 9"
+    },
+    {
+      "location": [
+        25.265346,
+        51.610961
+      ],
+      "heading": 69.9,
+      "type": "gate",
+      "name": "C10"
+    },
+    {
+      "location": [
+        25.266479,
+        51.612129
+      ],
+      "heading": 248.3,
+      "type": "gate",
+      "name": "C11"
+    },
+    {
+      "location": [
+        25.266016,
+        51.610659
+      ],
+      "heading": 69.3,
+      "type": "gate",
+      "name": "C12"
+    },
+    {
+      "location": [
+        25.267297,
+        51.611944
+      ],
+      "heading": 265.5,
+      "type": "gate",
+      "name": "C13"
+    },
+    {
+      "location": [
+        25.268493,
+        51.609423
+      ],
+      "heading": 201.8,
+      "type": "gate",
+      "name": "D2"
+    },
+    {
+      "location": [
+        25.26874,
+        51.60876
+      ],
+      "heading": 201.7,
+      "type": "gate",
+      "name": "D4"
+    },
+    {
+      "location": [
+        25.268421,
+        51.610475
+      ],
+      "heading": 155.9,
+      "type": "gate",
+      "name": "E2"
+    },
+    {
+      "location": [
+        25.269065,
+        51.61116
+      ],
+      "heading": 113.7,
+      "type": "gate",
+      "name": "E4"
+    },
+    {
+      "location": [
+        25.276483,
+        51.611926
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 1"
+    },
+    {
+      "location": [
+        25.27712,
+        51.611649
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 2"
+    },
+    {
+      "location": [
+        25.277758,
+        51.611372
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 3"
+    },
+    {
+      "location": [
+        25.278396,
+        51.611095
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 4"
+    },
+    {
+      "location": [
+        25.279036,
+        51.610817
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 5"
+    },
+    {
+      "location": [
+        25.279675,
+        51.610539
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 6"
+    },
+    {
+      "location": [
+        25.280441,
+        51.610206
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 7"
+    },
+    {
+      "location": [
+        25.281081,
+        51.609928
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 8"
+    },
+    {
+      "location": [
+        25.281719,
+        51.609651
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F 9"
+    },
+    {
+      "location": [
+        25.282356,
+        51.609374
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F10"
+    },
+    {
+      "location": [
+        25.282994,
+        51.609097
+      ],
+      "heading": -112.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp F11"
+    },
+    {
+      "location": [
+        25.283985,
+        51.608064
+      ],
+      "heading": 248.0,
+      "type": "tie_down",
+      "name": "Cargo Ramp Q 1"
+    },
+    {
+      "location": [
+        25.284593,
+        51.607797
+      ],
+      "heading": 248.6,
+      "type": "tie_down",
+      "name": "Cargo Ramp Q 2"
+    },
+    {
+      "location": [
+        25.285212,
+        51.60753
+      ],
+      "heading": 248.9,
+      "type": "tie_down",
+      "name": "Cargo Ramp Q 3"
+    },
+    {
+      "location": [
+        25.28579,
+        51.607301
+      ],
+      "heading": 202.7,
+      "type": "tie_down",
+      "name": "Cargo Ramp Q 4"
+    },
+    {
+      "location": [
+        25.266682,
+        51.616628
+      ],
+      "heading": 338.9,
+      "type": "tie_down",
+      "name": "G 1"
+    },
+    {
+      "location": [
+        25.266485,
+        51.616075
+      ],
+      "heading": 5.1,
+      "type": "tie_down",
+      "name": "G 2"
+    },
+    {
+      "location": [
+        25.266664,
+        51.615785
+      ],
+      "heading": 59.0,
+      "type": "tie_down",
+      "name": "G 3"
+    },
+    {
+      "location": [
+        25.267062,
+        51.61561
+      ],
+      "heading": 100.7,
+      "type": "tie_down",
+      "name": "G 4"
+    },
+    {
+      "location": [
+        25.267635,
+        51.615869
+      ],
+      "heading": 114.4,
+      "type": "tie_down",
+      "name": "G 5"
+    },
+    {
+      "location": [
+        25.268165,
+        51.616122
+      ],
+      "heading": 134.6,
+      "type": "tie_down",
+      "name": "G 6"
+    },
+    {
+      "location": [
+        25.263291,
+        51.607228
+      ],
+      "heading": 339.1,
+      "type": "tie_down",
+      "name": "H 1"
+    },
+    {
+      "location": [
+        25.263493,
+        51.607778
+      ],
+      "heading": 312.9,
+      "type": "tie_down",
+      "name": "H 2"
+    },
+    {
+      "location": [
+        25.263671,
+        51.608036
+      ],
+      "heading": 256.4,
+      "type": "tie_down",
+      "name": "H 3"
+    },
+    {
+      "location": [
+        25.264121,
+        51.607634
+      ],
+      "heading": 215.5,
+      "type": "tie_down",
+      "name": "H 4"
+    },
+    {
+      "location": [
+        25.264379,
+        51.60702
+      ],
+      "heading": 205.0,
+      "type": "tie_down",
+      "name": "H 5"
+    },
+    {
+      "location": [
+        25.264599,
+        51.606453
+      ],
+      "heading": 183.8,
+      "type": "tie_down",
+      "name": "H 6"
+    },
+    {
+      "location": [
+        25.285124,
+        51.602319
+      ],
+      "heading": 249.7,
+      "type": "unknown",
+      "name": "Q20"
+    },
+    {
+      "location": [
+        25.285988,
+        51.601972
+      ],
+      "heading": 248.8,
+      "type": "unknown",
+      "name": "Q21"
+    },
+    {
+      "location": [
+        25.288934,
+        51.60674
+      ],
+      "heading": 337.6,
+      "type": "unknown",
+      "name": "Q40"
+    },
+    {
+      "location": [
+        25.289252,
+        51.607641
+      ],
+      "heading": 337.5,
+      "type": "unknown",
+      "name": "Q41"
+    },
+    {
+      "location": [
+        25.289538,
+        51.606331
+      ],
+      "heading": 246.8,
+      "type": "unknown",
+      "name": "Q50"
+    },
+    {
+      "location": [
+        25.290164,
+        51.6061
+      ],
+      "heading": 248.0,
+      "type": "unknown",
+      "name": "Q51"
+    },
+    {
+      "location": [
+        25.254918,
+        51.621642
+      ],
+      "heading": -71.3,
+      "type": "tie_down",
+      "name": "V 1"
+    },
+    {
+      "location": [
+        25.25583,
+        51.621295
+      ],
+      "heading": -103.5,
+      "type": "tie_down",
+      "name": "V 2"
+    },
+    {
+      "location": [
+        25.256349,
+        51.620885
+      ],
+      "heading": 247.8,
+      "type": "tie_down",
+      "name": "V 3"
+    },
+    {
+      "location": [
+        25.256959,
+        51.62059
+      ],
+      "heading": 247.9,
+      "type": "tie_down",
+      "name": "V 4"
+    },
+    {
+      "location": [
+        25.257564,
+        51.620322
+      ],
+      "heading": 247.6,
+      "type": "tie_down",
+      "name": "V 5"
+    },
+    {
+      "location": [
+        25.280739,
+        51.598551
+      ],
+      "heading": 338.0,
+      "type": "unknown",
+      "name": "Y 1"
+    },
+    {
+      "location": [
+        25.280893,
+        51.598953
+      ],
+      "heading": 338.9,
+      "type": "unknown",
+      "name": "Y 2"
+    },
+    {
+      "location": [
+        25.281037,
+        51.599356
+      ],
+      "heading": 340.0,
+      "type": "unknown",
+      "name": "Y 3"
+    },
+    {
+      "location": [
+        25.281182,
+        51.599764
+      ],
+      "heading": 338.4,
+      "type": "unknown",
+      "name": "Y 4"
+    },
+    {
+      "location": [
+        25.281328,
+        51.600172
+      ],
+      "heading": 338.2,
+      "type": "unknown",
+      "name": "Y 5"
+    },
+    {
+      "location": [
+        25.281482,
+        51.600577
+      ],
+      "heading": 338.3,
+      "type": "unknown",
+      "name": "Y 6"
+    },
+    {
+      "location": [
+        25.279671,
+        51.599019
+      ],
+      "heading": 157.4,
+      "type": "unknown",
+      "name": "Y 7"
+    },
+    {
+      "location": [
+        25.279817,
+        51.599423
+      ],
+      "heading": 158.7,
+      "type": "unknown",
+      "name": "Y 8"
+    },
+    {
+      "location": [
+        25.279973,
+        51.599827
+      ],
+      "heading": 158.6,
+      "type": "unknown",
+      "name": "Y 9"
+    }
+  ],
+  "airport_info": {
+    "icao": "OTHH",
+    "name": "Doha Hamad Intl",
+    "elevation": 13.0
+  }
+}
