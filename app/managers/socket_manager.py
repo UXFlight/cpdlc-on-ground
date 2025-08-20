@@ -1,6 +1,7 @@
 from flask import request  # type: ignore
 from typing import TYPE_CHECKING, Optional
-from app.utils.constants import DEFAULT_PILOT_REQUESTS, TIMER_DURATION
+from app.utils.constants import TIMER_DURATION
+from app.utils.parse import interpolate_request_message, parse_status, parse_status_from_str
 from app.utils.time_utils import get_current_timestamp, get_formatted_time
 from app.utils.types import Clearance, ClearanceType, ConnectInfo, PilotPublicView, SocketError, StepStatus, UpdateStepData
 from app.managers.log_manager import logger
@@ -51,7 +52,7 @@ class SocketManager:
         # GSS EVENTS
         # gss_client.listen("gss_connected", self.on_gss_connect)
         # gss_client.listen("step_updated", self.on_receive_step_update)
-        self.socket.listen("atcSendResponse", self.on_receive_atc_response)
+        self.socket.listen("atcResponse", self.on_atc_response)
 
     ## PILOT UIS EVENTS
     ## === CONNECT
@@ -70,10 +71,12 @@ class SocketManager:
             self.atc_manager.create(sid)
             self.socket.enter_room(sid, room="atc_room")
             logger.log_event(pilot_id=sid, event_type="SOCKET", message=f"ATC connected: {sid}")
-            pilot_list = self.pilots.get_all_pilots()
-            self.socket.send("pilot_list", [pilot.to_public() for pilot in pilot_list], room=sid)
+            
+            pilot_list_data = self.get_adjusted_pilot_list()
+            self.socket.send("pilot_list", pilot_list_data, room=sid)
+
             atc_list = self.atc_manager.get_all()
-            self.socket.send("atc_list", atc_list, room="atc_room") #! send to either atc_sid or all atcs in 'atc_room'
+            self.socket.send("atc_list", atc_list, room="atc_room")
 
         else:
             logger.log_event(pilot_id=sid, event_type="SOCKET", message="Unknown role -- disconnecting")
@@ -113,10 +116,10 @@ class SocketManager:
                 "payload": step_payload.to_ack_payload()
             })
             
-            message = self.interpolate_request_message(step_code, pilot, data.get("direction"))
+            message = interpolate_request_message(step_code, pilot, data.get("direction"))
             step_payload.message = message
             
-            status = self.parse_status(step_payload.status)
+            status = parse_status(step_payload.status)
             step_payload.status = status
             
             if step_code in ["DM_135", "DM_136"]:
@@ -130,6 +133,8 @@ class SocketManager:
                     "coords": coords,
                     "issued_at": issued_at
                 }
+                
+                pilot.set_clearance(clearance)
 
                 self._emit_event("atc_room", {
                     "event": "proposed_clearance",
@@ -148,26 +153,6 @@ class SocketManager:
             error_payload: SocketError = pilot._error("REQUEST", str(e), data.get("requestType"))
             self._emit_event(sid, error_payload)
             
-    def interpolate_request_message(self, step_code: str, pilot: "Pilot", direction: Optional[str] = None) -> str:
-        raw_msg = DEFAULT_PILOT_REQUESTS.get(step_code, "Request sent")
-
-        from_loc = pilot.plane.get("current_pos", {})
-        name = from_loc.get("name", "UNKNOWN")
-        type_ = from_loc.get("type", "POS")
-        location_str = f"{name} ({type_})"
-
-        dir_str = direction.upper() if direction else "UNKNOWN DIR"
-
-        return (
-            raw_msg
-            .replace("[pos]", location_str)
-            .replace("[dir]", dir_str)
-        )
-            
-    def parse_status(self, status: StepStatus) -> StepStatus:
-        if status == StepStatus.REQUESTED:
-            return StepStatus.NEW
-        return status
 
     ## === CANCEL REQUEST
     def on_cancel_request(self, data: dict):
@@ -176,13 +161,27 @@ class SocketManager:
 
         try:
             update_data: UpdateStepData = pilot.handle_cancel_request(data)
-            # gss_client.send_update_step(update_data.to_dict())
 
             self._emit_event(sid, {
                 "event": "requestCancelled",
                 "payload": update_data.to_ack_payload()
             })
-
+            
+            self._emit_event("atc_room", { # i could create new channel, but event 'new_request' is alr working!
+                "event": "new_request",
+                "payload": update_data.to_atc_payload()
+            })
+            
+            if update_data.step_code in ["DM_135", "DM_136"]:
+                clearance = pilot.clear_clearance(update_data.step_code)
+                self._emit_event("atc_room", {
+                    "event": "proposed_clearance",
+                    "payload": {
+                        "pilot_sid": pilot.sid,
+                        "clearance": clearance
+                    }
+                })
+            
         except Exception as e:
             error_payload: SocketError = pilot._error("CANCEL", str(e), data.get("requestType"))
             self._emit_event(sid, error_payload)
@@ -194,70 +193,109 @@ class SocketManager:
 
         try:
             update_data : UpdateStepData = pilot.process_action(data)
-            # gss_client.send_update_step(update_data.to_dict())
             self._emit_event(sid, {
                 "event": "actionAcknowledged",
                 "payload": update_data.to_ack_payload()
             })
+            
+            self._emit_event("atc_room", {
+                "event": "new_request",
+                "payload": update_data.to_atc_payload()
+            })
+            
+            if data.get("action") == 'cancel' and update_data.step_code in ["DM_135", "DM_136"]:
+                clearance = pilot.clear_clearance(update_data.step_code)
+                self._emit_event("atc_room", {
+                    "event": "proposed_clearance",
+                    "payload": {
+                        "pilot_sid": pilot.sid,
+                        "clearance": clearance
+                    }
+                })
 
         except Exception as e:
             error_payload = pilot._error("ACTION", str(e), data.get("requestType"))
             self._emit_event(sid, error_payload)
 
 
-    ## GSS EVENTS
-    # ## === STEP UPDATE
-    def on_receive_atc_response(self, data: dict):
-        print(data)
-        sid = request.sid # type: ignore # atc sid
-        pilot_sid = data.get("pilot_sid")
-        if not pilot_sid:
-            print("[RECEIVE] Missing pilot_sid in update")
-            return
+    ## ATC EVENTS
+    ## === SEND RESPONSE
+    def on_atc_response(self, payload: dict):
+        sid = request.sid  # type: ignore
+        atc = self.atc_manager.get(sid)
 
-        pilot = self.pilots.get(sid)
-        update = UpdateStepData.from_dict(data)
-        if not update:
-            error = pilot._error("UPDATE", "Malformed update from GSS")
-            self._emit_event(sid, error)
+        if not atc:
+            self.socket.send("error", {"message": "ATC not connected"}, room=sid)
             return
 
         try:
-            step_dict = pilot.handle_step_update(update)
-            
+            pilot_sid = payload.get("pilot_sid")
+            if not pilot_sid:
+                self.socket.send("error", {"message": f"Unknown pilot: {pilot_sid}"}, room=sid)
+                return
+
+            pilot = self.pilots.get(pilot_sid)
+
+            update: UpdateStepData = atc.handle_response(payload, pilot)
+
+            pilot.handle_step_update(update, self.socket)
+
             self.socket.send("atcResponse", {
-                "step_code": step_dict["step_code"],
+                "step_code": update.step_code,
                 "status": update.status.value,
                 "message": update.message,
                 "timestamp": update.validated_at,
                 "time_left": update.time_left,
-            }, room=sid)
+            }, room=update.pilot_sid)
+            
+            if update.status == StepStatus.NEW:
+                update.status = StepStatus.RESPONDED
+
+            self._emit_event("atc_room", {
+                "event": "new_request",
+                "payload": update.to_atc_payload()
+            })
 
             logger.log_request(
-                pilot_id=sid,
+                pilot_id=update.pilot_sid,
                 request_type=update.step_code,
                 status=update.status.value,
                 message=update.message,
                 time_left=update.time_left
             )
 
-        except Exception as e:
-            error_payload = pilot._error("GSS_UPDATE", str(e), update.step_code)
-            self._emit_event(sid, error_payload)
-    
-    ## ATC EVENTS
-    ## === SEND RESPONSE
-    def on_atc_response(self, data: dict):
-        sid = request.sid # type: ignore
-        atc = self.atc_manager.get(sid)
-        
+        except ValueError as e:
+            self.socket.send("error", {"message": str(e)}, room=sid)
         
     ## === PILOT LIST
     def handle_pilot_list(self):
-        sid = request.sid # type: ignore
-        pilot_list : list[Pilot] = self.pilots.get_all_pilots()
-        pilot_list_data = [pilot.to_public() for pilot in pilot_list]
+        sid = request.sid  # type: ignore
+        pilot_list_data = self.get_adjusted_pilot_list()
         self.socket.send("pilot_list", pilot_list_data, room=sid)
+
+        
+    def get_adjusted_pilot_list(self) -> list[PilotPublicView]:
+        pilot_list: list[Pilot] = self.pilots.get_all_pilots()
+        pilot_list_data = [pilot.to_public() for pilot in pilot_list]
+
+        for pilot_data in pilot_list_data:
+            pilot = self.pilots.get(pilot_data["sid"])
+            for code, step_payload in pilot_data["steps"].items():
+                direction = step_payload.get("direction")
+                message = interpolate_request_message(code, pilot, direction)  # type: ignore
+                step_payload["message"] = message
+
+                status = step_payload["status"]
+                if status == StepStatus.NEW.value:
+                    step_payload["status"] = StepStatus.RESPONDED.value
+                elif status == StepStatus.REQUESTED.value:
+                    step_payload["status"] = StepStatus.NEW.value
+                    
+                print(step_payload["status"])
+
+        return pilot_list_data
+
+
 
     ## === SELECT PILOT
     def handle_atc_select_pilot(self, pilot_sid: str):

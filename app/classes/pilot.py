@@ -5,7 +5,8 @@ from app.classes.step import Step
 from app.managers.log_manager import logger
 from app.utils.color import set_pilot_color
 from app.utils.constants import ACTION_DEFINITIONS, DEFAULT_STEPS
-from app.utils.time_utils import get_current_timestamp
+from app.utils.parse import step_code_to_clearance_type
+from app.utils.time_utils import get_current_timestamp, get_formatted_time
 from app.managers import TimerManager
 from app.classes.socket import SocketService
 from app.utils.types import Clearance, ClearanceType, LocationInfo, Plane, SocketError, StepStatus, UpdateStepData, PilotPublicView
@@ -35,7 +36,7 @@ class Pilot:
         self.plane: Plane = plane
         
         self.clearances = self.init_clearances()
-        self.current_clearance : ClearanceType = "none"
+        self.current_clearance : ClearanceType = "expected"
         self.initialize_steps()
 
     def initialize_steps(self):
@@ -46,25 +47,50 @@ class Pilot:
             
     def init_clearances(self) -> Dict[ClearanceType, Clearance]:
         return {
-            "none": {
-                "kind": "none",
+            "expected": {
+                "kind": "expected",
                 "instruction": "",
                 "coords": [],
                 "issued_at": ""
+            },
+            "taxi": {
+                "kind": "taxi",
+                "instruction": "",
+                "coords": [],
+                "issued_at": ""
+            },
+            "route_change": {
+                "kind": "route_change",
+                "instruction": "",
+                "coords": [],
+                "issued_at": "" 
             }
+            
         }
+        
+    def set_clearance(self, clearance: Clearance):
+        if clearance["kind"] not in self.clearances:
+            raise ValueError(f"Unknown clearance type: {clearance['kind']}")
+        
+        self.clearances[clearance["kind"]] = clearance
+        self.current_clearance = clearance["kind"]
 
     def get_step(self, step_code: str) -> Optional[Step]:
         return self.steps.get(step_code)
 
     ## === Handle ATC Step Update ===
-    def handle_step_update(self, update: UpdateStepData) -> dict:
+    def handle_step_update(self, update: UpdateStepData, socket: SocketService | None = None) -> dict:
         step = self.get_step(update.step_code)
         if not step:
             step = Step.from_update(update)
             self.steps[update.step_code] = step
+
         step.apply_update(update)
         self.history.append(update)
+
+        if update.time_left and socket:
+            self.start_timer_for_step(update.step_code, socket)
+
         return step.to_dict()
 
     ## === Handle Send Request ===
@@ -152,6 +178,22 @@ class Pilot:
 
         return update
 
+    
+    def clear_clearance(self, step_code: str) -> Clearance:
+        kind = step_code_to_clearance_type(step_code)
+        if not kind:
+            raise ValueError(f"Unknown step_code: {step_code}")
+        
+        empty_clearance : Clearance = {
+            "kind": kind,
+            "instruction": "",
+            "coords": [],
+            "issued_at": get_formatted_time(get_current_timestamp())
+        }
+
+        self.clearances[kind] = empty_clearance
+        return empty_clearance
+    
     ## === Handle Actions ===
     def process_action(self, data: dict) -> UpdateStepData:
         action = data.get("action")

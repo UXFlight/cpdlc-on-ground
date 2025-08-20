@@ -6,6 +6,7 @@ from typing import List, Literal, Optional, Tuple, TypedDict, Union
 class StepStatus(Enum):
     IDLE = "idle"
     REQUESTED = "requested"
+    RESPONDED = "responded"
     NEW = "new"
     LOADED = "loaded"
     EXECUTED = "executed"
@@ -206,11 +207,11 @@ class Plane(TypedDict):
     current_speed: float
     
 # === Clearance ===
-ClearanceType = Literal["none", "expected", "taxi", "route_change"]
+ClearanceType = Literal["expected", "taxi", "route_change"]
 class Clearance(TypedDict):
     kind: ClearanceType
     instruction: str
-    coords: List[LocationInfo]  # <- mise à jour ici
+    coords: List[LocationInfo]
     issued_at: str
     
 # === Step Public View ===
@@ -221,6 +222,7 @@ class StepPublicView(TypedDict):
     message: str
     validated_at: float
     time_left: Optional[float]
+    request_id: str
     
     
 # SIMPLIFIED STEP FOR PILOT HISTORY
