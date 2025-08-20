@@ -54,7 +54,7 @@ canvas {
   padding: 0 1.5rem;
 
   &:hover {
-    background: var(--bg-body);
+    background: var(--bg-hover);
   }
 
 }
@@ -74,10 +74,6 @@ canvas {
   user-select: none;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
   transition: background-color 0.2s ease;
-
-  &:hover {
-    background: var(--bg-body);
-  }
 
   .toggle-checkbox {
     display: none;

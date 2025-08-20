@@ -48,8 +48,9 @@
     border-bottom: none;
 }
 
-.clearance-sticker:hover {
-    background: var(--bg-body);
+.clearance-sticker:hover,
+.sticker-header:hover {
+    background: var(--bg-hover);
 }
 
 .pilot-avatar {
