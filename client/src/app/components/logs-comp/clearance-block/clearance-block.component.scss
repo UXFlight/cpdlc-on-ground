@@ -24,48 +24,47 @@
     &.unable    { border-color: var(--color-inactive); }
 
     .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 12px;
-
-    .kind-container {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
+        padding: 4px 12px;
 
-        .kind {
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
+        .kind-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
 
-        // Couleur du titre = couleur statut
-        .responded & .kind { color: var(--color-responded); }
-        .standby   & .kind { color: var(--color-responded); }
-        .new       & .kind { color: var(--color-new); }
-        .loaded    & .kind,
-        .executed  & .kind { color: var(--color-active); }
-        .closed    & .kind { color: var(--color-closed); }
-        .timeout   & .kind,
-        .cancelled & .kind,
-        .error     & .kind,
-        .idle      & .kind,
-        .cancel    & .kind,
-        .unable    & .kind { color: var(--color-inactive); }
+            .kind {
+                font-weight: bold;
+                font-size: 0.9rem;
+                transition: color 0.3s ease;
+            }
 
-        .step-status {
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-primary);
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-size: 0.65rem;
-            background-color: var(--bg-body);
-            transition: all 0.2s ease-in-out;
-            animation: fadeIn 0.3s ease;
-        }
+            // Couleur du titre = couleur statut
+            .responded & .kind { color: var(--color-responded); }
+            .standby   & .kind { color: var(--color-responded); }
+            .new       & .kind { color: var(--color-new); }
+            .loaded    & .kind,
+            .executed  & .kind { color: var(--color-active); }
+            .closed    & .kind { color: var(--color-closed); }
+            .timeout   & .kind,
+            .cancelled & .kind,
+            .error     & .kind,
+            .idle      & .kind,
+            .cancel    & .kind,
+            .unable    & .kind { color: var(--color-inactive); }
+
+            .step-status {
+                font-weight: 600;
+                text-transform: uppercase;
+                padding: 2px 6px;
+                border-radius: 8px;
+                font-size: 0.65rem;
+                transition: all 0.2s ease-in-out;
+                animation: fadeIn 0.3s ease;
+                border: 1px solid;
+            }
 
             .step-status.responded { color: var(--color-responded); }
             .step-status.standby   { color: var(--color-responded); }
