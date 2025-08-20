@@ -78,7 +78,8 @@ class Step:
             "status": self.status.value,
             "message": self.message,
             "validated_at": self.validated_at,
-            "time_left": self.time_left
+            "time_left": self.time_left,
+            "request_id": self.request_id
         }
 
     # === Init from UpdateStepData
