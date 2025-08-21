@@ -65,22 +65,24 @@ export function flashElement(div) {
 
 
 export function updateTaxiClearanceMsg() {
-  const { kind, message} = getRecentClearance();
+  const recent = getRecentClearance();
   const box = document.querySelector(".taxi-clearance-box");
   const messageBox = document.getElementById("taxi-clearance-message");
 
-  const oldTag = document.getElementById('expected-tag');
+  const oldTag = document.getElementById("expected-tag");
   if (oldTag) oldTag.remove();
 
-  if (!message) {
+  if (!recent) {
     messageBox.innerHTML = `<p class="empty-box-message">No clearance received</p>`;
     box.classList.remove("active");
     return;
   }
 
-  const tokens = message.split(" ").map((word) => {
-    return `<span class="taxi-token">${word}</span>`;
-  }).join(" ");
+  const { kind, instruction } = recent;
+
+  const tokens = instruction.split(" ").map(
+    word => `<span class="taxi-token">${word}</span>`
+  ).join(" ");
 
   messageBox.innerHTML = `<div class="clearance-grid">${tokens}</div>`;
   box.classList.add("active");
@@ -89,12 +91,13 @@ export function updateTaxiClearanceMsg() {
   void box.offsetWidth;
   box.classList.add("pulse");
 
-  if (!kind) return;
-  const tag = document.createElement("span");
-  tag.id = "expected-tag";
-  tag.className = kind;
-  tag.textContent = `${kind.toUpperCase()} CLEARANCE`
-  box.prepend(tag);
+  if (kind) {
+    const tag = document.createElement("span");
+    tag.id = "expected-tag";
+    tag.className = kind;
+    tag.textContent = `${kind.toUpperCase()} CLEARANCE`;
+    box.prepend(tag);
+  }
 }
 
 // display snackbar messages
