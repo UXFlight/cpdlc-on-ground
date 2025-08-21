@@ -150,9 +150,6 @@ export class AirportMapRenderer {
     const pathCoords = clearance.coords;
     this.drawClearancePath(pathCoords, options, color, dashed);
   
-    const labels = clearance.coords.map(c => c.name).join(' → ');
-    console.log(`Drawing clearance for ${pilot.sid}: ${labels}`);
-  
     const finalPos = pilot.plane.final_pos.coord;
     this.drawFinalDestinationMarker(this.ctx, options.project, finalPos, color);
   }
@@ -241,7 +238,6 @@ export class AirportMapRenderer {
     const validStatuses = [StepStatus.NEW, StepStatus.LOADED, StepStatus.EXECUTED, StepStatus.STANDBY];
     return Object.values(pilot.steps || {}).filter(step => validStatuses.includes(step.status));
   }
-  
 
   shortenLabelFromStepCode(stepCode: string): string {
     const label = LABELS[stepCode]?.toLowerCase() ?? stepCode.toLowerCase();
