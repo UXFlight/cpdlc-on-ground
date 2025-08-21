@@ -60,7 +60,7 @@ Ingescape : To communicate with our flight simulator X-Plane, so we can really s
 
 ## License
 
-This project is licensed under the [MIT License](./LICENSE).  
+This project is licensed under the [MIT License](./LICENSE.md).  
 You’re free to use it, modify it, and share it.  
 If you find it useful, or want to contribute, you can always write a message!
 
