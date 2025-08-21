@@ -36,7 +36,7 @@ if __name__ == '__main__':
     # agent = Echo()
     # Echo.start_ingescape_agent() #! to start ingescape agent
     
-    airport_map_manager = AirportMapManager(icao="OTHH")
+    airport_map_manager = AirportMapManager()
     socket_service = SocketService(socketio)
     pilot_manager = PilotManager(airport_map_manager=airport_map_manager)
     atc_manager = AtcManager()
