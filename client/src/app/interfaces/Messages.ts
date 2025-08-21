@@ -3,7 +3,7 @@ export type QuickResponse = 'AFFIRM' | 'STANDBY' | 'UNABLE';
 
 const QUICK_RESPONSES: Record<StepCode, Partial<Record<QuickResponse, string>>> = {
   DM_134: { // Engine Startup
-    AFFIRM: "Engine start approved.",
+    AFFIRM: "Cleared to start engine. ",
     STANDBY: "Standby for engine start clearance.",
     UNABLE: "Unable to approve engine start."
   },
