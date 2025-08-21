@@ -43,7 +43,8 @@ class Pilot:
         for step_info in DEFAULT_STEPS:
             code = step_info["requestType"]
             label = step_info["label"]
-            self.steps[code] = Step(step_code=code, label=label)
+            request_id = str(uuid.uuid4())
+            self.steps[code] = Step(step_code=code, label=label, request_id=request_id)
             
     def init_clearances(self) -> Dict[ClearanceType, Clearance]:
         return {
@@ -51,19 +52,20 @@ class Pilot:
                 "kind": "expected",
                 "instruction": "",
                 "coords": [],
-                "issued_at": ""
+                "issued_at": "",
+                
             },
             "taxi": {
                 "kind": "taxi",
                 "instruction": "",
                 "coords": [],
-                "issued_at": ""
+                "issued_at": "",
             },
             "route_change": {
                 "kind": "route_change",
                 "instruction": "",
                 "coords": [],
-                "issued_at": "" 
+                "issued_at": "" ,
             }
             
         }
@@ -89,7 +91,7 @@ class Pilot:
         self.history.append(update)
 
         if update.time_left and socket:
-            self.start_timer_for_step(update.step_code, socket)
+            self.start_timer_for_step(step, socket)
 
         return step.to_dict()
 
@@ -122,7 +124,7 @@ class Pilot:
             status=StepStatus.REQUESTED,
             message="Request sent to ATC",
             validated_at=get_current_timestamp(),
-            request_id=str(uuid.uuid4()),
+            request_id=step.request_id,
             time_left=None,
             label=step.label
         )
@@ -188,7 +190,7 @@ class Pilot:
             "kind": kind,
             "instruction": "",
             "coords": [],
-            "issued_at": get_formatted_time(get_current_timestamp())
+            "issued_at": get_formatted_time(get_current_timestamp()),
         }
 
         self.clearances[kind] = empty_clearance
@@ -284,15 +286,11 @@ class Pilot:
         }
 
     ## === Timer ===
-    def start_timer_for_step(self, step_code: str, socket: SocketService):
-        step = self.get_step(step_code)
-        if not step:
-            return
-        
-        logger.log_event(self.sid, 'TICK', f"{step_code} — {step.time_left}s left")
+    def start_timer_for_step(self, step: Step, socket: SocketService):
+        logger.log_event(self.sid, 'TICK', f"{step.step_code} — {step.time_left}s left")
         self.timer_manager.start_timer(
             step=step,
-            step_code=step_code,
+            step_code=step.step_code,
             on_tick=lambda step_code, step: self.handle_tick(step_code, step, socket),
             on_timeout=lambda step_code, step: self.handle_timeout(step_code, step, socket)
         )
@@ -305,7 +303,7 @@ class Pilot:
 
     def handle_timeout(self, step_code: str, step: Step, socket: SocketService):
         if step.status.value in {"wilco", "cancelled", "unable", "executed", "closed"}:
-            logger.log_event(self.sid, "TIMEOUT_SKIP", f"Ignored timeout for {step_code} — already {step.status}")
+            logger.log_event(self.sid, "TIMEOUT_SKIP", f"Ignored timeout for {step_code} - already {step.status}")
             return
         
         update = UpdateStepData(
@@ -319,7 +317,7 @@ class Pilot:
             time_left=step.time_left
         )
 
-        step.apply_update(update)
+        update = step.apply_update(update)
 
         socket.send("atcTimeout", {
             "step_code": step_code,
@@ -328,6 +326,8 @@ class Pilot:
             "timestamp": update.validated_at,
             "timeLeft": update.time_left,
         }, room=self.sid)
+        
+        socket.send("new_request", update.to_atc_payload(), room="atc_room")
 
         # gss_client.send_update_step(update.to_dict()) #keeping track of gss
         logger.log_event(self.sid, "TIMEOUT", f"{step_code} expired.")

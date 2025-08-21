@@ -40,10 +40,20 @@ class Atc:
         return UpdateStepData(
             pilot_sid=pilot_sid,
             step_code=step_code,
-            label=payload.get("label", step_code),
+            label=step.label,
             status=new_status,
             message=message,
             validated_at=get_current_timestamp(),
             request_id=request_id,
             time_left=time_left
         )
+        
+    def validate_clearance_request(self, pilot: Pilot, kind: str):
+        if not pilot.plane["spawn_pos"]:
+            raise ValueError(f"Pilot {pilot.sid} has no position")
+
+        if kind not in ["expected", "taxi"]:
+            raise ValueError(f"Invalid clearance kind: {kind}")
+
+        # if kind == "taxi" and not pilot.has_requested_pushback(): #! potentiel robustesse!
+        #     raise ValueError("Cannot issue taxi clearance before pushback request")

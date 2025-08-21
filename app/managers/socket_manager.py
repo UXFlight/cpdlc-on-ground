@@ -1,3 +1,4 @@
+import uuid
 from flask import request  # type: ignore
 from typing import TYPE_CHECKING, Optional
 from app.utils.constants import TIMER_DURATION
@@ -48,6 +49,7 @@ class SocketManager:
         self.socket.listen("getPilotList", self.handle_pilot_list)
         self.socket.listen("selectPilot", self.handle_atc_select_pilot)
         self.socket.listen("getAirportMapData", self.handle_map_request)
+        self.socket.listen("getClearance", self.on_clearance_request)
 
         # GSS EVENTS
         # gss_client.listen("gss_connected", self.on_gss_connect)
@@ -131,7 +133,7 @@ class SocketManager:
                     "kind": kind,
                     "instruction": instruction,
                     "coords": coords,
-                    "issued_at": issued_at
+                    "issued_at": issued_at,
                 }
                 
                 pilot.set_clearance(clearance)
@@ -181,6 +183,14 @@ class SocketManager:
                         "clearance": clearance
                     }
                 })
+                
+                self._emit_event(pilot.sid, {
+                    "event": "proposed_clearance",
+                    "payload": {
+                        "step_code": update_data.step_code,
+                        "clearance": clearance
+                    }
+                })
             
         except Exception as e:
             error_payload: SocketError = pilot._error("CANCEL", str(e), data.get("requestType"))
@@ -203,7 +213,7 @@ class SocketManager:
                 "payload": update_data.to_atc_payload()
             })
             
-            if data.get("action") == 'cancel' and update_data.step_code in ["DM_135", "DM_136"]:
+            if data.get("action") in ['cancel', 'unable'] and update_data.step_code in ["DM_135", "DM_136"]:
                 clearance = pilot.clear_clearance(update_data.step_code)
                 self._emit_event("atc_room", {
                     "event": "proposed_clearance",
@@ -216,7 +226,6 @@ class SocketManager:
         except Exception as e:
             error_payload = pilot._error("ACTION", str(e), data.get("requestType"))
             self._emit_event(sid, error_payload)
-
 
     ## ATC EVENTS
     ## === SEND RESPONSE
@@ -255,6 +264,16 @@ class SocketManager:
                 "event": "new_request",
                 "payload": update.to_atc_payload()
             })
+            
+            if payload.get("action") in ['cancel', 'unable'] and update.step_code in ["DM_135", "DM_136"]:
+                clearance = pilot.clear_clearance(update.step_code)
+                self._emit_event("atc_room", {
+                    "event": "proposed_clearance",
+                    "payload": {
+                        "pilot_sid": pilot.sid,
+                        "clearance": clearance
+                    }
+                })
 
             logger.log_request(
                 pilot_id=update.pilot_sid,
@@ -272,7 +291,6 @@ class SocketManager:
         sid = request.sid  # type: ignore
         pilot_list_data = self.get_adjusted_pilot_list()
         self.socket.send("pilot_list", pilot_list_data, room=sid)
-
         
     def get_adjusted_pilot_list(self) -> list[PilotPublicView]:
         pilot_list: list[Pilot] = self.pilots.get_all_pilots()
@@ -290,12 +308,8 @@ class SocketManager:
                     step_payload["status"] = StepStatus.RESPONDED.value
                 elif status == StepStatus.REQUESTED.value:
                     step_payload["status"] = StepStatus.NEW.value
-                    
-                print(step_payload["status"])
 
         return pilot_list_data
-
-
 
     ## === SELECT PILOT
     def handle_atc_select_pilot(self, pilot_sid: str):
@@ -329,3 +343,47 @@ class SocketManager:
             return
 
         self.socket.send("airport_map_data", map_data, room=sid)
+        
+    ## === SEND CLEARANCE
+    def on_clearance_request(self, payload: dict):
+        sid = request.sid  # type: ignore
+        atc = self.atc_manager.get(sid)
+        if not atc:
+            self.socket.send("error", {"message": "ATC not connected"}, room=sid)
+            return
+
+        pilot_sid = payload.get("pilot_sid")
+        if not pilot_sid:
+            self.socket.send("error", {"message": "Missing pilot SID"}, room=sid)
+            return
+
+        pilot = self.pilots.get(pilot_sid)
+        if not pilot:
+            self.socket.send("error", {"message": f"Pilot with SID {pilot_sid} does not exist"}, room=sid)
+            return
+
+        try:
+            kind: ClearanceType = payload.get("kind") or "expected"
+
+            atc.validate_clearance_request(pilot, kind)
+            issued_at = get_formatted_time(get_current_timestamp())
+            instruction, coords = self.clearance_engine.generate_clearance(pilot)
+
+            clearance: Clearance = {
+                "kind": kind,
+                "instruction": instruction,
+                "coords": coords,
+                "issued_at": issued_at,
+            }
+
+            pilot.set_clearance(clearance)
+            self._emit_event("atc_room", {
+                "event": "proposed_clearance",
+                "payload": {
+                    "pilot_sid": pilot.sid,
+                    "clearance": clearance
+                }
+            })
+
+        except Exception as e:
+            self.socket.send("error", {"message": str(e)}, room=sid)

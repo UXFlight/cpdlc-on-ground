@@ -8,7 +8,7 @@ from app.utils.types import StepEvent, StepPublicView, StepStatus, UpdateStepDat
 class Step:
     step_code: str
     label: str
-    request_id: str = ""
+    request_id: str
     status: StepStatus = StepStatus.IDLE
     message: str = ""
     timestamp: float = 0.0
@@ -20,7 +20,7 @@ class Step:
     lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
     
     # === Apply update and add to history
-    def apply_update(self, update: UpdateStepData) -> None:
+    def apply_update(self, update: UpdateStepData) -> UpdateStepData:
         with self.lock:
             self.status = update.status
             self.message = update.message
@@ -30,23 +30,25 @@ class Step:
             self.time_left = update.time_left
 
             # Save event in step history
-            self.history.append(StepEvent(
-                step_code=update.step_code,
-                status=update.status.value,
-                timestamp=update.validated_at,
-                message=update.message
-            ))
-
-    # === Manual history entry (optional use)
-    def add_history(self, update: UpdateStepData) -> None:
-        with self.lock:
-            self.history.append(StepEvent(
-                step_code=update.step_code,
-                status=update.status.value,
-                timestamp=update.validated_at,
-                message=update.message
-            ))
-
+            self.history.append({
+                "step_code": update.step_code,
+                "status": update.status.value,
+                "timestamp": update.validated_at,
+                "message": update.message,
+                "request_id": update.request_id
+            })
+            
+        return UpdateStepData(
+            pilot_sid=update.pilot_sid,
+            step_code=update.step_code,
+            label=update.label,
+            status=update.status,
+            message=update.message,
+            validated_at=update.validated_at,
+            request_id=update.request_id,
+            time_left=update.time_left
+        )
+            
     # === Reset step to initial state
     def reset(self) -> None:
         with self.lock:
