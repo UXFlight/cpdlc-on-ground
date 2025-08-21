@@ -262,7 +262,7 @@ export class AirportMapService {
   }
   // event
   applyPan(dx: number, dy: number): void {
-    const factor = 1 / Math.sqrt(this.zoomFactor);
+    const factor = 1.25 / this.zoomFactor;
   
     this.panOffset.x += dx * factor;
     this.panOffset.y += dy * factor;
@@ -288,7 +288,7 @@ export class AirportMapService {
       kind: kind,
       instruction: instruction,
       coords: coords,
-      issued_at: issued_at
+      issued_at: issued_at,
     };
 
     currentPlane.clearances[kind] = clearance;

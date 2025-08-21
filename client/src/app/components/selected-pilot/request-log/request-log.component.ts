@@ -31,6 +31,7 @@ export class RequestLogComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedAction: 'affirm' | 'standby' | 'unable' | null = null;
   response: string = '';
   selectedRequestInfo: SelectedRequestInfo; // only the stepCode
+  selectedDirection: 'LEFT' | 'RIGHT' | null = null;
   // ----
 
   requestIdSubscription: Subscription;
@@ -46,12 +47,13 @@ export class RequestLogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private readonly mainPageService: MainPageService,
-    private readonly airportMapService: AirportMapService  
+    private readonly airportMapService: AirportMapService
   ) {}
 
   ngOnInit(): void {
     this.configSubscription();
-    this.isRespondable = [StepStatus.NEW, StepStatus.STANDBY].includes(this.step?.status);
+    this.isRespondable = this.step.status !== StepStatus.RESPONDED;
+    console.log('RequestLogComponent initialized with step:', this.isRespondable);
   }
 
   ngOnDestroy(): void {
@@ -60,6 +62,9 @@ export class RequestLogComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedPilotSubscription?.unsubscribe();
     this.selectedPlaneSubscription?.unsubscribe();
     if (this.expanded) this.selectRequest('', '');
+    this.selectedDirection = null;
+    this.response = '';
+    this.selectedAction = null;
   }
 
   ngAfterViewInit(): void {
@@ -72,8 +77,11 @@ export class RequestLogComponent implements OnInit, OnDestroy, AfterViewInit {
     this.requestIdSubscription = this.mainPageService.selectedRequestId$.subscribe((requestInfo : SelectedRequestInfo) => {
       this.selectedRequestInfo = requestInfo;
       const isEmpty = requestInfo.stepCode || requestInfo.requestId;
-      this.expanded = !!isEmpty && this.selectedRequestInfo.requestId === this.step.request_id
-      if (this.expanded) this.quickResponses = getQReponseByStepCode(this.selectedRequestInfo.stepCode as StepCode);
+      this.expanded = !!isEmpty && this.selectedRequestInfo.stepCode === this.step.step_code
+      if (this.expanded) {
+        this.isRespondable = ![StepStatus.RESPONDED, StepStatus.CLOSED].includes(this.step.status);
+        this.quickResponses = getQReponseByStepCode(this.selectedRequestInfo.stepCode as StepCode);
+      }
     })
 
     this.smartResponsesSubscription = this.mainPageService.smartResponses$.subscribe((responses: string[]) => {
@@ -108,6 +116,13 @@ export class RequestLogComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.selectedPilotSid) this.selectedPilotSid = sid;
     if (this.selectedPilotSid !== sid) this.selectedPilotSid = sid;
   }
+
+  selectDirection(event : Event, dir: 'LEFT' | 'RIGHT') {
+    event.stopPropagation();
+    this.selectedDirection = dir;
+    this.step.label = `PUSHBACK ${dir}`;
+    this.step.message = `REQUEST PUSHBACK ${dir}`;
+  }
   
   selectRequest(stepCode: string, requestId: string): void {
     const requestInfo: SelectedRequestInfo = { stepCode, requestId };
@@ -116,23 +131,28 @@ export class RequestLogComponent implements OnInit, OnDestroy, AfterViewInit {
 
   submitResponse(event: Event): void {
     event.stopPropagation();
+    if (this.step?.step_code === 'DM_131' && !this.selectedDirection) {
+      alert('Please select a direction for pushback (LEFT or RIGHT).');
+      return;
+    }
   
     const formattedResponse = this.response.trim();
     if (!formattedResponse) return;
-    if (!this.selectedAction) return;
   
-    const payload: StepUpdate & { action: string } = {
+    const payload: StepUpdate = {
       pilot_sid: this.selectedPilotSid,
       step_code: this.step.step_code,
-      request_id: this.step.request_id,
+      request_id: this.step.request_id || 'no_req_id', //! this is so shit
       message: formattedResponse,
-      action: this.selectedAction
+      action: this.selectedAction || 'affirm'
     };
 
     this.mainPageService.sendResponse(payload);
     this.response = '';
     this.smartResponses = [];
     this.selectedAction = null;
+    this.selectedDirection = null;
+    this.selectRequest('', '');
   }
 
   setQuickResponse(text: string, event: MouseEvent): void {

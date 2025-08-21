@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { AckUpdatePayload, ClearancePayload, PilotPublicView, StepPublicView } from '@app/interfaces/Publics';
+import { AckUpdatePayload, ClearancePayload, ClearanceType, PilotPublicView, StepPublicView } from '@app/interfaces/Publics';
 import { ClientSocketService } from './client-socket.service';
 import { CommunicationService, ErrorMessage } from './communication.service';
 import { Atc } from '@app/interfaces/Atc';
 import { SelectedRequestInfo } from '@app/interfaces/SelectedRequest';
 import { ResponseCache, StepUpdate } from '@app/interfaces/Payloads'; // SmartResponse
-import { StepStatus } from '@app/interfaces/StepStatus';
 import { AirportMapService } from './airport-map.service';
 import { LABELS } from '@app/modules/constants';
+// import { StepStatus } from '@app/interfaces/StepStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -138,10 +138,10 @@ export class MainPageService {
   getActiveStep(sid: string): StepPublicView[] {
     const pilot = this.getPilotBySid(sid);
     if (!pilot) return [];
-    
-    return Object.values(pilot.steps).filter(
-      step => [StepStatus.NEW, StepStatus.LOADED, StepStatus.EXECUTED, StepStatus.STANDBY].includes(step.status)
-    );
+    // return Object.values(pilot.steps).filter(
+    //   step => [StepStatus.NEW, StepStatus.LOADED, StepStatus.EXECUTED, StepStatus.STANDBY].includes(step.status)
+    // );
+    return Object.values(pilot.steps)
   }
 
   getPilotColor(sid: string): string {
@@ -283,8 +283,12 @@ export class MainPageService {
     this.smartResponsesSubject.next(cachedResponses);
   }
 
+  fetchClearance(pilot_sid: string, kind: ClearanceType) {
+    return this.clientSocketService.send('getClearance', { pilot_sid, kind });
+  }
+
   // SEND
-  sendResponse(payload: StepUpdate & { action: string }): void {
+  sendResponse(payload: StepUpdate): void {
     const requiredFields: [keyof typeof payload, string][] = [
       ['pilot_sid', 'Pilot SID is missing.'],
       ['step_code', 'Step code is missing.'],

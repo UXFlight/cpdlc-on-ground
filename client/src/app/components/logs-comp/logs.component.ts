@@ -99,23 +99,6 @@ export class LogsComponent implements OnInit, OnDestroy {
     });
   }
 
-  configSubscriptions(): void {
-    this.selectedPlaneSubscription = this.airportMapService.selectedPlane$.subscribe((plane) => {
-        if (!plane) this.airportMapService.resetZoomAndPan();
-        this.selectedPlane = plane;
-        this.currIdx = 0;
-    });
-
-    this.selectedRequestSubscription = this.mainPageService.selectedRequestId$.subscribe((requestInfo: SelectedRequestInfo) => {
-        this.selectedRequestInfo = requestInfo;
-    });
-
-    this.pilotsSubscription = this.mainPageService.pilotsPreviews$.subscribe((pilots) => {
-        this.pilots = pilots;
-    });
-}
-
-
   viewPilotLogs(): void {
     if (this.selectedPlane) {
       this.mainPageService.selectPilot(this.selectedPlane.sid, false);

@@ -7,8 +7,9 @@ export interface SmartResponse {
 export interface StepUpdate {
     pilot_sid: string;
     step_code: string;
-    request_id: string;
     message: string;
+    request_id: string;
+    action: string;
 }
 
 export interface ResponseCache {

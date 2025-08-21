@@ -27,6 +27,8 @@ export class ClearanceBlockComponent implements OnInit, OnDestroy, OnChanges {
   selectedPilotSid: string = '';
   response: string = '';
 
+  requestedClearanceKind: 'taxi' | 'expected' | '' = '';
+
   constructor(
     private readonly airportMapService: AirportMapService,
     private readonly mainPageService: MainPageService
@@ -92,12 +94,17 @@ export class ClearanceBlockComponent implements OnInit, OnDestroy, OnChanges {
 
   get isRespondableStep(): boolean {
     const s = this.step;
-    return !!s && [StepStatus.NEW, StepStatus.STANDBY].includes(s.status);
+    return !!s && [StepStatus.NEW, StepStatus.STANDBY, StepStatus.IDLE].includes(s.status);
   }
 
   get isStandby(): boolean {
     const s = this.step;
     return !!s && StepStatus.STANDBY == s.status;
+  }
+
+  get isEditable(): boolean {
+    const s = this.step;
+    return !!s && ![StepStatus.LOADED, StepStatus.EXECUTED].includes(s.status) && this.clearance?.kind !== 'expected';
   }
 
   get defaultMessage(): string {
@@ -110,6 +117,12 @@ export class ClearanceBlockComponent implements OnInit, OnDestroy, OnChanges {
     return `Unable to provide clearance at this time.`;
   }
 
+  requestClearance(): void {
+    if (!this.selectedPilotSid || !this.requestedClearanceKind) return;
+    this.mainPageService.fetchClearance(this.selectedPilotSid, this.requestedClearanceKind)
+  }
+
+  // requests to server
   emitAction(action: 'standby' | 'unable' | 'affirm'): void {
     if (!this.clearance || !this.selectedPilotSid || !this.isRespondableStep || !this.step) return;
 
@@ -125,7 +138,7 @@ export class ClearanceBlockComponent implements OnInit, OnDestroy, OnChanges {
       step_code: this.stepCode,
       action,
       message,
-      request_id: this.step?.request_id ?? ''
+      request_id: this.step?.request_id || '',
     };
 
     this.mainPageService.sendResponse(payload);
