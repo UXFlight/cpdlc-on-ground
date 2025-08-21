@@ -1,41 +1,78 @@
 .
 ├── app
 │   ├── classes
-│   │   ├── ingsvc
-│   │   │   └── agent.py
+│   │   ├── agent.py
+│   │   ├── airport_cache.py
+│   │   ├── apt_parser.py
+│   │   ├── atc.py
+│   │   ├── clearance.py
 │   │   ├── __init__.py
-│   │   ├── pilot
-│   │   │   └── pilot.py
-│   │   ├── socket
-│   │   │   └── socket.py
-│   │   └── state
-│   │       ├── state.py
-│   │       └── step.py
+│   │   ├── pilot.py
+│   │   ├── socket.py
+│   │   └── step.py
+│   ├── data
+│   │   ├── apt.dat
+│   │   ├── CYUL.json
+│   │   ├── KDEN.json
+│   │   ├── KJFK.json
+│   │   ├── KLAX.json
+│   │   ├── OEDF.json
+│   │   ├── OMDB.json
+│   │   ├── OTHH.json
+│   │   └── ZSPD.json
 │   ├── managers
+│   │   ├── airport_map_manager.py
+│   │   ├── atc_manager.py
 │   │   ├── __init__.py
-│   │   ├── log_manager
-│   │   │   ├── log_manager_instance.py
-│   │   │   └── log_manager.py
-│   │   ├── pilot_manager
-│   │   │   └── pilot_manager.py
-│   │   ├── socket_manager
-│   │   │   └── socket_manager.py
-│   │   └── timer_manager
-│   │       └── timer_manager.py
+│   │   ├── log_manager.py
+│   │   ├── pilot_manager.py
+│   │   ├── socket_manager.py
+│   │   └── timer_manager.py
 │   ├── routes
-│   │   ├── action_routes.py
 │   │   ├── general.py
-│   │   ├── __init__.py
-│   │   └── request_routes.py
+│   │   └── __init__.py
 │   └── utils
+│       ├── color.py
 │       ├── constants.py
 │       ├── __init__.py
+│       ├── parse.py
+│       ├── simulate_pos.py
 │       ├── time_utils.py
-│       └── types.py
+│       ├── types.py
+│       └── type_validation.py
 ├── clean.sh
+├── client
+│   ├── .angular
+│   │   └── cache
+│   ├── angular.json
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── src
+│   │   ├── app
+│   │   ├── assets
+│   │   ├── environments
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── main.ts
+│   │   ├── polyfills.ts
+│   │   └── styles.scss
+│   ├── tsconfig.app.json
+│   └── tsconfig.json
+├── .gitignore
 ├── logs
 ├── main.py
 ├── project-structure.txt
+├── readme
+│   ├── image-1.png
+│   ├── image-2.png
+│   ├── image-3.png
+│   ├── image-4.png
+│   ├── image-5.png
+│   ├── image-6.png
+│   ├── image-7.png
+│   ├── image-8.png
+│   └── image.png
 ├── README.md
 ├── requirements.txt
 ├── run.sh
@@ -56,46 +93,18 @@
 │   ├── favicon.ico
 │   ├── js
 │   │   ├── api
-│   │   │   └── api.js
 │   │   ├── events
-│   │   │   ├── action.js
-│   │   │   ├── cancelRequest.js
-│   │   │   ├── filter.js
-│   │   │   ├── overlay.js
-│   │   │   ├── pushbackDirection.js
-│   │   │   ├── sendRequest.js
-│   │   │   └── settings.js
 │   │   ├── main.js
 │   │   ├── messages
-│   │   │   └── historyLogs.js
 │   │   ├── socket
-│   │   │   ├── socket-emits.js
-│   │   │   ├── socket.js
-│   │   │   └── socket-listens.js
 │   │   ├── socket-events
-│   │   │   ├── actionResponse.js
-│   │   │   ├── atcResponse.js
-│   │   │   ├── cancelRequestResponse.js
-│   │   │   ├── connectionEvents.js
-│   │   │   ├── errorEvent.js
-│   │   │   ├── requestResponse.js
-│   │   │   └── timeoutEvent.js
 │   │   ├── state
-│   │   │   ├── configState.js
-│   │   │   ├── init.js
-│   │   │   ├── settingsState.js
-│   │   │   └── state.js
+│   │   ├── text-to-speech.js
 │   │   ├── ui
-│   │   │   ├── buttons-ui.js
-│   │   │   ├── timer-ui.js
-│   │   │   └── ui.js
 │   │   └── utils
-│   │       ├── consts
-│   │       ├── request-payload.js
-│   │       └── utils.js
 │   └── mp3
 │       └── notif.mp3
 └── templates
     └── index.html
 
-31 directories, 68 files
+32 directories, 76 files

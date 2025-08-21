@@ -1,144 +1,202 @@
-# cpdlc-flask-app
+# Controller–pilot data link communications (CPDLC) - Ground Ops
 
-Ce projet fait partie du programme de recherche **CPDLC** et vise à explorer de nouvelles interfaces logicielles autour du simulateur de vol **X-Plane**, en particulier les échanges de données entre les contrôleurs aériens et les pilotes via des protocoles modernes comme le CPDLC (Controller–Pilot Data Link Communications).  
-Cette application web, construite avec **Flask**, fournit une interface utilisateur pour visualiser et interagir avec les messages et données CPDLC échangés via le plugin X-Plane.
+Research projet @PolyMTL made by @simy46_. 
 
-## Prérequis
+This project is meant to simplify and strengthen the communication between the ATC and the Pilot. We used the Global Operational Data Link Document ([GOLD](https://www2023.icao.int/sam/documents/datalink11/gold%201st%20edition_14-jun-10.pdf)), by following the current communication protocol. It is heavily focused on ground operations. It can handle multiple pilots connection (having each one their context), and multiple ATCs, that have a shared context (imagine sharing a doc and both working on it).
 
-- Python 3.8+
-- `venv` (inclus avec Python)
-- `pip` pour installer les dépendances
-- X-Plane installé avec le plugin CPDLC (ou un simulateur de données mockées)
+The goal is to maximize communication efficiency while keeping a simple of usage interface. This project contains both the Pilot and the ATC interface communicating through one server.
 
-## Installation et exécution
+## Fig. 1 : Pilot App
+![Pilot Interface](/readme/image.png)
 
-1. **Cloner le dépôt**
+## Fig. 2 : ATC App
+![ATC Interface](/readme/image-1.png)
+
+## Tech Used
+
+Pilot Front-End : HTML/ CSS/ JS
+
+ATC Front-End : Angular/ TS/ SCSS
+
+Backend : Flask server with HTTP and WS integration for real-time communication.
+
+Ingescape : To communicate with our flight simulator X-Plane, so we can really simulate the usage of the app on a flight. It works with WS, but they abstract the coding out of it.
+
+## Installation and Execution on Linux
+**You would need Python 3.8+ and pip, and npm**
+
+1. **Clone repo**
 
    ```bash
    git clone https://github.com/UXFlight/cpdlc-flask-app.git
    cd cpdlc-flask-app
    ```
 #
-2. **Créer un environnement virtuel**
+2. **Create Venv**
 
    ```bash
    python3 -m venv venv
-   source venv/bin/activate  # Sur Windows : venv\Scripts\activate
+   cd venv
+   source venv/bin/activate
    ```
 
-3. **Installer les dépendances**
+3. **Install dependencies listed on requirements.txt**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Lancer l'application**
+4. **Run the app on main.py**
 
    ```bash
-   flask run
-   ```
-
-   ou bien
-
-   ```bash
-   python3 app.py
+   python3 main.py
    ```
 
    L'application sera disponible sur [http://127.0.0.1:5321/](http://127.0.0.1:5321/)
 
-5. **Arrêter l'environnement virtuel**
-   ```bash
-   deactivate
-   ```
 
-## Structure du projet
+## DISCLAIMER:
+- Be aware of the logging system, it will create a log on each pilot connection and write on each actions. Knowing that theres a new connection at each WS connection, this could add up to useless files.
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).  
+You’re free to use it, modify it, and share it.  
+If you find it useful, or want to contribute, you can always write a message!
+
+# Visualisation
+## 1 - Pilot requests the expected taxi clearance
+![step 1 - pilot](/readme/image-2.png)
+
+## 2 - ATC receives request and handles it
+![step 2 - atc](/readme/image-3.png)
+
+## 3 - Pilot receives ATC response and 'LOADS' the clearances
+![step 3 - pilot](/readme/image-4.png)
+
+![step 4 - loading clearance](/readme/image-7.png)
+
+## 4 - In parallel, the ATC can render the clearance on the map, and toggle if they want to see this pilots clearance or not.
+![alt text](/readme/image-6.png)
+## if you zoom well enough, ATC would see the pilots path
+![alt text](/readme/image-5.png)
+
+
+## Even though it is not usual, the ATC can also initiate a request.
+![step X - atc](/readme/image-8.png)
+
+
+## Project Structure
 
 ```
-cpdlc-flask-app/
 .
 ├── app
-│   ├── config.py
-│   ├── constants.py
-│   ├── ingsvc
-│   │   ├── agent.py
-│   │   ├── callbacks.py
-│   │   ├── init_agent.py
-│   │   └── __init__.py
-│   ├── __init__.py
-│   ├── logs
-│   ├── routes
-│   │   ├── action_routes.py
-│   │   ├── general.py
-│   │   ├── __init__.py
-│   │   └── request_routes.py
-│   ├── services
-│   │   ├── action_service.py
-│   │   ├── __init__.py
-│   │   ├── log_manager.py
-│   │   ├── request_service.py
-│   │   └── socket_event_service.py
-│   ├── socket
-│   │   ├── __init__.py
-│   │   └── sockets.py
-│   ├── state
-│   │   ├── __init__.py
-│   │   └── state.py
-│   └── utils
-│       ├── helpers.py
-│       └── __init__.py
+│   ├── classes
+│   │   ├── agent.py
+│   │   ├── airport_cache.py
+│   │   ├── apt_parser.py
+│   │   ├── atc.py
+│   │   ├── clearance.py
+│   │   ├── __init__.py
+│   │   ├── pilot.py
+│   │   ├── socket.py
+│   │   └── step.py
+│   ├── data
+│   │   ├── apt.dat
+│   │   ├── CYUL.json
+│   │   ├── KDEN.json
+│   │   ├── KJFK.json
+│   │   ├── KLAX.json
+│   │   ├── OEDF.json
+│   │   ├── OMDB.json
+│   │   ├── OTHH.json
+│   │   └── ZSPD.json
+│   ├── managers
+│   │   ├── airport_map_manager.py
+│   │   ├── atc_manager.py
+│   │   ├── __init__.py
+│   │   ├── log_manager.py
+│   │   ├── pilot_manager.py
+│   │   ├── socket_manager.py
+│   │   └── timer_manager.py
+│   ├── routes
+│   │   ├── general.py
+│   │   └── __init__.py
+│   └── utils
+│       ├── color.py
+│       ├── constants.py
+│       ├── __init__.py
+│       ├── parse.py
+│       ├── simulate_pos.py
+│       ├── time_utils.py
+│       ├── types.py
+│       └── type_validation.py
+├── clean.sh
+├── client
+│   ├── .angular
+│   │   └── cache
+│   ├── angular.json
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── src
+│   │   ├── app
+│   │   ├── assets
+│   │   ├── environments
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── main.ts
+│   │   ├── polyfills.ts
+│   │   └── styles.scss
+│   ├── tsconfig.app.json
+│   └── tsconfig.json
+├── .gitignore
+├── logs
 ├── main.py
 ├── project-structure.txt
+├── readme
+│   ├── image-1.png
+│   ├── image-2.png
+│   ├── image-3.png
+│   ├── image-4.png
+│   ├── image-5.png
+│   ├── image-6.png
+│   ├── image-7.png
+│   ├── image-8.png
+│   └── image.png
 ├── README.md
 ├── requirements.txt
+├── run.sh
 ├── shared
-│   └── msg_status.json
+│   └── msg_status.json
 ├── static
-│   ├── css
-│   │   ├── header.css
-│   │   ├── logs.css
-│   │   ├── pilot-buttons.css
-│   │   ├── request.css
-│   │   ├── style.css
-│   │   └── taxi-clearance.css
-│   ├── favicon.ico
-│   ├── js
-│   │   ├── api
-│   │   │   └── api.js
-│   │   ├── events
-│   │   │   ├── action.js
-│   │   │   ├── cancelRequest.js
-│   │   │   ├── execute.js
-│   │   │   ├── filter.js
-│   │   │   ├── load.js
-│   │   │   ├── overlay.js
-│   │   │   ├── pushbackDirection.js
-│   │   │   └── sendRequest.js
-│   │   ├── main.js
-│   │   ├── messages
-│   │   │   └── historyLogs.js
-│   │   ├── socket
-│   │   │   └── socket.js
-│   │   ├── socket-events
-│   │   │   ├── atcResponse.js
-│   │   │   ├── connectionEvents.js
-│   │   │   └── timeoutEvent.js
-│   │   ├── state
-│   │   │   ├── handlerMap.js
-│   │   │   ├── init.js
-│   │   │   ├── state.js
-│   │   │   └── status.js
-│   │   ├── ui
-│   │   │   ├── buttons-ui.js
-│   │   │   ├── timer-ui.js
-│   │   │   └── ui.js
-│   │   └── utils
-│   │       └── utils.js
-│   └── mp3
-│       └── notif.mp3
+│   ├── assets
+│   │   └── pilot.png
+│   ├── css
+│   │   ├── header.css
+│   │   ├── logs.css
+│   │   ├── pilot-buttons.css
+│   │   ├── request.css
+│   │   ├── settings.css
+│   │   ├── status.css
+│   │   ├── style.css
+│   │   └── taxi-clearance.css
+│   ├── favicon.ico
+│   ├── js
+│   │   ├── api
+│   │   ├── events
+│   │   ├── main.js
+│   │   ├── messages
+│   │   ├── socket
+│   │   ├── socket-events
+│   │   ├── state
+│   │   ├── text-to-speech.js
+│   │   ├── ui
+│   │   └── utils
+│   └── mp3
+│       └── notif.mp3
 └── templates
     └── index.html
 
-23 directories, 59 files
+32 directories, 76 files
 ```
-
-# Visualisation
