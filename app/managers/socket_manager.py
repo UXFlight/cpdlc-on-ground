@@ -187,8 +187,8 @@ class SocketManager:
                 self._emit_event(pilot.sid, {
                     "event": "proposed_clearance",
                     "payload": {
-                        "step_code": update_data.step_code,
-                        "clearance": clearance
+                        "kind": clearance["kind"],
+                        "instruction": clearance["instruction"]
                     }
                 })
             
@@ -215,6 +215,15 @@ class SocketManager:
             
             if data.get("action") in ['cancel', 'unable'] and update_data.step_code in ["DM_135", "DM_136"]:
                 clearance = pilot.clear_clearance(update_data.step_code)
+                
+                self._emit_event(sid, {
+                    "event": "proposed_clearance",
+                    "payload": {
+                        "kind": clearance["kind"],
+                        "instruction": clearance["instruction"]
+                    }
+                })
+                
                 self._emit_event("atc_room", {
                     "event": "proposed_clearance",
                     "payload": {
@@ -264,9 +273,35 @@ class SocketManager:
                 "event": "new_request",
                 "payload": update.to_atc_payload()
             })
-            
+            if update.step_code in ["DM_135", "DM_136"]:
+                if pilot.clearances["route_change"]["instruction"]:
+                    clearance = pilot.clearances["route_change"]
+                elif pilot.clearances["taxi"]["instruction"]:
+                    clearance = pilot.clearances["taxi"]
+                elif pilot.clearances["expected"]["instruction"]:
+                    clearance = pilot.clearances["expected"]
+                if clearance: 
+                    self._emit_event(pilot_sid, {
+                        "event": "proposed_clearance",
+                        "payload": {
+                            "kind": clearance["kind"],
+                            "instruction": clearance["instruction"]
+                        }
+                    })
+                
             if payload.get("action") in ['cancel', 'unable'] and update.step_code in ["DM_135", "DM_136"]:
                 clearance = pilot.clear_clearance(update.step_code)
+                
+                self._emit_event(pilot_sid, {
+                    "event": "proposed_clearance",
+                    "payload": {
+                        "kind": clearance["kind"],
+                        "instruction": clearance["instruction"]
+                    }
+                })
+                
+                print("Emitting proposed clearance to ATC room")
+                
                 self._emit_event("atc_room", {
                     "event": "proposed_clearance",
                     "payload": {
