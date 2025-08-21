@@ -10,6 +10,7 @@ import { handleError } from "../socket-events/errorEvent.js";
 import { handleCancelRequest } from "../socket-events/cancelRequestResponse.js";
 import { SOCKET_LISTENS } from "../utils/consts/socketConsts.js";
 import { setConnectionInfos } from "../state/settingsState.js";
+import { updateClearance } from "../socket-events/clearanceUpdate.js";
 
 export function setupSocketListeners() {
   listen(SOCKET_LISTENS.CONNECT, () => {
@@ -48,6 +49,9 @@ export function setupSocketListeners() {
   //! lock in
   listen(SOCKET_LISTENS.TICK, tickUpdate);
   listen(SOCKET_LISTENS.TIMEOUT, timeoutEvent);
+
+  // clearance update
+  listen(SOCKET_LISTENS.CLEARANCE_UPDATE, updateClearance);
 
   // why handling errors if program is good
   listen(SOCKET_LISTENS.ERROR, handleError);

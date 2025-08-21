@@ -11,9 +11,5 @@ export function handleActionResponse(data) {
     updateStep(step_code, status, message, validated_at, time_left);
     displayHistoryLogs();
     enableButtonsByStatus(status, step_code);
-
-    if ([MSG_STATUS.LOADED, MSG_STATUS.EXECUTED, MSG_STATUS.CANCEL].includes(status)) {
-        updateTaxiClearanceMsg(step_code === REQUEST_TYPE.EXPECTED_TAXI_CLEARANCE, status !== MSG_STATUS.CANCEL ? message : '');
-    }
     closeCurrentOverlay();
 }

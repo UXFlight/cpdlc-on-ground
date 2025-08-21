@@ -1,5 +1,6 @@
 
 import { MSG_STATUS } from '../utils/consts/status.js';
+import { getRecentClearance } from '../state/clearance.js';
 
 // loader
 export function showSpinner(requestType) {
@@ -63,7 +64,8 @@ export function flashElement(div) {
 }
 
 
-export function updateTaxiClearanceMsg(expected = false, message = null) {
+export function updateTaxiClearanceMsg() {
+  const { kind, message} = getRecentClearance();
   const box = document.querySelector(".taxi-clearance-box");
   const messageBox = document.getElementById("taxi-clearance-message");
 
@@ -87,11 +89,11 @@ export function updateTaxiClearanceMsg(expected = false, message = null) {
   void box.offsetWidth;
   box.classList.add("pulse");
 
+  if (!kind) return;
   const tag = document.createElement("span");
   tag.id = "expected-tag";
-  tag.className = expected ? "tag-expected" : "tag-default";
-  tag.textContent = expected ? "(EXPECTED)" : "(TAXI CLEARANCE)";
-
+  tag.className = kind;
+  tag.textContent = `${kind.toUpperCase()} CLEARANCE`
   box.prepend(tag);
 }
 
