@@ -44,7 +44,7 @@ Cette application web, construite avec **Flask**, fournit une interface utilisat
    python3 app.py
    ```
 
-   L'application sera disponible sur [http://127.0.0.1:5320/](http://127.0.0.1:5320/)
+   L'application sera disponible sur [http://127.0.0.1:5321/](http://127.0.0.1:5321/)
 
 5. **Arrêter l'environnement virtuel**
    ```bash
