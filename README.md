@@ -60,7 +60,7 @@ Ingescape : To communicate with our flight simulator X-Plane, so we can really s
    cd client
    ```
 
-6. **Install dependencies listed on package.json
+6. **Install dependencies listed on package.json**
 
   ```bash
    npm install
