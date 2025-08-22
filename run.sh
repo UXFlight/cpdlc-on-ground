@@ -1,4 +1,4 @@
-#!/bin/bash
+# script to automatically runs the code on a process that gets killed on SIGINT
 
 VENV_DIR="./venv"
 MAIN_SCRIPT="main.py"
