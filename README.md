@@ -52,11 +52,29 @@ Ingescape : To communicate with our flight simulator X-Plane, so we can really s
    python3 main.py
    ```
 
-   L'application sera disponible sur [http://127.0.0.1:5321/](http://127.0.0.1:5321/)
+   The pilot interface is available on [http://127.0.0.1:5321/](http://127.0.0.1:5321/)
 
+5. **Change directory on /client**
 
-## DISCLAIMER:
-- Be aware of the logging system, it will create a log on each pilot connection and write on each actions. Knowing that theres a new connection at each WS connection, this could add up to useless files.
+  ```bash
+   cd client
+   ```
+
+6. **Install dependencies listed on package.json
+
+  ```bash
+   npm install
+   ```
+
+7. **Start client side server**
+
+  ```bash
+   npm start
+   ```
+
+The ATC interface is available on [http://127.0.0.1:4200/](http://127.0.0.1:4200/)
+
+Enjoy !
 
 ## License
 
@@ -84,6 +102,12 @@ If you find it useful, or want to contribute, you can always write a message!
 
 ## Even though it is not usual, the ATC can also initiate a request.
 ![step X - atc](/readme/image-8.png)
+
+## DISCLAIMER:
+
+- Be aware of the logging system, it will write on a log at every main event [connections, requests, errors, and so on]. Knowing that theres a new connection at each WS client-side [auth is based on sid], this could add up to multiple useless files. 
+
+The logging system is a hidden festure [a true gem] that the client will never perceive. It is such a main service on the backend, as for development, debugging, scalability, abstraction, ... that never sees the light. One global logger is definitely needed. 
 
 
 ## Project Structure
@@ -200,3 +224,7 @@ If you find it useful, or want to contribute, you can always write a message!
 
 32 directories, 76 files
 ```
+
+## + if you want to print a tree of your project without unnecessary files the command is:
+   ```bash
+   ```
